@@ -64,21 +64,7 @@ pnpm dev
 
 Visit: http://localhost:3000
 
-## 📊 Default Login Credentials
 
-### Admin
-- **Email:** admin@college.edu
-- **Password:** password123
-
-### Faculty
-- **Dr. Rajesh Kumar:** rajesh.kumar@college.edu
-- **Prof. Priya Sharma:** priya.sharma@college.edu  
-- **Dr. Amit Patel:** amit.patel@college.edu
-- **Password:** password123 (for all)
-
-### Students
-- **Emails:** student001@college.edu to student030@college.edu
-- **Password:** password123 (for all)
 
 ## 📁 Tech Stack
 
