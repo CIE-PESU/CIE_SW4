@@ -123,6 +123,17 @@ export function NotificationDropdown({ activities, loading = false, onPageChange
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         
+        {/* View All Notifications - Top Position */}
+        <DropdownMenuItem 
+          className="text-center text-sm text-blue-600 cursor-pointer font-medium bg-blue-50 hover:bg-blue-100 border-b"
+          onClick={() => {
+            onPageChange?.('notifications')
+          }}
+        >
+          View all notifications
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        
         {loading ? (
           // Loading skeleton
           Array.from({ length: 3 }).map((_, index) => (
@@ -135,7 +146,7 @@ export function NotificationDropdown({ activities, loading = false, onPageChange
             </DropdownMenuItem>
           ))
         ) : unreadActivities.length > 0 ? (
-          unreadActivities.slice(0, 8).map((activity, index) => {
+          unreadActivities.slice(0, 5).map((activity, index) => {
             return (
               <DropdownMenuItem 
                 key={index} 
@@ -165,16 +176,6 @@ export function NotificationDropdown({ activities, loading = false, onPageChange
             </div>
           </DropdownMenuItem>
         )}
-        
-        <DropdownMenuSeparator />
-        <DropdownMenuItem 
-          className="text-center text-sm text-blue-600 cursor-pointer font-medium"
-          onClick={() => {
-            onPageChange?.('notifications')
-          }}
-        >
-          View all notifications
-        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )

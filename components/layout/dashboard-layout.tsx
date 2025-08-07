@@ -249,25 +249,49 @@ export function DashboardLayout({ children, currentPage, onPageChange, menuItems
   return (
     <div className={cn("min-h-screen bg-white dark:bg-dark5 dark:text-dark1", isDashboardHome ? "overflow-hidden" : "overflow-auto") }>
       {/* Top Header */}
-      <div className={cn("fixed top-0 right-0 z-30 h-16 bg-white dark:bg-dark5 border-b border-gray-200 dark:border-gray-700 shadow-sm transition-all duration-300", mainMargin)}>
+      <div className="fixed top-0 left-0 right-0 z-30 h-16 bg-white dark:bg-dark5 border-b border-gray-200 dark:border-gray-700 shadow-sm">
         <div className="flex items-center justify-between h-full px-4 lg:px-8">
-          {/* Mobile menu button */}
-          <button
-            className="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-md transition-colors"
-            onClick={() => setSidebarOpen(true)}
-          >
-            <Menu className="h-5 w-5" />
-          </button>
-          
-          {/* Spacer for mobile */}
-          <div className="flex-1 lg:hidden" />
+          {/* Left side - Logo and Mobile menu */}
+          <div className="flex items-center space-x-4">
+            {/* Mobile menu button */}
+            <button
+              className="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-md transition-colors"
+              onClick={() => setSidebarOpen(true)}
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+            
+            {/* Logo - hidden on mobile, visible on larger screens */}
+            <div className="hidden lg:flex items-center">
+              <img 
+                src="/logo.png" 
+                alt="CIE Logo" 
+                className="h-10 w-auto"
+              />
+            </div>
+          </div>
           
           {/* Right side - Notifications and Profile */}
           <div className="flex items-center space-x-3">
+            {/* Theme Toggle */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="h-9 w-9"
+            >
+              {theme === 'dark' ? (
+                <Sun className="h-4 w-4" />
+              ) : (
+                <Moon className="h-4 w-4" />
+              )}
+            </Button>
+            
             {/* Notifications */}
             <NotificationDropdown 
               activities={activities}
               loading={loading}
+              onPageChange={onPageChange}
             />
             
             {/* Profile Dropdown */}
@@ -297,14 +321,6 @@ export function DashboardLayout({ children, currentPage, onPageChange, menuItems
                   <DropdownMenuItem>
                     <User className="mr-2 h-4 w-4" />
                     <span>Profile</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
-                    {theme === 'dark' ? (
-                      <Sun className="mr-2 h-4 w-4" />
-                    ) : (
-                      <Moon className="mr-2 h-4 w-4" />
-                    )}
-                    <span>Toggle theme</span>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut}>
