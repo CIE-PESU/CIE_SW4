@@ -367,7 +367,7 @@ export function DashboardLayout({ children, currentPage, onPageChange, menuItems
                       {user.name}
                     </p>
                     <p className="text-xs text-gray-500 truncate">
-                      {user.role}
+                      {user.role.charAt(0).toUpperCase() + user.role.slice(1).toLowerCase()}
                     </p>
                   </div>
                   <DropdownMenu>
@@ -407,7 +407,7 @@ export function DashboardLayout({ children, currentPage, onPageChange, menuItems
                     <DropdownMenuLabel>
                       <div>
                         <p className="font-medium">{user.name}</p>
-                        <p className="text-sm text-muted-foreground">{user.role}</p>
+                        <p className="text-sm text-muted-foreground">{user.role.charAt(0).toUpperCase() + user.role.slice(1).toLowerCase()}</p>
                       </div>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />

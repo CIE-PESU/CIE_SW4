@@ -93,6 +93,7 @@ export default function StudentOpportunity() {
       setError('Please upload your resume (PDF) before applying.');
       return;
     }
+    const existingStatus = getApplicationStatus(oppId);
     try {
       // 1. Upload resume
       const fd = new FormData();
@@ -113,7 +114,7 @@ export default function StudentOpportunity() {
         body: JSON.stringify({ opportunityId: oppId, resumePath }),
       });
       if (res.ok) {
-        setSuccess('Application submitted!');
+        setSuccess(existingStatus ? 'Application updated successfully!' : 'Application submitted successfully!');
         setResumeFiles(prev => ({ ...prev, [oppId]: null }));
         if (fileInputRefs.current[oppId] && fileInputRefs.current[oppId].current) fileInputRefs.current[oppId].current.value = '';
         // Refresh applications
@@ -229,18 +230,22 @@ export default function StudentOpportunity() {
                   }</span></div>
                   <div className="flex justify-between"><span className="text-gray-500">App Window:</span><span className="text-right">{formatDate(opp.applicationStartDate)} to {formatDate(opp.applicationEndDate)}</span></div>
                   <div className="flex justify-between"><span className="text-gray-500">Capacity:</span><span className="text-right">{opp.capacity}</span></div>
-                  <div className="flex justify-between"><span className="text-gray-500">Applicants:</span><span className="text-right">{opp.opportunityApplications?.length ?? 0}</span></div>
                   <div className="flex justify-between"><span className="text-gray-500">Status:</span><span className="capitalize text-right">{opp.status.toLowerCase()}</span></div>
                 </div>
-                {!status && (
+                {(
                   <div className="flex flex-col gap-2 mt-2">
+                    {status && (
+                      <div className="text-sm text-blue-600 bg-blue-50 px-3 py-2 rounded-md">
+                        You have already applied to this opportunity. You can update your resume below.
+                      </div>
+                    )}
                     <div className="flex items-center gap-2">
                       <button
                         type="button"
                         className="bg-gray-100 border border-gray-300 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-200 transition-colors select-none"
                         onClick={() => fileInputRefs.current[opp.id]?.current?.click()}
                       >
-                        Upload Resume
+                        {status ? 'Replace Resume' : 'Upload Resume'}
                       </button>
                       <input
                         type="file"
@@ -254,7 +259,7 @@ export default function StudentOpportunity() {
                         onClick={() => handleApply(opp.id)}
                         disabled={!!applyingId}
                       >
-                        {applyingId === opp.id ? 'Applying...' : 'Apply'}
+                        {applyingId === opp.id ? 'Applying...' : status ? 'Update Application' : 'Apply'}
                       </button>
                     </div>
                     {resumeFiles[opp.id] && (

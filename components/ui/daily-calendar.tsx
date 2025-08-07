@@ -187,7 +187,7 @@ export function DailyCalendar({ role = 'admin' }: DailyCalendarProps) {
   };
 
   return (
-    <Card className="dashboard-tab-card transform hover:scale-105 focus:scale-105 transition-transform duration-200">
+    <Card className="dashboard-tab-card transform hover:scale-105 focus:scale-105 transition-transform duration-200 min-h-[500px] flex flex-col">
       <CardHeader>
         <div className="flex flex-col gap-1">
           <CardTitle className="text-xl">Daily Schedule</CardTitle>
@@ -282,7 +282,7 @@ export function DailyCalendar({ role = 'admin' }: DailyCalendarProps) {
         </div>
       </CardHeader>
       <CardContent className="pb-4">
-        <div className="space-y-2 max-h-60 overflow-y-auto">
+        <div className="space-y-2 max-h-80 overflow-y-auto">
           {timeSlots.map((timeSlot) => {
             const appointments = getAppointmentsForTimeSlot(timeSlot);
             const isCurrent = isCurrentTimeSlot(timeSlot);
@@ -292,8 +292,8 @@ export function DailyCalendar({ role = 'admin' }: DailyCalendarProps) {
                 key={timeSlot}
                 className={`p-3 border rounded-lg transition-all ${
                   isCurrent 
-                    ? 'bg-blue-50 dark:bg-dm-tab-purple border-blue-300' 
-                    : 'bg-white dark:bg-dm-tab-purple border-gray-200 hover:border-gray-300'
+                    ? 'bg-blue-50 border-blue-300' 
+                    : 'bg-white border-gray-200 hover:border-gray-300'
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -312,7 +312,7 @@ export function DailyCalendar({ role = 'admin' }: DailyCalendarProps) {
                       appointments.map((appointment) => (
                         <div
                           key={appointment.id}
-                          className="flex items-center justify-between p-3 bg-white dark:bg-dm-tab-purple border border-gray-200 rounded"
+                          className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded"
                         >
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2">

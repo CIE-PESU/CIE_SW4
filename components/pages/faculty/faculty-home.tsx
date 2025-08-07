@@ -195,11 +195,11 @@ export function FacultyHome({ onPageChange }: FacultyHomeProps) {
               </Card>
             )}
 
-            <div className="grid grid-cols-1 lg:grid-cols-10 gap-4">
-              <div className="lg:col-span-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="lg:col-span-1">
                 <TodoList role="faculty" />
               </div>
-              <div className="lg:col-span-6">
+              <div className="lg:col-span-1">
                 <DailyCalendar role="faculty" />
               </div>
             </div>

@@ -169,20 +169,22 @@ function ProjectDescription({ description }: { description: string }) {
   const needsTruncation = truncatedDescription !== description;
 
   return (
-    <div className="relative">
+    <div className="space-y-2">
       <p className="text-sm text-gray-600">
         {isExpanded ? description : truncatedDescription}
       </p>
       {needsTruncation && (
-        <Button
-          variant="ghost"
-          size="sm"
-          className="absolute -top-1 -right-1 h-6 w-6 p-0 hover:bg-blue-50"
-          onClick={() => setIsExpanded(!isExpanded)}
-          title={isExpanded ? "Show less" : "Show full description"}
-        >
-          <Info className="h-3 w-3 text-blue-500" />
-        </Button>
+        <div className="flex justify-end">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-6 w-6 p-0 hover:bg-blue-50"
+            onClick={() => setIsExpanded(!isExpanded)}
+            title={isExpanded ? "Show less" : "Show full description"}
+          >
+            <Info className="h-3 w-3 text-blue-500" />
+          </Button>
+        </div>
       )}
     </div>
   );
@@ -1905,12 +1907,12 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                 id="enrollment-cap"
                 type="number"
                 min="1"
-                max="50"
+                max="500"
                 value={enrollmentCap}
                 onChange={(e) =>
                   setEnrollmentCap(parseInt(e.target.value) || 1)
                 }
-                placeholder="Enter maximum number of students"
+                placeholder="Enter maximum number of students (1-500)"
               />
             </div>
           </div>
@@ -1967,57 +1969,10 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
       >
         <DialogContent className="sm:max-w-[1200px] max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="flex items-center justify-between">
-              <span>Project Applications - {selectedProject?.name}</span>
-              <div className="flex gap-2">
-                {!showAIRanking && selectedProjectApplications.length > 0 && (
-                  <>
-                    <Button
-                      variant="outline"
-                      onClick={() => setIsCustomPromptDialogOpen(true)}
-                      className="border-purple-300 text-purple-700 hover:bg-purple-50"
-                    >
-                      <Settings className="h-4 w-4 mr-2" />
-                      Customize AI Prompt
-                    </Button>
-                    <Button
-                      onClick={handleAIShortlistInDialog}
-                      disabled={isShortlisting}
-                      className="bg-purple-600 hover:bg-purple-700 text-white"
-                    >
-                      {isShortlisting ? (
-                        <>
-                          <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                          AI Analyzing...
-                        </>
-                      ) : (
-                        <>
-                          <CheckCircle className="h-4 w-4 mr-2" />
-                          AI Shortlist Candidates
-                        </>
-                      )}
-                    </Button>
-                  </>
-                )}
-                {showAIRanking && (
-                  <>
-                    <Button
-                      onClick={exportShortlistCSV}
-                      variant="outline"
-                      className="border-green-300 text-green-700 hover:bg-green-50"
-                    >
-                      <Download className="h-4 w-4 mr-2" />
-                      Export CSV
-                    </Button>
-                    <Button
-                      variant="outline"
-                      onClick={() => setShowAIRanking(false)}
-                    >
-                      <Users className="h-4 w-4 mr-2" />
-                      Show All Applications
-                    </Button>
-                  </>
-                )}
+            <DialogTitle>
+              <div className="flex items-center justify-between">
+                <span>Project Applications - {selectedProject?.name}</span>
+                {/* Close button space reserved - no content here */}
               </div>
             </DialogTitle>
             <DialogDescription>
@@ -2027,6 +1982,57 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                   } candidates for: ${selectedProject?.name}`
                 : ``}
             </DialogDescription>
+            {/* Action buttons moved below title to avoid overlap */}
+            <div className="flex gap-2 pt-2 border-t mt-4">
+              {!showAIRanking && selectedProjectApplications.length > 0 && (
+                <>
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsCustomPromptDialogOpen(true)}
+                    className="border-purple-300 text-purple-700 hover:bg-purple-50"
+                  >
+                    <Settings className="h-4 w-4 mr-2" />
+                    Customize AI Prompt
+                  </Button>
+                  <Button
+                    onClick={handleAIShortlistInDialog}
+                    disabled={isShortlisting}
+                    className="bg-purple-600 hover:bg-purple-700 text-white"
+                  >
+                    {isShortlisting ? (
+                      <>
+                        <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                        AI Analyzing...
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle className="h-4 w-4 mr-2" />
+                        AI Shortlist Candidates
+                      </>
+                    )}
+                  </Button>
+                </>
+              )}
+              {showAIRanking && (
+                <>
+                  <Button
+                    onClick={exportShortlistCSV}
+                    variant="outline"
+                    className="border-green-300 text-green-700 hover:bg-green-50"
+                  >
+                    <Download className="h-4 w-4 mr-2" />
+                    Export CSV
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowAIRanking(false)}
+                  >
+                    <Users className="h-4 w-4 mr-2" />
+                    Show All Applications
+                  </Button>
+                </>
+              )}
+            </div>
           </DialogHeader>
 
           <div className="space-y-4">
@@ -2955,7 +2961,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                   id="edit-enrollment-cap"
                   type="number"
                   min="1"
-                  max="50"
+                  max="500"
                   value={editingProject.enrollment_cap}
                   onChange={(e) =>
                     setEditingProject({
@@ -2963,7 +2969,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                       enrollment_cap: parseInt(e.target.value) || 1,
                     })
                   }
-                  placeholder="Enter maximum number of students"
+                  placeholder="Enter maximum number of students (1-500)"
                 />
                 <p className="text-sm text-gray-600">
                   Number of students who can be selected for this project

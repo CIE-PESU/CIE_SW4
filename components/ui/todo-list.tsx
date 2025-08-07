@@ -114,12 +114,12 @@ export function TodoList({ role = 'admin' }: TodoListProps) {
   const sortedTodos = [...todos].sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
 
   return (
-    <Card className="todo-list-card transform hover:scale-105 focus:scale-105 transition-transform duration-200">
+    <Card className="todo-list-card transform hover:scale-105 focus:scale-105 transition-transform duration-200 min-h-[500px] flex flex-col">
       <CardHeader>
         <CardTitle className="text-xl">To-Do List</CardTitle>
       </CardHeader>
-      <CardContent className="pb-4">
-        <div className="space-y-1">
+      <CardContent className="pb-4 flex-1 flex flex-col">
+        <div className="space-y-1 flex-1 flex flex-col">
           {/* Add new task */}
           <div className="flex items-baseline gap-2 mb-1">
             <Input
@@ -144,9 +144,9 @@ export function TodoList({ role = 'admin' }: TodoListProps) {
           </div>
 
           {/* Todo list */}
-          <div className="space-y-1 max-h-60 overflow-y-auto">
+          <div className="space-y-1 flex-1 overflow-y-auto">
             {sortedTodos.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
+              <div className="text-center py-8 text-gray-500 flex-1 flex flex-col justify-center">
                 <p>No tasks yet</p>
                 <p className="text-xs mt-1">Add your first task above</p>
               </div>
