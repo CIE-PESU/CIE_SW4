@@ -2,7 +2,7 @@ import React from "react";
 import { useAuth } from "@/components/auth-provider";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Mail, Phone, MapPin, BookOpen, Users, Calendar, BadgeIcon as IdCard, User as UserIcon, Camera, FilePlus, FileText, Download, Trash2 } from "lucide-react";
+import { Mail, Phone, MapPin, BookOpen, Users, Calendar, BadgeIcon as IdCard, User as UserIcon, Camera, FilePlus, FileText, Download, Trash2, GraduationCap, Award } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -348,10 +348,11 @@ export function UserProfile() {
 
                 {isStudentProfile(profile) && (
                     <>
+                        <ProfileRow label="Student ID" icon={IdCard} value={profile.student_id} />
                         <ProfileRow label="Program" icon={BookOpen} value={profile.program} />
                         <ProfileRow label="Year & Section" icon={Users} value={`${profile.year} - ${profile.section}`} />
                         <ProfileRow label="Advisor" icon={UserIcon} value={profile.advisor} />
-                        <ProfileRow label="GPA" icon={IdCard} value={profile.gpa} />
+                        <ProfileRow label="GPA" icon={Award} value={profile.gpa} />
                     </>
                 )}
               </tbody>
