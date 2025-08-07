@@ -36,7 +36,7 @@ export function getOverdueDays(dueDate: string): number {
 
 export function getTimeUntilExpiry(requestDate: string): { expired: boolean, timeLeft: string, minutesLeft: number } {
   const reservationTime = new Date(requestDate)
-  const expiryTime = new Date(reservationTime.getTime() + 120 * 1000) // Add 2 hours
+  const expiryTime = new Date(reservationTime.getTime() + 2 * 60 * 60 * 1000) // Add 2 hours
   const now = new Date()
   const timeLeft = expiryTime.getTime() - now.getTime()
   

@@ -32,7 +32,7 @@ export function getOverdueDays(expectedReturnDate: string): number {
   return Math.ceil(diffMs / (1000 * 60 * 60 * 24));
 }
 
-type ViewType = 'available' | 'requests' | 'active' | 'overdue'
+type ViewType = 'available' | 'reserved' | 'active' | 'overdue'
 
 interface LabComponent {
   id: string
@@ -95,9 +95,6 @@ export function LabComponentsRequest() {
   const [imageStates, setImageStates] = useState<Record<string, boolean>>({}) // false = front, true = back
   const [showBack, setShowBack] = useState(false)
 
-
-
-  const [userReturnDialogOpen, setUserReturnDialogOpen] = useState<string | null>(null)
   const [infoDialogOpen, setInfoDialogOpen] = useState<string | null>(null)
   const [categoryFilter, setCategoryFilter] = useState<string>("All")
 
@@ -305,40 +302,6 @@ export function LabComponentsRequest() {
     }
   }
 
-  const handleReturnComponent = async (requestId: string) => {
-    if (!user) return;
-    try {
-      const response = await fetch(`/api/component-requests/${requestId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          "x-user-id": user.id
-        },
-        body: JSON.stringify({
-          status: "USER_RETURNED",  // Student confirms they have returned the component
-          return_date: new Date().toISOString(),
-        }),
-      })
-
-      if (response.ok) {
-        fetchData()
-        toast({
-          title: "Return Confirmed",
-          description: "You have confirmed returning the component. Awaiting coordinator verification.",
-        })
-      } else {
-        throw new Error("Failed to confirm return")
-      }
-    } catch (error) {
-      console.error("Error confirming return:", error)
-      toast({
-        title: "Error",
-        description: "Failed to confirm return",
-        variant: "destructive",
-      })
-    }
-  }
-
   const getStatusColor = (status: string) => {
     switch (status.toUpperCase()) {
       case "PENDING":
@@ -402,6 +365,11 @@ export function LabComponentsRequest() {
   const activeRequests = requests.filter(r => r.status === "APPROVED" || r.status === "COLLECTED")
   const overdueRequests = requests.filter(r => r.status === "COLLECTED" && isOverdue(r.required_date))
 
+  // Filter requests by status to match library system
+  const reservedItems = requests.filter((req) => req.status === "APPROVED")
+  const activeLoans = requests.filter((req) => req.status === "COLLECTED")
+  const overdueItems = activeLoans.filter((req) => req.required_date && isOverdue(req.required_date))
+
   const [currentView, setCurrentView] = useState<ViewType>('available')
 
   if (loading) {
@@ -454,22 +422,22 @@ export function LabComponentsRequest() {
           
           <Card 
             className={`cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105 hover:bg-blue-100 hover:border-blue-300 ${
-              currentView === 'requests' ? 'ring-2 ring-blue-500 bg-blue-50 border-blue-200' : 'hover:ring-1 hover:ring-blue-200'
+              currentView === 'reserved' ? 'ring-2 ring-blue-500 bg-blue-50 border-blue-200' : 'hover:ring-1 hover:ring-blue-200'
             }`}
-            onClick={() => setCurrentView('requests')}
+            onClick={() => setCurrentView('reserved')}
           >
             <CardContent className="p-4">
               <div className="flex items-center space-x-2">
                 <ClipboardCheck className={`h-5 w-5 transition-colors duration-200 ${
-                  currentView === 'requests' ? 'text-blue-600' : 'text-blue-500 group-hover:text-blue-700'
+                  currentView === 'reserved' ? 'text-blue-600' : 'text-blue-500 group-hover:text-blue-700'
                 }`} />
                 <div>
                   <p className={`text-2xl font-bold transition-colors duration-200 ${
-                    currentView === 'requests' ? 'text-blue-700' : 'text-gray-900'
-                  }`}>{requests.length}</p>
+                    currentView === 'reserved' ? 'text-blue-700' : 'text-gray-900'
+                  }`}>{reservedItems.length}</p>
                   <p className={`text-sm transition-colors duration-200 ${
-                    currentView === 'requests' ? 'text-blue-600' : 'text-gray-600'
-                  }`}>My Requests</p>
+                    currentView === 'reserved' ? 'text-blue-600' : 'text-gray-600'
+                  }`}>Reserved</p>
                 </div>
               </div>
             </CardContent>
@@ -483,16 +451,16 @@ export function LabComponentsRequest() {
           >
             <CardContent className="p-4">
               <div className="flex items-center space-x-2">
-                <Clock className={`h-5 w-5 transition-colors duration-200 ${
+                <Package className={`h-5 w-5 transition-colors duration-200 ${
                   currentView === 'active' ? 'text-green-600' : 'text-green-500 group-hover:text-green-700'
                 }`} />
                 <div>
                   <p className={`text-2xl font-bold transition-colors duration-200 ${
                     currentView === 'active' ? 'text-green-700' : 'text-gray-900'
-                  }`}>{activeRequests.length}</p>
+                  }`}>{activeLoans.length}</p>
                   <p className={`text-sm transition-colors duration-200 ${
                     currentView === 'active' ? 'text-green-600' : 'text-gray-600'
-                  }`}>Active Requests</p>
+                  }`}>Active Loans</p>
                 </div>
               </div>
             </CardContent>
@@ -512,7 +480,7 @@ export function LabComponentsRequest() {
                 <div>
                   <p className={`text-2xl font-bold transition-colors duration-200 ${
                     currentView === 'overdue' ? 'text-red-700' : 'text-gray-900'
-                  }`}>{overdueRequests.length}</p>
+                  }`}>{overdueItems.length}</p>
                   <p className={`text-sm transition-colors duration-200 ${
                     currentView === 'overdue' ? 'text-red-600' : 'text-gray-600'
                   }`}>Overdue</p>
@@ -862,363 +830,250 @@ export function LabComponentsRequest() {
             </Card>
           </div>
         )}
-        {currentView === 'requests' && (
+        {currentView === 'reserved' && (
           <div className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <ClipboardCheck className="h-5 w-5" />
-                  <span>My Requests</span>
-                </CardTitle>
-                <CardDescription>
-                  View all your component requests and their current status.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-2">
-              {requests.length === 0 ? (
-                <Card>
-                  <CardContent className="p-4 text-center">
-                    <Package className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                    <h3 className="font-medium text-gray-900 mb-1">No requests yet</h3>
-                    <p className="text-sm text-gray-600">Submit your first component request to get started.</p>
-                  </CardContent>
-                </Card>
-              ) : (
-                requests.map((request) => (
-                  <Card key={request.id} className="border-l-4 border-l-orange-400">
-                    <CardContent className="p-3">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3 flex-1">
-                          <div className="w-8 h-8 bg-orange-100 rounded-md flex items-center justify-center flex-shrink-0">
-                            <Package className="h-4 w-4 text-orange-600" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <h3 className="font-medium text-gray-900 truncate text-sm">{request.component.component_name}</h3>
-                            <div className="flex items-center space-x-3 text-xs text-gray-500 mt-0.5">
-                              <span>Qty: {request.quantity}</span>
-                              <span>Requested: {new Date(request.request_date).toLocaleDateString()}</span>
-                              <span className={isOverdue(request.required_date) ? "text-red-600 font-medium" : ""}>
-                                Due: {new Date(request.required_date).toLocaleDateString()}
-                              </span>
-                            </div>
-                            {request.project_id && (
-                              <div className="mt-1">
-                                <p className="text-xs text-orange-600">
-                                  Project: {projects.find(p => p.id === request.project_id)?.name || 'Unknown'}
-                                </p>
-                              </div>
-                            )}
-                          </div>
+            <h2 className="text-xl font-semibold">Reserved Items</h2>
+            {reservedItems.length === 0 ? (
+              <Card>
+                <CardContent className="p-8 text-center">
+                  <ClipboardCheck className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No reserved items</h3>
+                  <p className="text-gray-600">Items you reserve will appear here, ready for collection.</p>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {reservedItems.map((request) => (
+                  <Card key={request.id} className="flex flex-col h-full hover:shadow-lg hover:scale-105 transition-all duration-200 border border-gray-200 bg-white">
+                    <CardHeader className="p-3 pb-2">
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1 min-w-0">
+                          <CardTitle className="flex items-center space-x-2 text-base font-semibold">
+                            <ClipboardCheck className="h-4 w-4 flex-shrink-0 text-blue-600" />
+                            <span className="truncate">{request.component.component_name}</span>
+                          </CardTitle>
+                          <CardDescription className="text-xs">{request.component.component_category}</CardDescription>
                         </div>
-                        
-                        <div className="flex items-center space-x-2">
-                          <Badge className={`${getStatusColor(request.status)} text-xs px-2 py-1`}>
-                            <div className="flex items-center space-x-1">
-                              {getStatusIcon(request.status)}
-                              <span>{request.status}</span>
-                            </div>
+                        <div className="flex items-center space-x-1 flex-shrink-0">
+                          <Badge className="text-xs px-2 py-0.5 rounded-full font-medium bg-blue-100 text-blue-800">
+                            Reserved
                           </Badge>
-                          
-                          {/* Status-specific actions and messages */}
-                          <div className="text-right min-w-0">
-                            {request.status === "COLLECTED" && (
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => setUserReturnDialogOpen(request.id)}
-                                className="text-xs"
-                              >
-                                I Returned It
-                              </Button>
-                            )}
-
-                            {request.status === "USER_RETURNED" && (
-                              <div className="text-xs text-purple-600 font-medium">
-                                Waiting for coordinator verification
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="flex-grow flex flex-col p-3 pt-0">
+                      <div className="space-y-3 flex-grow">
+                        {/* Image Display */}
+                        {(request.component.front_image_id || request.component.back_image_id || request.component.image_url) && (
+                          <div className="relative w-full h-48">
+                            <img
+                              src={request.component.image_url || '/placeholder.jpg'}
+                              alt={`Image of ${request.component.component_name}`}
+                              className="w-full h-full object-contain rounded-md bg-gray-50"
+                              onError={(e) => {
+                                e.currentTarget.src = "/placeholder.jpg"
+                              }}
+                            />
+                          </div>
+                        )}
+                        
+                        <div className="space-y-1">
+                          <div className="grid grid-cols-2 gap-2 text-xs text-gray-700">
+                            <div>
+                              <span className="font-medium">Reserved:</span> {new Date(request.request_date).toLocaleDateString()}
+                            </div>
+                            {request.quantity && (
+                              <div>
+                                <span className="font-medium">Quantity:</span> {request.quantity}
                               </div>
                             )}
-                            
-                            {request.status === "RETURNED" && (
-                              <p className="text-xs text-green-600">
-                                ✅ Returned
-                              </p>
-                            )}
-                            
-                            {request.status === "REJECTED" && (
-                              <p className="text-xs text-red-600">
-                                ❌ Rejected
-                              </p>
-                            )}
-
-                            {/* Show overdue warning for collected items */}
-                            {request.status === "COLLECTED" && isOverdue(request.required_date) && (
-                              <p className="text-xs text-red-600 font-medium mt-1">
-                                ⚠️ {getOverdueDays(request.required_date)}d overdue
-                              </p>
-                            )}
+                          </div>
+                          
+                          <div className="flex items-center space-x-1 mt-2">
+                            <ClipboardCheck className="h-3 w-3 text-blue-600" />
+                            <p className="text-xs font-medium text-blue-600">
+                              Ready for collection
+                            </p>
                           </div>
                         </div>
-                        
                       </div>
-                      {request.faculty_notes && (
-                        <div className="mt-3 p-2 bg-blue-50 rounded text-xs text-blue-700">
-                          <strong>Faculty Notes:</strong> {request.faculty_notes}
-                        </div>
-                      )}
                     </CardContent>
                   </Card>
-                ))
-              )}
-                </div>
-              </CardContent>
-            </Card>
+                ))}
+              </div>
+            )}
           </div>
         )}
         {currentView === 'active' && (
           <div className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Clock className="h-5 w-5" />
-                  <span>Active Requests</span>
-                </CardTitle>
-                <CardDescription>
-                  View your currently active component requests.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-2">
-              {activeRequests.length === 0 ? (
-                <Card>
-                  <CardContent className="p-4 text-center">
-                    <Clock className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                    <h3 className="font-medium text-gray-900 mb-1">No active requests</h3>
-                    <p className="text-sm text-gray-600">You have no active component requests.</p>
-                  </CardContent>
-                </Card>
-              ) : (
-                activeRequests.map((request) => (
-                  <Card key={request.id} className="border-l-4 border-l-green-400">
-                    <CardContent className="p-3">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3 flex-1">
-                          <div className="w-8 h-8 bg-green-100 rounded-md flex items-center justify-center flex-shrink-0">
-                            <Package className="h-4 w-4 text-green-600" />
-                          </div>
+            <h2 className="text-xl font-semibold">Active Loans</h2>
+            {activeLoans.length === 0 ? (
+              <Card>
+                <CardContent className="p-8 text-center">
+                  <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No active loans</h3>
+                  <p className="text-gray-600">Items you collect will appear here.</p>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {activeLoans.map((request) => {
+                  const overdue = request.required_date && isOverdue(request.required_date)
+                  const daysOverdue = request.required_date ? getOverdueDays(request.required_date) : 0
+                  
+                  return (
+                    <Card key={request.id} className={`flex flex-col h-full hover:shadow-lg hover:scale-105 transition-all duration-200 border border-gray-200 bg-white ${
+                      overdue ? "border-red-200 bg-red-50" : ""
+                    }`}>
+                      <CardHeader className="p-3 pb-0">
+                        <div className="flex justify-between items-start">
                           <div className="flex-1 min-w-0">
-                            <h3 className="font-medium text-gray-900 truncate text-sm">{request.component.component_name}</h3>
-                            <div className="flex items-center space-x-3 text-xs text-gray-500 mt-0.5">
-                              <span>Qty: {request.quantity}</span>
-                              <span>Requested: {new Date(request.request_date).toLocaleDateString()}</span>
-                              <span className={isOverdue(request.required_date) ? "text-red-600 font-medium" : ""}>
-                                Due: {new Date(request.required_date).toLocaleDateString()}
-                              </span>
-                            </div>
-                            {request.project_id && (
-                              <div className="mt-1">
-                                <p className="text-xs text-green-600">
-                                  Project: {projects.find(p => p.id === request.project_id)?.name || 'Unknown'}
-                                </p>
-                              </div>
-                            )}
+                            <CardTitle className="flex items-center space-x-2 text-base font-semibold">
+                              <Package className="h-5 w-5 flex-shrink-0 text-purple-600" />
+                              <span className="truncate">{request.component.component_name}</span>
+                            </CardTitle>
+                            <CardDescription className="text-xs text-gray-500">{request.component.component_category}</CardDescription>
+                          </div>
+                          <div className="flex items-center space-x-1 flex-shrink-0">
+                            <Badge className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                              overdue ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
+                            }`}>
+                              {overdue ? 'Overdue' : 'Active Loan'}
+                            </Badge>
                           </div>
                         </div>
-                        
-                        <div className="flex items-center space-x-2">
-                          <Badge className={`${getStatusColor(request.status)} text-xs px-2 py-1`}>
-                            <div className="flex items-center space-x-1">
-                              {getStatusIcon(request.status)}
-                              <span>{request.status}</span>
+                      </CardHeader>
+                      <CardContent className="flex-grow flex flex-col p-3 pt-0">
+                        <div className="space-y-3 flex-grow">
+                          {/* Image Display */}
+                          {(request.component.front_image_id || request.component.back_image_id || request.component.image_url) && (
+                            <div className="relative w-full h-48">
+                              <img
+                                src={request.component.image_url || '/placeholder.jpg'}
+                                alt={`Image of ${request.component.component_name}`}
+                                className="w-full h-full object-contain rounded-md bg-gray-50"
+                                onError={(e) => {
+                                  e.currentTarget.src = "/placeholder.jpg"
+                                }}
+                              />
                             </div>
-                          </Badge>
+                          )}
                           
-                          {/* Status-specific actions and messages */}
-                          <div className="text-right min-w-0">
-                            {request.status === "COLLECTED" && (
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => setUserReturnDialogOpen(request.id)}
-                                className="text-xs"
-                              >
-                                I Returned It
-                              </Button>
-                            )}
-
-                            {request.status === "USER_RETURNED" && (
-                              <div className="text-xs text-purple-600 font-medium">
-                                Waiting for coordinator verification
+                          <div className="space-y-1">
+                            <div className="grid grid-cols-2 gap-2 text-xs text-gray-700">
+                              <div>
+                                <span className="font-medium">Collected:</span> {new Date(request.request_date).toLocaleDateString()}
                               </div>
-                            )}
+                              {request.quantity && (
+                                <div>
+                                  <span className="font-medium">Quantity:</span> {request.quantity}
+                                </div>
+                              )}
+                            </div>
                             
-                            {request.status === "RETURNED" && (
-                              <p className="text-xs text-green-600">
-                                ✅ Returned
+                            <div className="flex items-center space-x-1 mt-2">
+                              <p className={`text-xs font-medium ${
+                                overdue ? 'text-red-600' : 'text-green-600'
+                              }`}>
+                                {overdue ? `${daysOverdue} days overdue` : 'Currently borrowed'}
                               </p>
-                            )}
-                            
-                            {request.status === "REJECTED" && (
-                              <p className="text-xs text-red-600">
-                                ❌ Rejected
-                              </p>
-                            )}
-
-                            {/* Show overdue warning for collected items */}
-                            {request.status === "COLLECTED" && isOverdue(request.required_date) && (
-                              <p className="text-xs text-red-600 font-medium mt-1">
-                                ⚠️ {getOverdueDays(request.required_date)}d overdue
+                            </div>
+                            {overdue && (
+                              <p className="text-red-600 font-medium text-xs mt-1">
+                                ⚠️ Return immediately to avoid penalties
                               </p>
                             )}
                           </div>
                         </div>
-                      </div>
-                      {request.faculty_notes && (
-                        <div className="mt-3 p-2 bg-blue-50 rounded text-xs text-blue-700">
-                          <strong>Faculty Notes:</strong> {request.faculty_notes}
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                ))
-              )}
-                </div>
-              </CardContent>
-            </Card>
+                      </CardContent>
+                    </Card>
+                  )
+                })}
+              </div>
+            )}
           </div>
         )}
         {currentView === 'overdue' && (
           <div className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <AlertTriangle className="h-5 w-5" />
-                  <span>Overdue Requests</span>
-                </CardTitle>
-                <CardDescription>
-                  View your overdue component requests that need attention.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-2">
-                  {overdueRequests.length === 0 ? (
-                    <Card>
-                      <CardContent className="p-4 text-center">
-                        <AlertTriangle className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                        <h3 className="font-medium text-gray-900 mb-1">No overdue requests</h3>
-                        <p className="text-sm text-gray-600">You have no overdue component requests.</p>
-                      </CardContent>
-                    </Card>
-                  ) : (
-                    overdueRequests.map((request) => (
-                      <Card key={request.id} className="border-l-4 border-l-red-400">
-                        <CardContent className="p-3">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-3 flex-1">
-                              <div className="w-8 h-8 bg-red-100 rounded-md flex items-center justify-center flex-shrink-0">
-                                <Package className="h-4 w-4 text-red-600" />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <h3 className="font-medium text-gray-900 truncate text-sm">{request.component.component_name}</h3>
-                                <div className="flex items-center space-x-3 text-xs text-gray-500 mt-0.5">
-                                  <span>Qty: {request.quantity}</span>
-                                  <span>Requested: {new Date(request.request_date).toLocaleDateString()}</span>
-                                  <span className={isOverdue(request.required_date) ? "text-red-600 font-medium" : ""}>
-                                    Due: {new Date(request.required_date).toLocaleDateString()}
-                                  </span>
-                                </div>
-                                {request.project_id && (
-                                  <div className="mt-1">
-                                    <p className="text-xs text-red-600">
-                                      Project: {projects.find(p => p.id === request.project_id)?.name || 'Unknown'}
-                                    </p>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              <Badge className={`${getStatusColor(request.status)} text-xs px-2 py-1`}>
-                                <div className="flex items-center space-x-1">
-                                  {getStatusIcon(request.status)}
-                                  <span>{request.status}</span>
-                                </div>
-                              </Badge>
-                              {/* Status-specific actions and messages */}
-                              <div className="text-right min-w-0">
-                                {request.status === "COLLECTED" && (
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() => setUserReturnDialogOpen(request.id)}
-                                    className="text-xs"
-                                  >
-                                    I Returned It
-                                  </Button>
-                                )}
-                                {request.status === "USER_RETURNED" && (
-                                  <div className="text-xs text-purple-600 font-medium">
-                                    Waiting for coordinator verification
-                                  </div>
-                                )}
-                                {request.status === "RETURNED" && (
-                                  <p className="text-xs text-green-600">
-                                    ✅ Returned
-                                  </p>
-                                )}
-                                {request.status === "REJECTED" && (
-                                  <p className="text-xs text-red-600">
-                                    ❌ Rejected
-                                  </p>
-                                )}
-                                {/* Show overdue warning for collected items */}
-                                {request.status === "COLLECTED" && isOverdue(request.required_date) && (
-                                  <p className="text-xs text-red-600 font-medium mt-1">
-                                    ⚠️ {getOverdueDays(request.required_date)}d overdue
-                                  </p>
-                                )}
-                              </div>
-                            </div>
+            <h2 className="text-xl font-semibold">Overdue Items</h2>
+            {overdueItems.length === 0 ? (
+              <Card>
+                <CardContent className="p-8 text-center">
+                  <CheckCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No overdue items</h3>
+                  <p className="text-gray-600">Keep up the good work! Return items on time.</p>
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {overdueItems.map((request) => {
+                  const daysOverdue = request.required_date ? getOverdueDays(request.required_date) : 0
+                  
+                  return (
+                    <Card key={request.id} className="flex flex-col h-full hover:shadow-lg hover:scale-105 transition-all duration-200 border border-red-300 bg-red-50">
+                      <CardHeader className="p-3 pb-2">
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1 min-w-0">
+                            <CardTitle className="flex items-center space-x-2 text-base font-semibold">
+                              <Package className="h-4 w-4 flex-shrink-0 text-red-600" />
+                              <span className="truncate">{request.component.component_name}</span>
+                            </CardTitle>
+                            <CardDescription className="text-xs">{request.component.component_category}</CardDescription>
                           </div>
-                          {request.faculty_notes && (
-                            <div className="mt-3 p-2 bg-blue-50 rounded text-xs text-blue-700">
-                              <strong>Faculty Notes:</strong> {request.faculty_notes}
+                          <div className="flex items-center space-x-1 flex-shrink-0">
+                            <Badge className="text-xs px-2 py-0.5 rounded-full font-medium bg-red-100 text-red-800">
+                              Overdue
+                            </Badge>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="flex-grow flex flex-col p-3 pt-0">
+                        <div className="space-y-3 flex-grow">
+                          {/* Image Display */}
+                          {(request.component.front_image_id || request.component.back_image_id || request.component.image_url) && (
+                            <div className="relative w-full h-48">
+                              <img
+                                src={request.component.image_url || '/placeholder.jpg'}
+                                alt={`Image of ${request.component.component_name}`}
+                                className="w-full h-full object-contain rounded-md bg-gray-50"
+                                onError={(e) => {
+                                  e.currentTarget.src = "/placeholder.jpg"
+                                }}
+                              />
                             </div>
                           )}
-                        </CardContent>
-                      </Card>
-                    ))
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+                          
+                          <div className="space-y-1">
+                            <div className="grid grid-cols-2 gap-2 text-xs text-gray-700">
+                              <div>
+                                <span className="font-medium">Collected:</span> {new Date(request.request_date).toLocaleDateString()}
+                              </div>
+                              {request.quantity && (
+                                <div>
+                                  <span className="font-medium">Quantity:</span> {request.quantity}
+                                </div>
+                              )}
+                            </div>
+                            
+                            <div className="flex items-center space-x-1 mt-2">
+                              <p className="text-xs text-red-600 font-medium">
+                                {daysOverdue} days overdue
+                              </p>
+                            </div>
+                            <p className="text-red-600 font-medium text-xs mt-1">
+                              ⚠️ Return immediately to avoid penalties
+                            </p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )
+                })}
+              </div>
+            )}
           </div>
         )}
       </div>
-
-                  {/* User Returned Dialog */}
-                  <Dialog open={!!userReturnDialogOpen} onOpenChange={(open) => !open && setUserReturnDialogOpen(null)}>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Confirm Component Return</DialogTitle>
-                        <DialogDescription>
-                          Please confirm that you have physically returned this component to the lab. The coordinator will then verify and complete the return process.
-                        </DialogDescription>
-                      </DialogHeader>
-                      <div className="flex justify-end space-x-2">
-                        <Button variant="outline" onClick={() => setUserReturnDialogOpen(null)}>
-                          Cancel
-                        </Button>
-                        <Button onClick={() => {
-                          if (userReturnDialogOpen) {
-                            handleReturnComponent(userReturnDialogOpen)
-                            setUserReturnDialogOpen(null)
-                          }
-                        }}>
-                          Yes, I Returned It
-                        </Button>
-                      </div>
-                    </DialogContent>
-                  </Dialog>
 
                   {/* Component Info Dialog */}
                   <Dialog open={!!infoDialogOpen} onOpenChange={(open) => !open && setInfoDialogOpen(null)}>

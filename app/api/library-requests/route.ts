@@ -5,15 +5,15 @@ import { RequestStatus } from "@prisma/client";
 
 async function expireOldReservations() {
   try {
-    const twoMinutesAgo = new Date(Date.now() - 2 * 60 * 1000) // 2 minutes ago
-    
-    // Find all APPROVED requests that have been approved for more than 2 minutes
+    const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000) // 2 hours ago
+
+    // Find all APPROVED requests that have been approved for more than 2 hours
     // Since we don't have updatedAt, we'll use request_date as approximation
     const expiredRequests = await prisma.libraryRequest.findMany({
       where: {
         status: "APPROVED",
         request_date: {
-          lt: twoMinutesAgo
+          lt: twoHoursAgo
         }
       },
       include: {
@@ -32,7 +32,7 @@ async function expireOldReservations() {
             where: { id: request.id },
             data: {
               status: RequestStatus.OVERDUE,
-              faculty_notes: "Auto-expired after 2 minutes - not collected"
+              faculty_notes: "Auto-expired after 2 hours - not collected"
             }
           })
 

@@ -108,7 +108,10 @@ export function ManageLabComponents() {
     purchase_date: "",
     purchase_value: "",
     purchase_currency: "INR"
+    // domain_id removed - automatically assigned by API
   })
+
+  // Removed domains state - lab components are auto-assigned to "Lab Components" domain
 
   // Individual tracking state
   const [trackIndividual, setTrackIndividual] = useState(false)
@@ -164,6 +167,7 @@ export function ManageLabComponents() {
     fetchComponents()
     fetchCategories()
     fetchLocations()
+    // fetchDomains() removed - domain assignment is automatic
   }, [])
 
   // Debug user information
@@ -1244,6 +1248,7 @@ export function ManageLabComponents() {
       purchase_date: "",
       purchase_value: "",
       purchase_currency: "INR"
+      // domain_id removed - automatically assigned by API
     })
     setFrontImageFile(null)
     setBackImageFile(null)

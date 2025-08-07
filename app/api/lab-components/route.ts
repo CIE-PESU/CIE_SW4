@@ -173,6 +173,21 @@ export async function POST(request: NextRequest) {
 
     console.log("POST /api/lab-components - Final userName being used:", userName)
 
+    // AUTOMATIC DOMAIN ASSIGNMENT: All lab components are automatically assigned to "Lab Components" domain
+    // This ensures proper coordinator lookup for component requests without requiring user selection
+    let domain_id = data.domain_id
+    if (!domain_id) {
+      const labComponentsDomain = await prisma.domain.findFirst({
+        where: { name: 'Lab Components' }
+      })
+      if (labComponentsDomain) {
+        domain_id = labComponentsDomain.id
+        console.log("POST /api/lab-components - Auto-assigned to Lab Components domain:", domain_id)
+      } else {
+        console.warn("POST /api/lab-components - Warning: No 'Lab Components' domain found, component will be created without domain")
+      }
+    }
+
     const component = await prisma.labComponent.create({
       data: {
         component_name: data.component_name,
@@ -190,6 +205,7 @@ export async function POST(request: NextRequest) {
         purchase_currency: data.purchase_currency || "INR",
         purchase_date: data.purchase_date ? new Date(data.purchase_date) : null,
         created_by: userName,
+        domain_id: domain_id, // Add domain assignment
         track_individual: data.track_individual || false,
         individual_items: data.individual_items ? JSON.stringify(data.individual_items) : undefined,
       },

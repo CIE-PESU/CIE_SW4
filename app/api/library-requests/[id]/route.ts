@@ -38,9 +38,9 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 
       // Allow students to expire their own time-expired APPROVED reservations
       if (body.status === "OVERDUE" && currentRequest.status === "APPROVED") {
-        // Check if the reservation has actually expired (2 minutes for testing)
+        // Check if the reservation has actually expired (2 hours)
         const reservationTime = new Date(currentRequest.request_date)
-        const expiryTime = new Date(reservationTime.getTime() + 2 * 60 * 1000) // Add 2 minutes for testing
+        const expiryTime = new Date(reservationTime.getTime() + 2 * 60 * 60 * 1000) // Add 2 hours
         const now = new Date()
         
         if (now > expiryTime) {
@@ -417,9 +417,9 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
         // Already marked as overdue, can delete
         canDelete = true;
       } else if (currentRequest.status === "APPROVED") {
-        // Check if the reservation has actually expired (2 minutes for testing)
+        // Check if the reservation has actually expired (2 hours)
         const reservationTime = new Date(currentRequest.request_date)
-        const expiryTime = new Date(reservationTime.getTime() + 2 * 60 * 1000) // Add 2 minutes for testing
+        const expiryTime = new Date(reservationTime.getTime() + 2 * 60 * 60 * 1000) // Add 2 hours
         const now = new Date()
         
         if (now > expiryTime) {
