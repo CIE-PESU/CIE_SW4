@@ -3,6 +3,25 @@ import { hash } from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
+function generateStudentId({
+  campus,
+  programType,
+  startYear,
+  courseCode,
+  rollNumber
+}: {
+  campus: 1 | 2;
+  programType: 'UG' | 'PG';
+  startYear: number;
+  courseCode: string;
+  rollNumber: number;
+}): string {
+  const yy = startYear.toString().slice(-2);
+  const nnn = rollNumber.toString().padStart(3, '0');
+  return `PES${campus}${programType}${yy}${courseCode}${nnn}`;
+}
+
+
 async function main() {
   // Clear existing data (preserve users, admins, faculty, students)
   await prisma.componentRequest.deleteMany();
@@ -53,6 +72,8 @@ async function main() {
 
   // Create users and their respective role records
   const createdUsers: Record<string, any> = {};
+  let studentCounter = 1; // Counter for roll numbers
+  
   for (const userInfo of userData) {
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
@@ -104,7 +125,29 @@ async function main() {
         });
         createdUsers[userInfo.email] = user;
       } else if (userInfo.role === 'STUDENT') {
-        const studentId = `STU${Date.now()}${Math.floor(Math.random() * 1000)}`;
+        // Decide campus (1 or 2)
+        const campus = Math.random() < 0.5 ? 1 : 2;
+
+        // For trial purposes, assume all are UG students
+        const programType = 'UG';
+
+        // Assume they started in 2024 (you can make this dynamic later)
+        const startYear = 2024;
+
+        // Default to CS course code (you can make this varied later)
+        const courseCode = 'CS';
+
+        // Use counter for roll number
+        const rollNumber = studentCounter++;
+
+        const studentId = generateStudentId({
+          campus,
+          programType,
+          startYear,
+          courseCode,
+          rollNumber
+        });
+
         const user = await prisma.user.create({
           data: {
             email: userInfo.email,
@@ -158,13 +201,6 @@ async function main() {
     }
   });
 
-  const projectManager = await prisma.domain.create({
-    data: {
-      name: 'Project Manager',
-      description: 'Domain for managing project coordination and oversight',
-    }
-  });
-
   // Assign domain coordinators
   await prisma.domainCoordinator.create({
     data: {
@@ -179,15 +215,6 @@ async function main() {
     data: {
       domain_id: libraryDomain.id,
       faculty_id: createdUsers['sathya.prasad@pes.edu'].faculty?.id,
-      assigned_by: createdUsers['cie.admin@pes.edu'].id,
-      assigned_at: new Date(),
-    }
-  });
-
-  await prisma.domainCoordinator.create({
-    data: {
-      domain_id: projectManager.id,
-      faculty_id: createdUsers['tarunrama@pes.edu'].faculty?.id,
       assigned_by: createdUsers['cie.admin@pes.edu'].id,
       assigned_at: new Date(),
     }
@@ -237,7 +264,7 @@ async function main() {
     data: {
       course_name: "Internet of Things",
       course_description: "Comprehensive study of IoT systems, sensor networks, and smart device integration for real-world applications.",
-      course_code: "CS102", 
+      course_code: "CS102",
       course_start_date: new Date("2025-07-01T00:00:00.000Z"),
       course_end_date: new Date("2025-09-01T00:00:00.000Z"),
       course_enrollments: [],
@@ -539,7 +566,7 @@ async function main() {
 
   // Create sample component requests demonstrating the simplified return flow
   console.log('\n📝 Creating sample component requests...');
-  
+
   // Student request - COLLECTED status (ready for return)
   const studentRequest1 = await prisma.componentRequest.create({
     data: {
@@ -655,8 +682,8 @@ async function main() {
   // Summary
   console.log('\n🎉 Seed completed successfully!');
   console.log('\n📊 Summary of created data:');
-  console.log(`   - Domains: 5 (Lab Components, Library, Platform Manager, Developer, Project Manager)`);
-  console.log(`   - Domain Coordinators: 3`);
+  console.log(`   - Domains: 4 (Lab Components, Library, Platform Manager, Developer)`);
+  console.log(`   - Domain Coordinators: 2`);
   console.log(`   - Courses: 2`);
   console.log(`   - Course Units: 2`);
   console.log(`   - Lab Components: 5 (all assigned to Lab Components domain)`);
@@ -671,7 +698,6 @@ async function main() {
   console.log('\n👨‍💼 Coordinator Assignments:');
   console.log(`   - Madhukar N: Lab Components Domain (${labDomain.name})`);
   console.log(`   - Sathya Prasad: Library Domain (${libraryDomain.name})`);
-  console.log(`   - Tarun R: Project Manager Domain (${projectManager.name})`);
 }
 
 main()
