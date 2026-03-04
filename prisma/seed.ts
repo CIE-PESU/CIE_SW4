@@ -52,6 +52,7 @@ async function main() {
     { email: 'cieoffice@pes.edu', name: 'Madhukar N', role: 'FACULTY' as const },
     { email: 'sathya.prasad@pes.edu', name: 'Sathya Prasad', role: 'FACULTY' as const },
     { email: 'tarunrama@pes.edu', name: 'Tarun R', role: 'FACULTY' as const },
+    { email: 'prasannachandran@pes.edu', name: 'Prasanna Chandran', role: 'FACULTY' as const },
     // Students
     { email: 'preetham@pes.edu', name: 'Preetham Kumar S', role: 'STUDENT' as const },
     { email: 'rishi@pes.edu', name: 'Rishi D V', role: 'STUDENT' as const },
