@@ -54,6 +54,7 @@ interface Course {
     name: string
     email: string
   }
+  status?: "not_started" | "ongoing" | "completed"
 }
 
 interface ManageCoursesProps {
@@ -401,6 +402,16 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
     editCourseUnits
   ])
 
+  const getCourseStatus = (course: Course) => {
+    const now = new Date();
+    const start = new Date(course.course_start_date);
+    const end = new Date(course.course_end_date);
+
+    if (now < start) return { label: "Not Started", color: "bg-blue-500", text: "text-blue-500", light: "bg-blue-50" };
+    if (now > end) return { label: "Completed", color: "bg-green-500", text: "text-green-500", light: "bg-green-50" };
+    return { label: "Ongoing", color: "bg-orange-500", text: "text-orange-500", light: "bg-orange-50" };
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -585,26 +596,43 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
         </div>
       </div>
 
-      <div className="flex items-center gap-2 mb-2">
-        <div className="relative w-full max-w-xs">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            placeholder="Search courses..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 w-full"
-          />
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div className="flex items-center gap-2 flex-1">
+          <div className="relative w-full max-w-xs">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Input
+              placeholder="Search courses..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 w-full"
+            />
+          </div>
+          <Filter className="h-5 w-5 text-gray-400 mx-2" />
+          <select
+            value={filter}
+            onChange={e => setFilter(e.target.value)}
+            className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="all">All Courses</option>
+            <option value="my_courses">My Courses</option>
+          </select>
         </div>
-        <Filter className="h-5 w-5 text-gray-400 mx-2" />
-        <select
-          value={filter}
-          onChange={e => setFilter(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="all">All Courses</option>
-          <option value="my_courses">My Courses</option>
-          {/* Add more filter options here if needed */}
-        </select>
+
+        {/* Status Legend */}
+        <div className="flex items-center gap-4 text-sm bg-gray-50 dark:bg-slate-800/50 px-4 py-2 rounded-lg border border-gray-100 dark:border-slate-700">
+          <div className="flex items-center gap-1.5">
+            <div className="h-2 w-2 rounded-full bg-blue-500"></div>
+            <span className="text-gray-600 dark:text-slate-400">Not Started</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <div className="h-2 w-2 rounded-full bg-orange-500"></div>
+            <span className="text-gray-600 dark:text-slate-400">Ongoing</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <div className="h-2 w-2 rounded-full bg-green-500"></div>
+            <span className="text-gray-600 dark:text-slate-400">Completed</span>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -618,18 +646,29 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
           </Card>
         ) : (
           filteredCourses.map((course) => (
-            <div key={course.id} className="admin-card rounded-xl shadow-sm border hover:shadow-md transition-shadow flex flex-col justify-between h-full">
+            <div 
+              key={course.id} 
+              className="admin-card rounded-xl shadow-sm border hover:shadow-md transition-shadow flex flex-col justify-between h-full cursor-pointer"
+              onClick={() => openUnitsSheet(course)}
+            >
               <CardHeader className="pb-2">
-                <div className="flex justify-between items-start">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center space-x-2">
-                      <BookOpen className="h-4 w-4 text-gray-500" />
-                      <span className="text-xl font-bold text-gray-900 /*dark:text-white*/ truncate">{course.course_name}</span>
-                    </div>
-                    <CardDescription className="mt-1 text-gray-600 text-sm truncate /*dark:text-white*/">{course.course_description}</CardDescription>
+                <div className="flex justify-between items-center mb-2">
+                  <div className="flex items-center space-x-2 min-w-0">
+                    <BookOpen className="h-4 w-4 text-gray-500" />
+                    <span className="text-xl font-bold text-gray-900 truncate">{course.course_name}</span>
                   </div>
-                  <Badge variant="outline" className="ml-2 whitespace-nowrap">{course.course_units?.length || 0} Units</Badge>
+                  <div className="flex items-center gap-2">
+                    <Badge className="bg-slate-200 dark:bg-slate-600 text-slate-900 dark:text-slate-100 border-0 whitespace-nowrap pointer-events-none">
+                      {course.course_units?.length || 0} Units
+                    </Badge>
+                    <Badge className={`${getCourseStatus(course).color} text-white border-0 whitespace-nowrap pointer-events-none`}>
+                      {getCourseStatus(course).label}
+                    </Badge>
+                  </div>
                 </div>
+                <CardDescription className="text-gray-600 text-sm line-clamp-2">
+                  {course.course_description}
+                </CardDescription>
               </CardHeader>
               <CardContent className="flex-1 flex flex-col justify-between">
                 <div className="space-y-2 mb-2">
@@ -648,26 +687,42 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
                   <span className="text-xs text-gray-400">Created by: {course.creator?.name || 'Unknown User'}</span>
                   <div className="flex items-center justify-between">
                     <div className="flex space-x-2">
-                      <Button size="sm" variant="outline" onClick={() => openEditDialog(course)}>
-                        <Edit className="h-4 w-4 mr-1" />
-                        Edit
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openEditDialog(course);
+                        }}
+                      >
+                        <Edit className="h-4 w-4 md:mr-1" />
+                        <span className="hidden md:inline">Edit</span>
                       </Button>
-                      <Button size="sm" variant="outline" className="text-red-600 hover:text-red-700 hover:bg-red-50" onClick={() => {
-                        setCourseToDelete(course)
-                        setIsDeleteDialogOpen(true)
-                      }}>
-                        <Trash2 className="h-4 w-4 mr-1" />
-                        Delete
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        className="text-red-600 hover:text-red-700 hover:bg-red-50" 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setCourseToDelete(course);
+                          setIsDeleteDialogOpen(true);
+                        }}
+                      >
+                        <Trash2 className="h-4 w-4 md:mr-1" />
+                        <span className="hidden md:inline">Delete</span>
                       </Button>
                     </div>
                     <div className="flex space-x-2">
-                      <Button size="sm" variant="outline">
-                        <MessageSquare className="h-4 w-4 mr-1" />
-                        View Feedback
-                      </Button>
-                      <Button size="sm" variant="outline" onClick={() => openUnitsSheet(course)}>
-                        <List className="h-4 w-4 mr-1" />
-                        View Units
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // Handle feedback click here if needed
+                        }}
+                      >
+                        <MessageSquare className="h-4 w-4 md:mr-1" />
+                        <span className="hidden md:inline">View Feedback</span>
                       </Button>
                     </div>
                   </div>
