@@ -224,9 +224,9 @@ export function ViewCourses() {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {filteredCourses.length === 0 ? (
-          <Card className="col-span-1 md:col-span-2 xl:col-span-3">
+          <Card className="col-span-full">
             <CardContent className="p-8 text-center">
               <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">No courses found</h3>
