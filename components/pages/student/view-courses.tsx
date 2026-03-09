@@ -241,7 +241,7 @@ export function ViewCourses() {
             return (
               <Card 
                 key={course.id} 
-                className="bg-white dark:bg-slate-900 flex flex-col justify-between min-h-[280px] w-full shadow-sm hover:shadow-md transition-shadow rounded-xl border border-gray-200 dark:border-slate-800 p-4 cursor-pointer"
+                className="admin-card flex flex-col justify-between min-h-[280px] w-full cursor-pointer"
                 onClick={() => openUnitsSheet(course)}
               >
                 <CardHeader className="pb-2 px-0">
