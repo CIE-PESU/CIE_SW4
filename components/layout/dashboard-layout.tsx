@@ -258,7 +258,7 @@ export function DashboardLayout({ children, currentPage, onPageChange, menuItems
       {/* Sidebar */}
       <div
         className={cn(
-          "fixed top-[55px] bottom-0 left-0 z-40 transform transition-all duration-500 ease-in-out lg:translate-x-0 rounded-r-2xl overflow-hidden shadow-2xl backdrop-blur-lg",
+          "fixed top-[55px] bottom-0 left-0 z-40 transform transition-all duration-300 ease-in-out lg:translate-x-0 rounded-r-2xl overflow-hidden shadow-2xl backdrop-blur-lg",
           sidebarWidth,
           sidebarOpen ? "translate-x-0" : "-translate-x-full",
           "bg-[rgba(255,255,255,0.65)] dark:bg-[rgba(17,17,17,0.8)] text-sidebar-foreground"
@@ -368,7 +368,7 @@ export function DashboardLayout({ children, currentPage, onPageChange, menuItems
       </div>
 
       {/* Main content */}
-      <div className={cn("transition-all duration-300", isDashboardHome ? "overflow-hidden" : "overflow-auto", mainMargin)}>
+      <div className={cn("transition-all duration-300 ease-in-out", isDashboardHome ? "overflow-hidden" : "overflow-auto", mainMargin)}>
         <div className={cn("pt-16", isDashboardHome ? "overflow-hidden" : "overflow-auto") }>
           <div className={cn("p-4 lg:p-8 rounded-tl-2xl min-h-[calc(100vh-4rem)]", isDashboardHome ? "overflow-hidden" : "overflow-auto") }>
             {children}
