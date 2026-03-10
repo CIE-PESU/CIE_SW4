@@ -131,7 +131,7 @@ export function DashboardLayout({ children, currentPage, onPageChange, menuItems
   // Only disable scrolling for dashboard home pages (case-insensitive)
   const isDashboardHome = ["home", "dashboard"].includes(currentPage.toLowerCase());
 
-  const sidebarWidth = sidebarCollapsed ? "w-16" : "w-64"
+  const sidebarWidth = sidebarCollapsed ? "lg:w-16 w-64" : "w-64"
   const mainMargin = sidebarCollapsed ? "lg:ml-16" : "lg:ml-64"
 
   const getRoleColor = (role: string) => {
@@ -258,7 +258,7 @@ export function DashboardLayout({ children, currentPage, onPageChange, menuItems
       {/* Sidebar */}
       <div
         className={cn(
-          "fixed top-[55px] bottom-0 left-0 z-40 transform transition-all duration-500 ease-in-out lg:translate-x-0 rounded-tr-2xl overflow-hidden shadow-2xl backdrop-blur-lg",
+          "fixed top-[55px] bottom-0 left-0 z-40 transform transition-all duration-500 ease-in-out lg:translate-x-0 rounded-r-2xl overflow-hidden shadow-2xl backdrop-blur-lg",
           sidebarWidth,
           sidebarOpen ? "translate-x-0" : "-translate-x-full",
           "bg-[rgba(255,255,255,0.65)] dark:bg-[rgba(17,17,17,0.8)] text-sidebar-foreground"
@@ -270,11 +270,11 @@ export function DashboardLayout({ children, currentPage, onPageChange, menuItems
         <div className="flex flex-col h-full">
 
           {/* Navigation with animated items */}
-          <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
+          <nav className={cn("flex-1 py-4 space-y-1 overflow-y-auto", sidebarCollapsed ? "lg:px-1 px-2" : "px-2")}>
             {menuItems.map((item, index) => (
               <div 
                 key={item.id}
-                className="px-2 py-1 group"
+                className={cn("py-1 group", sidebarCollapsed ? "lg:px-0 px-2" : "px-2")}
                 style={{
                   animation: `fadeIn 0.3s ease-out ${index * 0.05}s forwards`,
                   opacity: 0,
@@ -283,8 +283,10 @@ export function DashboardLayout({ children, currentPage, onPageChange, menuItems
               >
                 <button
                   className={cn(
-                    "w-full flex items-center p-3 transition-all duration-200 rounded-lg mx-1 overflow-hidden",
-                    sidebarCollapsed ? "justify-center px-2" : "px-4",
+                    "flex items-center transition-all duration-200 rounded-lg overflow-hidden",
+                    sidebarCollapsed 
+                      ? "lg:aspect-square lg:h-10 lg:w-10 lg:justify-center lg:mx-auto w-full p-3 px-4 mx-1" 
+                      : "w-full p-3 px-4 mx-1",
                     item.disabled 
                       ? "text-gray-400 cursor-not-allowed opacity-50" 
                       : currentPage === item.id
@@ -302,8 +304,8 @@ export function DashboardLayout({ children, currentPage, onPageChange, menuItems
                 >
                   <item.icon 
                     className={cn(
-                      "h-5 w-5 transition-transform duration-300 flex-shrink-0 min-w-[8px]",
-                      !sidebarCollapsed && "mr-3",
+                      "h-5 w-5 aspect-square transition-transform duration-300 flex-shrink-0",
+                      sidebarCollapsed ? "lg:mr-0 mr-3" : "mr-3",
                       item.disabled 
                         ? "text-gray-400" 
                         : currentPage === item.id 
@@ -311,11 +313,12 @@ export function DashboardLayout({ children, currentPage, onPageChange, menuItems
                           : "text-gray-600 dark:text-dark1"
                     )} 
                   />
-                  {!sidebarCollapsed && (
-                    <span className="text-sm font-medium whitespace-nowrap truncate">
-                      {item.label}
-                    </span>
-                  )}
+                  <span className={cn(
+                    "text-sm font-medium whitespace-nowrap truncate transition-all duration-300",
+                    sidebarCollapsed && "lg:opacity-0 lg:w-0 lg:hidden"
+                  )}>
+                    {item.label}
+                  </span>
                 </button>
               </div>
             ))}
@@ -340,14 +343,16 @@ export function DashboardLayout({ children, currentPage, onPageChange, menuItems
           <div className="hidden lg:block p-2 border-t border-gray-100">
             <button
               className={cn(
-                "w-full flex items-center text-gray-600 hover:bg-gray-100 p-2 rounded transition-all duration-200 overflow-hidden",
-                sidebarCollapsed ? "justify-center px-2" : "px-3"
+                "flex items-center text-gray-600 hover:bg-emerald-100 hover:text-emerald-800 transition-all duration-200 rounded-lg overflow-hidden",
+                sidebarCollapsed 
+                  ? "aspect-square h-10 w-10 justify-center mx-auto" 
+                  : "w-full p-2 px-3 mx-1"
               )}
               onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
             >
               <ChevronLeft
                 className={cn(
-                  "h-5 w-5 transition-transform duration-300 flex-shrink-0 min-w-[8px]",
+                  "h-5 w-5 aspect-square transition-transform duration-300 flex-shrink-0",
                   sidebarCollapsed ? "rotate-180" : "",
                   !sidebarCollapsed && "mr-3"
                 )}
