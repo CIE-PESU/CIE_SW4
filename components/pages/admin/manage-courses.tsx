@@ -659,15 +659,15 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
         <div className="flex flex-wrap items-center gap-4 text-sm bg-gray-50 dark:bg-slate-800/50 px-4 py-2 rounded-lg border border-gray-100 dark:border-slate-700">
           <div className="flex items-center gap-1.5">
             <div className="h-2 w-2 rounded-full bg-blue-500"></div>
-            <span className="text-gray-600 dark:text-slate-400">Not Started</span>
+            <span className="text-gray-600 dark:text-gray-300">Not Started</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="h-2 w-2 rounded-full bg-orange-500"></div>
-            <span className="text-gray-600 dark:text-slate-400">Ongoing</span>
+            <span className="text-gray-600 dark:text-gray-300">Ongoing</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="h-2 w-2 rounded-full bg-green-500"></div>
-            <span className="text-gray-600 dark:text-slate-400">Completed</span>
+            <span className="text-gray-600 dark:text-gray-300">Completed</span>
           </div>
         </div>
       </div>
@@ -677,8 +677,8 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
           <Card className="col-span-2">
             <CardContent className="p-8 text-center">
               <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No courses found</h3>
-              <p className="text-gray-600">Create your first course to get started.</p>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No courses found</h3>
+              <p className="text-gray-600 dark:text-gray-400">Try adjusting your search or filters.</p>
             </CardContent>
           </Card>
         ) : (
@@ -695,8 +695,8 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
               <CardHeader className="pb-2">
                 <div className="flex justify-between items-center mb-2">
                   <div className="flex items-center space-x-2 min-w-0">
-                    <BookOpen className="h-4 w-4 text-gray-500" />
-                    <span className="text-xl font-bold text-gray-900 truncate">{course.course_name}</span>
+                    <BookOpen className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                    <span className="text-xl font-bold text-gray-900 dark:text-white truncate">{course.course_name}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Badge className="bg-slate-200 dark:bg-slate-600 text-slate-900 dark:text-slate-100 border-0 whitespace-nowrap pointer-events-none">
@@ -707,19 +707,19 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
                     </Badge>
                   </div>
                 </div>
-                <CardDescription className="text-gray-600 text-sm line-clamp-2">
+                <CardDescription className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2">
                   {course.course_description}
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex-1 flex flex-col justify-between">
                 <div className="space-y-2 mb-2">
-                  <div className="flex items-center space-x-4 text-sm text-gray-700">
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-gray-700 dark:text-gray-300">
                     <span className="flex items-center space-x-1">
-                      <Calendar className="h-4 w-4 text-gray-400" />
+                      <Calendar className="h-4 w-4 text-gray-400 dark:text-gray-500" />
                       <span>{new Date(course.course_start_date).toLocaleDateString()} - {new Date(course.course_end_date).toLocaleDateString()}</span>
                     </span>
                     <span className="flex items-center space-x-1">
-                      <Users className="h-4 w-4 text-gray-400" />
+                      <Users className="h-4 w-4 text-gray-400 dark:text-gray-500" />
                       <span>{course.course_enrollments?.length || 0} enrolled • {course.course_code}</span>
                     </span>
                   </div>
@@ -829,7 +829,7 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
                 <div className="flex items-center justify-between px-2">
                   <span className="text-sm font-medium text-gray-500">{courseFeedbacks.length} Responses</span>
                   <div className="flex items-center gap-1">
-                    <span className="text-sm font-bold text-gray-900">
+                    <span className="text-sm font-bold text-gray-900 dark:text-white">
                       {(courseFeedbacks.reduce((acc, f) => acc + f.rating, 0) / courseFeedbacks.length).toFixed(1)}
                     </span>
                     <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />

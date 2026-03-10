@@ -233,8 +233,8 @@ export function ViewCourses() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Available Courses</h1>
-          <p className="text-gray-600 mt-2">Browse and sign up for available courses</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Available Courses</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-2">Browse and sign up for available courses</p>
         </div>
         <div className="flex items-center space-x-2">
           <Button onClick={fetchData} variant="outline">
@@ -267,22 +267,22 @@ export function ViewCourses() {
         </div>
 
         {/* Status Legend */}
-        <div className="flex items-center gap-4 text-sm bg-gray-50 dark:bg-slate-800/50 px-4 py-2 rounded-lg border border-gray-100 dark:border-slate-700">
+        <div className="flex flex-wrap items-center gap-4 text-sm bg-gray-50 dark:bg-slate-800/50 px-4 py-2 rounded-lg border border-gray-100 dark:border-slate-700">
           <div className="flex items-center gap-1.5">
             <div className="h-2 w-2 rounded-full bg-green-500"></div>
-            <span className="text-gray-600 dark:text-slate-400">Completed</span>
+            <span className="text-gray-600 dark:text-gray-300">Completed</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="h-2 w-2 rounded-full bg-orange-500"></div>
-            <span className="text-gray-600 dark:text-slate-400">Ongoing</span>
+            <span className="text-gray-600 dark:text-gray-300">Ongoing</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="h-2 w-2 rounded-full bg-blue-500"></div>
-            <span className="text-gray-600 dark:text-slate-400">Available</span>
+            <span className="text-gray-600 dark:text-gray-300">Available</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="h-2 w-2 rounded-full bg-red-500"></div>
-            <span className="text-gray-600 dark:text-slate-400">Ended</span>
+            <span className="text-gray-600 dark:text-gray-300">Ended</span>
           </div>
         </div>
       </div>
@@ -314,7 +314,7 @@ export function ViewCourses() {
                   <div className="flex justify-between items-center mb-2">
                     <div className="flex items-center space-x-2 min-w-0">
                       <BookOpen className="h-5 w-5 text-blue-600" />
-                      <span className="font-bold text-lg text-gray-900 truncate">{course.course_name}</span>
+                      <span className="font-bold text-lg text-gray-900 dark:text-white truncate">{course.course_name}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Badge className="bg-slate-200 dark:bg-slate-600 text-slate-900 dark:text-slate-100 border-0 whitespace-nowrap pointer-events-none">
@@ -325,28 +325,28 @@ export function ViewCourses() {
                       </Badge>
                     </div>
                   </div>
-                  <CardDescription className="text-gray-600 text-sm line-clamp-2">
+                  <CardDescription className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2">
                     {course.course_description}
                   </CardDescription>
                   <span className="text-xs text-gray-400 mt-1 block">{course.course_code}</span>
                 </CardHeader>
                 <CardContent className="flex-1 flex flex-col justify-between px-0 pb-0">
                   <div className="space-y-2">
-                    <div className="flex flex-wrap gap-4 text-sm mb-2">
+                    <div className="flex flex-wrap gap-4 text-sm mb-2 text-gray-600 dark:text-gray-300">
                       <div className="flex items-center space-x-2">
-                        <Calendar className="h-4 w-4 text-gray-400" />
+                        <Calendar className="h-4 w-4 text-gray-400 dark:text-gray-500" />
                         <span>{new Date(course.course_start_date).toLocaleDateString()} - {new Date(course.course_end_date).toLocaleDateString()}</span>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <Clock className="h-4 w-4 text-gray-400" />
+                        <Clock className="h-4 w-4 text-gray-400 dark:text-gray-500" />
                         <span>{totalHours} hours</span>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <FileText className="h-4 w-4 text-gray-400" />
+                        <FileText className="h-4 w-4 text-gray-400 dark:text-gray-500" />
                         <span>{totalAssignments} assignments</span>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <List className="h-4 w-4 text-gray-400" />
+                        <List className="h-4 w-4 text-gray-400 dark:text-gray-500" />
                         <span>{course.course_units?.length || 0} units</span>
                       </div>
                     </div>
