@@ -238,8 +238,8 @@ export function ViewCourses() {
         </div>
         <div className="flex items-center space-x-2">
           <Button onClick={fetchData} variant="outline">
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh
+            <RefreshCw className="h-4 w-4 md:mr-2" />
+            <span className="hidden md:inline">Refresh</span>
           </Button>
         </div>
       </div>

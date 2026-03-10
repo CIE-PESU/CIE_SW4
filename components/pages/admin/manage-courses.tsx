@@ -459,21 +459,21 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
         <div>
           <h1 className="admin-page-title">Course Management</h1>
         </div>
         <div className="flex space-x-2">
           <Button onClick={fetchCourses} variant="outline">
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh
+            <RefreshCw className="h-4 w-4 md:mr-2" />
+            <span className="hidden md:inline">Refresh</span>
           </Button>
 
           <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
             <DialogTrigger asChild>
               <Button>
-                <Plus className="h-4 w-4 mr-2" />
-                Add Course
+                <Plus className="h-4 w-4 md:mr-2" />
+                <span className="hidden md:inline">Add Course</span>
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-[90vw] w-[1100px] max-h-[90vh] h-[750px] overflow-hidden flex flex-col">
@@ -656,7 +656,7 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
         </div>
 
         {/* Status Legend */}
-        <div className="flex items-center gap-4 text-sm bg-gray-50 dark:bg-slate-800/50 px-4 py-2 rounded-lg border border-gray-100 dark:border-slate-700">
+        <div className="flex flex-wrap items-center gap-4 text-sm bg-gray-50 dark:bg-slate-800/50 px-4 py-2 rounded-lg border border-gray-100 dark:border-slate-700">
           <div className="flex items-center gap-1.5">
             <div className="h-2 w-2 rounded-full bg-blue-500"></div>
             <span className="text-gray-600 dark:text-slate-400">Not Started</span>
@@ -672,7 +672,7 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {filteredCourses.length === 0 ? (
           <Card className="col-span-2">
             <CardContent className="p-8 text-center">
