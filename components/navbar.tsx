@@ -37,7 +37,7 @@ export function Navbar({ sidebarOpen, setSidebarOpen, sidebarCollapsed, onPageCh
     <div
       className="fixed top-0 left-0 right-0 w-full h-[55px] backdrop-blur-lg 
       bg-gradient-to-r from-[rgba(255,255,255,0.6)] via-[rgba(181,210,248,0.6)] to-[rgba(142,192,252,0.6)] 
-      dark:from-[rgba(0,0,0,0.6)] dark:via-[rgba(20,32,43,0.6)] dark:to-[rgba(9,56,114,0.6)] 
+      dark:from-[rgba(0,0,0,0.6)] dark:via-[rgba(31,51,70,0.6)] dark:to-[rgba(9,56,114,0.6)] 
       z-50 transition-all duration-300"
     >
       <div className="flex items-center justify-between h-full pl-1 pr-4">

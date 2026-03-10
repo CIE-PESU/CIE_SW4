@@ -258,10 +258,10 @@ export function DashboardLayout({ children, currentPage, onPageChange, menuItems
       {/* Sidebar */}
       <div
         className={cn(
-          "fixed top-[55px] bottom-0 left-0 z-40 transform transition-all duration-500 ease-in-out lg:translate-x-0 rounded-tr-2xl overflow-hidden shadow-2xl",
+          "fixed top-[55px] bottom-0 left-0 z-40 transform transition-all duration-500 ease-in-out lg:translate-x-0 rounded-tr-2xl overflow-hidden shadow-2xl backdrop-blur-lg",
           sidebarWidth,
           sidebarOpen ? "translate-x-0" : "-translate-x-full",
-          "bg-[#e3f0ff] dark:bg-sidebar text-sidebar-foreground"
+          "bg-[#e3f0ff]/60 dark:bg-sidebar/60 text-sidebar-foreground"
         )}
         style={{
           boxShadow: '4px 0 15px rgba(0, 0, 0, 0.1)'

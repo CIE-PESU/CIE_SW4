@@ -58,7 +58,8 @@ export function LoginForm() {
       {/* Split card layout */}
       <div className="w-full z-10 flex flex-row items-stretch justify-center gap-6 md:gap-10 max-w-5xl h-[550px] px-6 py-4">
         {/* Login form card */}
-        <div className="flex-1 w-full max-w-[420px] rounded-2xl flex flex-col items-center justify-center p-0 bg-gradient-to-b from-[rgba(0,0,0,0.25)] to-transparent backdrop-blur-3xl shadow-lg border border-slate-800/50 overflow-hidden">
+        <div className="flex-1 w-full max-w-[420px] rounded-2xl flex flex-col items-center justify-center p-0 bg-gradient-to-b from-[rgba(0,0,0,0.25)] to-[rgba(255,255,255,0.05)]
+        backdrop-blur-3xl shadow-lg border border-slate-800/90 overflow-hidden">
           <Card className="bg-transparent border-none shadow-none p-0 rounded-2xl w-full backdrop-blur-2xl">
             <CardContent className="p-8 flex flex-col items-center">
               <Icons.logo className="h-20 w-auto mb-5" />
