@@ -345,7 +345,7 @@ export default function FacultyFeedbacks() {
       <Sheet open={isFeedbackSheetOpen} onOpenChange={setIsFeedbackSheetOpen}>
         <SheetContent className="w-[450px] sm:w-[540px] overflow-y-auto">
           <SheetHeader>
-            <SheetTitle>Unit-Wise Feedback</SheetTitle>
+            <SheetTitle>Course Performance & Feedback</SheetTitle>
             <SheetDescription>
               Performance data for {selectedCourse?.course_name}
             </SheetDescription>
@@ -360,6 +360,7 @@ export default function FacultyFeedbacks() {
                 value={selectedFeedbackUnitId}
                 onChange={(e) => {
                   setSelectedFeedbackUnitId(e.target.value);
+                  setAiAnalysis(null);
                   fetchCourseFeedbacks(selectedCourse.id, e.target.value);
                 }}
                 className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm focus:ring-2 focus:ring-blue-500"
