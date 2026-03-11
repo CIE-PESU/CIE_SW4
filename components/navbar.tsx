@@ -61,7 +61,7 @@ export function Navbar({ sidebarOpen, setSidebarOpen, sidebarCollapsed, onPageCh
             title="Go to Dashboard"
           >
             <img
-              src="/logo.png"
+              src={theme === 'dark' ? "/cie_logo_dark.png" : "/cie_logo_light.png"}
               alt="CIE Logo"
               className="h-full w-auto object-contain"
             />
