@@ -22,7 +22,14 @@ import {
   BookOpen, 
   Users, 
   Calendar, 
-  RefreshCw 
+  RefreshCw,
+  Sparkles,
+  BrainCircuit,
+  TrendingUp,
+  TrendingDown,
+  Minus,
+  AlertCircle,
+  Lightbulb
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -48,6 +55,12 @@ export default function FacultyFeedbacks() {
   const [courseFeedbacks, setCourseFeedbacks] = useState<any[]>([]);
   const [isFeedbacksLoading, setIsFeedbacksLoading] = useState(false);
   const [selectedFeedbackUnitId, setSelectedFeedbackUnitId] = useState<string>("all");
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [aiAnalysis, setAiAnalysis] = useState<{
+    summary: string;
+    sentiment: string;
+    insights: string[];
+  } | null>(null);
 
   const sidebarSections = [
     "Dashboard", "Courses", "Lab Components", "Library", "Locations", "Project Management", "Feedbacks", "Settings"
@@ -105,11 +118,55 @@ export default function FacultyFeedbacks() {
       const data = await response.json();
       if (response.ok) {
         setCourseFeedbacks(data.feedbacks || []);
+        setAiAnalysis(null); // Reset analysis when feedbacks change
       }
     } catch (error) {
-      console.error("Error fetching course feedbacks:", error);
+      console.error("Error fetching course feedbacks:", error)
     } finally {
       setIsFeedbacksLoading(false);
+    }
+  };
+
+  const analyzeWithAI = async () => {
+    if (!courseFeedbacks.length || !user?.id) return;
+    
+    setIsAnalyzing(true);
+    try {
+      const context = selectedFeedbackUnitId === "all" 
+        ? `the entire course: ${selectedCourse?.course_name}`
+        : `Unit ${selectedCourse?.course_units?.find((u: any) => u.id === selectedFeedbackUnitId)?.unit_number} of ${selectedCourse?.course_name}`;
+
+      const response = await fetch("/api/courses/feedback/analyze", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "x-user-id": user.id 
+        },
+        body: JSON.stringify({
+          feedbacks: courseFeedbacks,
+          context: context
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setAiAnalysis(data.analysis);
+      } else {
+        const errData = await response.json();
+        const isQuotaError = errData.details?.toLowerCase().includes("429") || errData.details?.toLowerCase().includes("quota");
+        
+        toast({ 
+          title: isQuotaError ? "AI Quota Reached" : "Analysis Failed", 
+          description: isQuotaError 
+            ? "You've reached the free tier limit. Please wait a minute and try again." 
+            : (errData.details || errData.error || "Unable to reach AI services"), 
+          variant: "destructive" 
+        });
+      }
+    } catch (error) {
+      toast({ title: "Analysis Error", description: "Something went wrong during analysis", variant: "destructive" });
+    } finally {
+      setIsAnalyzing(false);
     }
   };
 
@@ -117,6 +174,7 @@ export default function FacultyFeedbacks() {
     setSelectedCourse(course);
     setSelectedFeedbackUnitId("all");
     setIsFeedbackSheetOpen(true);
+    setAiAnalysis(null);
     fetchCourseFeedbacks(course.id, "all");
   };
 
@@ -293,28 +351,93 @@ export default function FacultyFeedbacks() {
             </SheetDescription>
           </SheetHeader>
           
-          <div className="mt-4 pb-4 border-b">
-            <Label className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2 block">
-              Filter by Unit
-            </Label>
-            <select
-              value={selectedFeedbackUnitId}
-              onChange={(e) => {
-                setSelectedFeedbackUnitId(e.target.value);
-                fetchCourseFeedbacks(selectedCourse.id, e.target.value);
-              }}
-              className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm focus:ring-2 focus:ring-blue-500"
+          <div className="mt-4 pb-4 border-b flex items-end gap-3">
+            <div className="flex-1">
+              <Label className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2 block">
+                Filter by Unit
+              </Label>
+              <select
+                value={selectedFeedbackUnitId}
+                onChange={(e) => {
+                  setSelectedFeedbackUnitId(e.target.value);
+                  fetchCourseFeedbacks(selectedCourse.id, e.target.value);
+                }}
+                className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="all">Overall Performance</option>
+                {selectedCourse?.course_units?.map((unit: any) => (
+                  <option key={unit.id} value={unit.id}>
+                    Unit {unit.unit_number}: {unit.unit_name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <Button 
+              size="sm" 
+              className="bg-purple-600 hover:bg-purple-700 text-white shrink-0"
+              onClick={analyzeWithAI}
+              disabled={isAnalyzing || courseFeedbacks.length === 0}
             >
-              <option value="all">Overall Performance</option>
-              {selectedCourse?.course_units?.map((unit: any) => (
-                <option key={unit.id} value={unit.id}>
-                  Unit {unit.unit_number}: {unit.unit_name}
-                </option>
-              ))}
-            </select>
+              {isAnalyzing ? <RefreshCw className="h-3.5 w-3.5 animate-spin mr-2" /> : <Sparkles className="h-3.5 w-3.5 mr-2" />}
+              AI Insight
+            </Button>
           </div>
 
           <div className="mt-6 space-y-6">
+            {isAnalyzing && (
+              <div className="p-6 border-2 border-dashed border-purple-200 rounded-xl bg-purple-50/30 flex flex-col items-center justify-center text-center">
+                <BrainCircuit className="h-10 w-10 text-purple-400 animate-pulse mb-3" />
+                <p className="text-purple-700 font-medium">Brewing Deep Insights...</p>
+                <p className="text-sm text-purple-500">Our AI is distilling student feedback for you.</p>
+              </div>
+            )}
+
+            {aiAnalysis && !isAnalyzing && (
+              <Card className="border-purple-200 bg-gradient-to-br from-purple-50 to-white overflow-hidden shadow-sm">
+                <CardHeader className="p-4 pb-0 flex flex-row items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 bg-purple-100 rounded-lg">
+                      <Sparkles className="h-4 w-4 text-purple-600" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-sm font-bold text-purple-900 uppercase tracking-tight">AI Intelligent Summary</CardTitle>
+                      <CardDescription className="text-[10px] text-purple-600">Based on {courseFeedbacks.length} student responses</CardDescription>
+                    </div>
+                  </div>
+                  <Badge className={cn(
+                    "capitalize text-[10px] font-bold border-0",
+                    aiAnalysis.sentiment.toLowerCase().includes("positive") ? "bg-green-100 text-green-700" :
+                    aiAnalysis.sentiment.toLowerCase().includes("negative") ? "bg-red-100 text-red-700" :
+                    "bg-slate-100 text-slate-700"
+                  )}>
+                    {aiAnalysis.sentiment.toLowerCase().includes("positive") ? <TrendingUp className="h-3 w-3 mr-1" /> :
+                     aiAnalysis.sentiment.toLowerCase().includes("negative") ? <TrendingDown className="h-3 w-3 mr-1" /> :
+                     <Minus className="h-3 w-3 mr-1" />}
+                    {aiAnalysis.sentiment}
+                  </Badge>
+                </CardHeader>
+                <CardContent className="p-4 space-y-3">
+                  <p className="text-sm text-slate-700 leading-relaxed italic">
+                    "{aiAnalysis.summary}"
+                  </p>
+                  
+                  <div className="space-y-2">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase flex items-center gap-1">
+                      <Lightbulb className="h-3 w-3 text-yellow-500" /> Actionable Recommendations
+                    </p>
+                    <div className="grid gap-2">
+                      {aiAnalysis.insights.map((insight, idx) => (
+                        <div key={idx} className="flex gap-2 items-start p-2 bg-white/60 rounded-lg border border-purple-50 text-xs text-slate-600">
+                          <AlertCircle className="h-3.5 w-3.5 text-purple-400 shrink-0 mt-0.5" />
+                          <span>{insight}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
             {isFeedbacksLoading ? (
               <div className="flex justify-center py-8">
                 <RefreshCw className="h-6 w-6 animate-spin text-blue-500" />
