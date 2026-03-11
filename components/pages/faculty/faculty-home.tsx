@@ -99,7 +99,7 @@ export function FacultyHome({ onPageChange }: FacultyHomeProps) {
         return (
           <>
             {/* Hero Section - match admin dashboard style */}
-            <div className="rounded-lg shadow-2xl p-4 min-h-[100px] flex flex-col md:flex-row items-center justify-between relative overflow-hidden mb-0" style={{ background: "linear-gradient(135deg, #34305E 0%, #3999C2 40%, #56A3C2 58%, #76ABC1 72%, #98ADB1 84%, #C49B86 94%, #E75A2D 100%)" }}>
+            <div className="rounded-lg shadow-2xl p-4 min-h-[100px] flex flex-col md:flex-row items-center justify-between relative overflow-hidden mb-0" style={{ background: "linear-gradient(135deg, #34305E 0%, #3999C2 40%, #4899B8 55%, #5D9CB3 68%, #78A0B0 80%, #98A1A4 88%, #B78976 94%, #D07153 97%, #E75A2D 100%)" }}>
               <div className="flex-1 z-6">
                 <span className="text-white text-2xl font-extrabold tracking-tight">CIE Faculty Portal</span>
                 <h2 className="text-3xl md:text-3xl font-extrabold text-white mb-2 mt-2">Empower your teaching journey!</h2>
