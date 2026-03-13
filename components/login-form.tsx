@@ -13,9 +13,9 @@ import { LoginSideCard } from "./login-sidecard";
 // Inline Icons implementation
 const Icons = {
   logo: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
-    <img 
-      src="/logo.png" 
-      alt="Logo" 
+    <img
+      src="/cie_logo_dark.png"
+      alt="Logo"
       className="h-16 w-auto"
       {...props}
     />
@@ -24,7 +24,7 @@ const Icons = {
 }
 
 export function LoginForm() {
-  const [email, setEmail] = React.useState("")  
+  const [email, setEmail] = React.useState("")
   const [password, setPassword] = React.useState("")
   const [error, setError] = React.useState("")
   const [isLoading, setIsLoading] = React.useState(false)
@@ -39,12 +39,12 @@ export function LoginForm() {
     if (!success) {
       setError("Invalid email or password")
     }
-    
+
     setIsLoading(false)
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+    <div className="dark min-h-screen flex items-center justify-center relative overflow-hidden">
       {/* Animated background video full screen */}
       <video
         src="/login_background_animation.mp4"
@@ -55,15 +55,16 @@ export function LoginForm() {
         playsInline
         style={{ pointerEvents: 'none', userSelect: 'none', opacity: 1 }}
       />
-        {/* Split card layout */}
-        <div className="w-full max-w-4xl z-10 flex flex-row rounded-2xl shadow-lg overflow-hidden bg-white">
+      {/* Split card layout */}
+      <div className="w-full z-10 flex flex-row items-stretch justify-center gap-6 md:gap-10 max-w-5xl h-[550px] px-6 py-4">
         {/* Login form card */}
-        <div className="basis-1/2 flex flex-col items-center justify-center p-0 bg-white">
-          <Card className="bg-gray-50 shadow-none p-0 rounded-2xl w-full">
+        <div className="flex-1 w-full max-w-[420px] rounded-2xl flex flex-col items-center justify-center p-0 bg-gradient-to-b from-[rgba(0,0,0,0.25)] to-[rgba(255,255,255,0.05)]
+        backdrop-blur-3xl shadow-xl border border-white/10 overflow-hidden">
+          <Card className="bg-transparent border-none shadow-none p-0 w-full">
             <CardContent className="p-8 flex flex-col items-center">
-              <Icons.logo className="h-28 w-auto" />
-              <h1 className="text-3xl tracking-tight mb-2 mt-0" style={{ fontFamily: 'Gotham, Helvetica, Arial, sans-serif', fontWeight: 'normal' }}>Welcome back</h1>
-              <p className="text-base text-muted-foreground mb-6">
+              <Icons.logo className="h-20 w-auto mb-5" />
+              <h1 className="text-3xl text-slate-400 tracking-tight mb-2 mt-0" style={{ fontFamily: 'Gotham, Helvetica, Arial, sans-serif', fontWeight: 'normal' }}>Welcome back</h1>
+              <p className="text-base text-slate-500 text-muted-foreground mb-6">
                 Enter your email to sign in to your account
               </p>
               <form onSubmit={onSubmit} className="space-y-6 w-full max-w-md">
@@ -73,8 +74,8 @@ export function LoginForm() {
                   </Alert>
                 )}
                 <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
+                  <Label className="text-slate-500" htmlFor="email" >Email</Label>
+                  <Input className=''
                     id="email"
                     placeholder="name@example.com"
                     type="email"
@@ -89,11 +90,11 @@ export function LoginForm() {
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="password">Password</Label>
+                    <Label className="text-slate-500" htmlFor="password">Password</Label>
                   </div>
                   <Input
                     id="password"
-                    placeholder="••••••••"
+                    placeholder="Enter your password"
                     type="password"
                     autoComplete="current-password"
                     disabled={isLoading}
@@ -102,7 +103,7 @@ export function LoginForm() {
                     required
                   />
                 </div>
-                <Button type="submit" className="w-full" disabled={isLoading}>
+                <Button type="submit" className="w-full hover:bg-slate-400" disabled={isLoading}>
                   {isLoading ? (
                     <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
                   ) : null}
@@ -113,7 +114,7 @@ export function LoginForm() {
           </Card>
         </div>
         {/* Side illustration card */}
-        <div className="hidden md:flex flex-col items-center justify-center basis-1/2">
+        <div className="hidden md:flex flex-1 w-full max-w-[420px] flex-col items-center justify-center rounded-2xl shadow-lg overflow-hidden">
           <LoginSideCard />
         </div>
       </div>

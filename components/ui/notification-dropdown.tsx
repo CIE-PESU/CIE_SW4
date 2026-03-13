@@ -39,7 +39,7 @@ export function NotificationDropdown({ activities, loading = false, onPageChange
   const getActivityIcon = (activity: any) => {
     const iconColors = ['text-orange-600', 'text-green-600', 'text-red-600', 'text-blue-600', 'text-purple-600', 'text-indigo-600']
     const iconColor = iconColors[Math.floor(Math.random() * iconColors.length)]
-    
+
     switch (activity.category) {
       case 'laboratory':
       case 'component_request':
@@ -64,7 +64,7 @@ export function NotificationDropdown({ activities, loading = false, onPageChange
 
   const getStatusBadge = (status?: string) => {
     if (!status) return null
-    
+
     const statusConfig = {
       'APPROVED': { bg: 'bg-green-100', text: 'text-green-800' },
       'PENDING': { bg: 'bg-yellow-100', text: 'text-yellow-800' },
@@ -75,7 +75,7 @@ export function NotificationDropdown({ activities, loading = false, onPageChange
     }
 
     const config = statusConfig[status as keyof typeof statusConfig] || { bg: 'bg-gray-100', text: 'text-gray-800' }
-    
+
     return (
       <span className={`text-xs px-2 py-0.5 rounded ${config.bg} ${config.text}`}>
         {status}
@@ -95,12 +95,12 @@ export function NotificationDropdown({ activities, loading = false, onPageChange
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" aria-label="Notifications" className="relative">
-          <Bell className="h-5 w-5" />
+        <Button variant="ghost" size="icon" aria-label="Notifications" className="relative text-slate-700 dark:text-slate-400 hover:bg-transparent hover:text-[#E75A2D] dark:hover:text-[#E75A2D] active:text-[#E75A2D] dark:active:text-[#E75A2D] transition-all duration-200 [&_svg]:size-6 hover:scale-[1.15] active:scale-[1.15] select-none">
+          <Bell />
           {unreadCount > 0 && (
-            <Badge 
-              variant="destructive" 
-              className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
+            <Badge
+              variant="destructive"
+              className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs transition-transform duration-200"
             >
               {unreadCount > 99 ? '99+' : unreadCount}
             </Badge>
@@ -111,9 +111,9 @@ export function NotificationDropdown({ activities, loading = false, onPageChange
         <DropdownMenuLabel className="flex items-center justify-between">
           <span>Notifications</span>
           {unreadCount > 0 && (
-            <Button 
-              variant="ghost" 
-              size="sm" 
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={markAllAsRead}
               className="h-6 px-2 text-xs"
             >
@@ -122,9 +122,9 @@ export function NotificationDropdown({ activities, loading = false, onPageChange
           )}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        
+
         {/* View All Notifications - Top Position */}
-        <DropdownMenuItem 
+        <DropdownMenuItem
           className="text-center text-sm text-blue-600 cursor-pointer font-medium bg-blue-50 hover:bg-blue-100 border-b"
           onClick={() => {
             onPageChange?.('notifications')
@@ -133,7 +133,7 @@ export function NotificationDropdown({ activities, loading = false, onPageChange
           View all notifications
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        
+
         {loading ? (
           // Loading skeleton
           Array.from({ length: 3 }).map((_, index) => (
@@ -148,8 +148,8 @@ export function NotificationDropdown({ activities, loading = false, onPageChange
         ) : unreadActivities.length > 0 ? (
           unreadActivities.slice(0, 5).map((activity, index) => {
             return (
-              <DropdownMenuItem 
-                key={index} 
+              <DropdownMenuItem
+                key={index}
                 className="flex items-start space-x-3 p-3 cursor-pointer transition-colors bg-blue-50"
                 onClick={() => markAsRead(activity)}
               >

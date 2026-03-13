@@ -42,6 +42,7 @@ import { cn } from "@/lib/utils"
 import { useTheme } from 'next-themes'
 import { NotificationDropdown } from "@/components/ui/notification-dropdown"
 import { useNotifications } from "@/components/notification-provider"
+import { Navbar } from "@/components/navbar"
 
 interface DashboardLayoutProps {
   children: ReactNode
@@ -130,7 +131,7 @@ export function DashboardLayout({ children, currentPage, onPageChange, menuItems
   // Only disable scrolling for dashboard home pages (case-insensitive)
   const isDashboardHome = ["home", "dashboard"].includes(currentPage.toLowerCase());
 
-  const sidebarWidth = sidebarCollapsed ? "w-16" : "w-64"
+  const sidebarWidth = sidebarCollapsed ? "lg:w-16 w-64" : "w-64"
   const mainMargin = sidebarCollapsed ? "lg:ml-16" : "lg:ml-64"
 
   const getRoleColor = (role: string) => {
@@ -247,124 +248,33 @@ export function DashboardLayout({ children, currentPage, onPageChange, menuItems
 
   return (
     <div className={cn("min-h-screen bg-white dark:bg-dark5 dark:text-dark1", isDashboardHome ? "overflow-hidden" : "overflow-auto") }>
-      {/* Navbar */}
-      <div
-        className={cn(
-          "fixed top-0 right-0 left-0 h-20 bg-[#e3f0ff] dark:bg-dark4 border-b border-gray-200 dark:border-dark3 z-30 transition-all duration-300",
-          sidebarCollapsed ? "lg:left-16" : "lg:left-64",
-        )}
-      >
-        <div className="flex items-center justify-between h-full px-4">
-          {/* Mobile menu button */}
-          <div className="lg:hidden">
-            <Button variant="outline" size="icon" onClick={() => setSidebarOpen(!sidebarOpen)}>
-              <Menu className="h-4 w-4" />
-            </Button>
-          </div>
-
-          <div className="flex items-center gap-2 justify-end flex-1">
-            {/* Dark mode toggle button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              aria-label="Toggle dark mode"
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            >
-              {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-            </Button>
-
-            <NotificationDropdown activities={activities} loading={loading} onPageChange={onPageChange} />
-
-            {/* Profile dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="relative h-10 px-3 rounded-full flex items-center space-x-2">
-                  <div className="flex items-center space-x-2">
-                    <div className="text-right">
-                      <p className="font-medium text-gray-900 text-sm">{user?.name}</p>
-                      <p className="text-xs leading-none text-muted-foreground dark:text-white">
-                        {user?.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1).toLowerCase() : ''}
-                      </p>
-                    </div>
-                    <Avatar className="h-8 w-8">
-                      <AvatarImage 
-                        src={user?.role === 'FACULTY' && user?.profileData?.faculty_id ? `/profile-img/${user.profileData.faculty_id}.jpg` : undefined}
-                        alt={user?.name || 'User avatar'}
-                        onError={(e) => {
-                          // Try different extensions if jpg fails
-                          const currentSrc = e.currentTarget.src;
-                          if (currentSrc.includes('.jpg')) {
-                            e.currentTarget.src = currentSrc.replace('.jpg', '.jpeg');
-                          } else if (currentSrc.includes('.jpeg')) {
-                            e.currentTarget.src = currentSrc.replace('.jpeg', '.png');
-                          }
-                        }}
-                      />
-                      <AvatarFallback className="bg-blue-100 text-blue-600 font-semibold text-sm">
-                        {user?.name.charAt(0)}
-                      </AvatarFallback>
-                    </Avatar>
-                  </div>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" forceMount>
-                <DropdownMenuItem onClick={() => onPageChange('profile')} className="cursor-pointer">
-                  <User className="mr-2 h-4 w-4" />
-                  <span>Profile</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                {/* Sign Out Button */}
-                <DropdownMenuItem
-                  onClick={handleSignOut}
-                  className="text-red-600 focus:text-red-600 focus:bg-red-50 cursor-pointer"
-                >
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span className="font-medium">Sign Out</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div>
-      </div>
+      <Navbar 
+        sidebarOpen={sidebarOpen} 
+        setSidebarOpen={setSidebarOpen} 
+        sidebarCollapsed={sidebarCollapsed} 
+        onPageChange={onPageChange} 
+      />
 
       {/* Sidebar */}
       <div
         className={cn(
-          "fixed inset-y-0 left-0 z-40 transform transition-all duration-500 ease-in-out lg:translate-x-0 rounded-r-2xl overflow-hidden shadow-2xl",
+          "fixed top-[55px] bottom-0 left-0 z-40 transform transition-all duration-300 ease-in-out lg:translate-x-0 rounded-r-2xl overflow-hidden shadow-2xl backdrop-blur-lg",
           sidebarWidth,
           sidebarOpen ? "translate-x-0" : "-translate-x-full",
-          "bg-[#e3f0ff] dark:bg-sidebar text-sidebar-foreground"
+          "bg-[rgba(255,255,255,0.65)] dark:bg-[rgba(17,17,17,0.8)] text-sidebar-foreground"
         )}
         style={{
           boxShadow: '4px 0 15px rgba(0, 0, 0, 0.1)'
         }}
       >
         <div className="flex flex-col h-full">
-          {/* Header with gradient */}
-          <div className="flex items-center justify-center h-20 px-4 border-b border-indigo-200 bg-white/90">
-            <div className="relative w-full h-full flex items-center justify-center p-2">
-              {sidebarCollapsed ? (
-                <img 
-                  src="/logo-collapse.png" 
-                  alt="Logo Collapsed" 
-                  className="object-contain h-12 w-12 transition-all duration-300 hover:scale-110"
-                />
-              ) : (
-                <img 
-                  src="/logo.png" 
-                  alt="Logo" 
-                  className="object-contain max-h-full w-48 transition-all duration-300 hover:scale-105"
-                />
-              )}
-            </div>
-          </div>
 
           {/* Navigation with animated items */}
-          <nav className="flex-1 px-2 py-4 space-y-1 overflow-y-auto">
+          <nav className={cn("flex-1 py-4 space-y-1 overflow-y-auto", sidebarCollapsed ? "lg:px-1 px-2" : "px-2")}>
             {menuItems.map((item, index) => (
               <div 
                 key={item.id}
-                className="px-2 py-1 group"
+                className={cn("py-1 group", sidebarCollapsed ? "lg:px-0 px-2" : "px-2")}
                 style={{
                   animation: `fadeIn 0.3s ease-out ${index * 0.05}s forwards`,
                   opacity: 0,
@@ -373,8 +283,10 @@ export function DashboardLayout({ children, currentPage, onPageChange, menuItems
               >
                 <button
                   className={cn(
-                    "w-full flex items-center p-3 transition-all duration-200 rounded-lg mx-1",
-                    sidebarCollapsed ? "justify-center px-2" : "px-4",
+                    "flex items-center transition-all duration-200 rounded-lg overflow-hidden h-11",
+                    sidebarCollapsed 
+                      ? "lg:aspect-square lg:h-11 lg:w-11 lg:justify-center lg:mx-auto w-full p-3 px-4 mx-1" 
+                      : "w-full p-3 px-4 mx-1",
                     item.disabled 
                       ? "text-gray-400 cursor-not-allowed opacity-50" 
                       : currentPage === item.id
@@ -392,8 +304,8 @@ export function DashboardLayout({ children, currentPage, onPageChange, menuItems
                 >
                   <item.icon 
                     className={cn(
-                      "h-5 w-5 transition-transform duration-300",
-                      !sidebarCollapsed && "mr-3",
+                      "h-5 w-5 aspect-square transition-transform duration-300 flex-shrink-0",
+                      sidebarCollapsed ? "lg:mr-0 mr-3" : "mr-3",
                       item.disabled 
                         ? "text-gray-400" 
                         : currentPage === item.id 
@@ -401,11 +313,12 @@ export function DashboardLayout({ children, currentPage, onPageChange, menuItems
                           : "text-gray-600 dark:text-dark1"
                     )} 
                   />
-                  {!sidebarCollapsed && (
-                    <span className="text-sm font-medium">
-                      {item.label}
-                    </span>
-                  )}
+                  <span className={cn(
+                    "text-sm font-medium whitespace-nowrap truncate transition-all duration-300",
+                    sidebarCollapsed && "lg:opacity-0 lg:w-0 lg:hidden"
+                  )}>
+                    {item.label}
+                  </span>
                 </button>
               </div>
             ))}
@@ -427,23 +340,25 @@ export function DashboardLayout({ children, currentPage, onPageChange, menuItems
           </div>
 
           {/* Collapse button */}
-          <div className="hidden lg:block p-2 border-t border-gray-100">
+          <div className="hidden lg:block mx-3 py-2 border-t border-gray-200/60 dark:border-gray-800/60">
             <button
               className={cn(
-                "w-full flex items-center text-gray-600 hover:bg-gray-100 p-2 rounded transition-all duration-200",
-                sidebarCollapsed ? "justify-center px-2" : "px-3"
+                "flex items-center text-gray-800 dark:text-dark1 hover:bg-blue-100 hover:text-indigo-800 transition-all duration-200 rounded-lg overflow-hidden transform hover:scale-105 focus:scale-105 h-11",
+                sidebarCollapsed 
+                  ? "lg:aspect-square lg:h-11 lg:w-11 lg:justify-center lg:mx-auto w-full p-3 px-4" 
+                  : "w-full p-2 px-3 mx-1"
               )}
               onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
             >
               <ChevronLeft
                 className={cn(
-                  "h-5 w-5 transition-transform duration-300",
+                  "h-5 w-5 aspect-square transition-transform duration-300 flex-shrink-0",
                   sidebarCollapsed ? "rotate-180" : "",
                   !sidebarCollapsed && "mr-3"
                 )}
               />
               {!sidebarCollapsed && (
-                <span className="text-sm font-medium transition-opacity duration-300">
+                <span className="text-sm font-medium transition-opacity duration-300 whitespace-nowrap truncate">
                   Collapse
                 </span>
               )}
@@ -453,7 +368,7 @@ export function DashboardLayout({ children, currentPage, onPageChange, menuItems
       </div>
 
       {/* Main content */}
-      <div className={cn("transition-all duration-300", isDashboardHome ? "overflow-hidden" : "overflow-auto", mainMargin)}>
+      <div className={cn("transition-all duration-300 ease-in-out", isDashboardHome ? "overflow-hidden" : "overflow-auto", mainMargin)}>
         <div className={cn("pt-16", isDashboardHome ? "overflow-hidden" : "overflow-auto") }>
           <div className={cn("p-4 lg:p-8 rounded-tl-2xl min-h-[calc(100vh-4rem)]", isDashboardHome ? "overflow-hidden" : "overflow-auto") }>
             {children}
@@ -463,7 +378,7 @@ export function DashboardLayout({ children, currentPage, onPageChange, menuItems
 
       {/* Mobile overlay */}
       {sidebarOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden" onClick={() => setSidebarOpen(false)} />
+        <div className="fixed inset-0 z-30 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
     </div>
   )
