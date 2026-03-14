@@ -147,6 +147,145 @@ function isLibraryRequest(request: RequestUnion): request is LibraryRequest {
   return 'item' in request
 }
 
+function ProjectApprovalTable({
+  projects,
+  onApprove,
+}: {
+  projects: any[]
+  onApprove: (projectId: string, status: "APPROVED" | "REJECTED", notes?: string) => Promise<void>
+}) {
+  const [notes, setNotes] = useState<Record<string, string>>({})
+  const [openNoteId, setOpenNoteId] = useState<string | null>(null)
+  const [pendingAction, setPendingAction] = useState<{ id: string; status: "APPROVED" | "REJECTED" } | null>(null)
+
+  const handleAction = (projectId: string, status: "APPROVED" | "REJECTED") => {
+    setPendingAction({ id: projectId, status })
+    setOpenNoteId(projectId)
+  }
+
+  const handleConfirm = async () => {
+    if (!pendingAction) return
+    await onApprove(pendingAction.id, pendingAction.status, notes[pendingAction.id] || "")
+    setOpenNoteId(null)
+    setPendingAction(null)
+  }
+
+  return (
+    <div className="space-y-4">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="text-left text-black font-bold">Project Name</TableHead>
+            <TableHead className="text-left text-black font-bold">Description</TableHead>
+            <TableHead className="text-left text-black font-bold">Faculty</TableHead>
+            <TableHead className="text-center text-black font-bold">Completion Date</TableHead>
+            <TableHead className="text-center text-black font-bold">Submitted</TableHead>
+            <TableHead className="text-center text-black font-bold">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {projects.map((project) => (
+            <TableRow key={project.id} className="hover:bg-gray-50">
+              <TableCell className="font-medium text-sm text-left max-w-[160px]">
+                <div className="font-semibold">{project.name}</div>
+              </TableCell>
+              <TableCell className="text-sm text-left max-w-[240px]">
+                <p className="line-clamp-2 text-gray-600">{project.description || "—"}</p>
+              </TableCell>
+              <TableCell className="text-sm text-left">
+                <div className="font-medium">{project.faculty_creator?.user?.name || "Unknown"}</div>
+                <div className="text-xs text-gray-500">{project.faculty_creator?.user?.email || ""}</div>
+              </TableCell>
+              <TableCell className="text-sm text-center">
+                {project.expected_completion_date
+                  ? new Date(project.expected_completion_date).toLocaleDateString()
+                  : "—"}
+              </TableCell>
+              <TableCell className="text-sm text-center">
+                {project.created_date
+                  ? new Date(project.created_date).toLocaleDateString()
+                  : "—"}
+              </TableCell>
+              <TableCell className="text-center">
+                <div className="flex justify-center items-center space-x-2">
+                  <Dialog open={openNoteId === project.id && pendingAction?.status === "APPROVED"} onOpenChange={(open) => { if (!open) { setOpenNoteId(null); setPendingAction(null); } }}>
+                    <DialogTrigger asChild>
+                      <Button
+                        size="sm"
+                        className="bg-green-600 hover:bg-green-700"
+                        onClick={() => handleAction(project.id, "APPROVED")}
+                      >
+                        <CheckCircle className="h-4 w-4 mr-1" />
+                        Approve
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Approve Project</DialogTitle>
+                        <DialogDescription>
+                          Approving <strong>{project.name}</strong> by {project.faculty_creator?.user?.name || "faculty"}. You may add optional notes.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="space-y-3 py-2">
+                        <Label htmlFor={`notes-approve-${project.id}`}>Notes (optional)</Label>
+                        <Textarea
+                          id={`notes-approve-${project.id}`}
+                          placeholder="e.g. Looks good, proceed with enrollment."
+                          value={notes[project.id] || ""}
+                          onChange={(e) => setNotes((prev) => ({ ...prev, [project.id]: e.target.value }))}
+                        />
+                      </div>
+                      <div className="flex justify-end space-x-2 pt-2">
+                        <Button variant="outline" onClick={() => { setOpenNoteId(null); setPendingAction(null); }}>Cancel</Button>
+                        <Button className="bg-green-600 hover:bg-green-700" onClick={handleConfirm}>Confirm Approval</Button>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+
+                  <Dialog open={openNoteId === project.id && pendingAction?.status === "REJECTED"} onOpenChange={(open) => { if (!open) { setOpenNoteId(null); setPendingAction(null); } }}>
+                    <DialogTrigger asChild>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-red-600 border-red-200 hover:bg-red-50"
+                        onClick={() => handleAction(project.id, "REJECTED")}
+                      >
+                        <XCircle className="h-4 w-4 mr-1" />
+                        Reject
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Reject Project</DialogTitle>
+                        <DialogDescription>
+                          Rejecting <strong>{project.name}</strong> by {project.faculty_creator?.user?.name || "faculty"}. Please provide a reason.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="space-y-3 py-2">
+                        <Label htmlFor={`notes-reject-${project.id}`}>Reason for rejection</Label>
+                        <Textarea
+                          id={`notes-reject-${project.id}`}
+                          placeholder="e.g. Project scope is too broad, please revise."
+                          value={notes[project.id] || ""}
+                          onChange={(e) => setNotes((prev) => ({ ...prev, [project.id]: e.target.value }))}
+                        />
+                      </div>
+                      <div className="flex justify-end space-x-2 pt-2">
+                        <Button variant="outline" onClick={() => { setOpenNoteId(null); setPendingAction(null); }}>Cancel</Button>
+                        <Button variant="destructive" onClick={handleConfirm}>Confirm Rejection</Button>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  )
+}
+
 export function CoordinatorDashboard() {
   const { user } = useAuth()
   const { toast } = useToast()
@@ -1075,12 +1214,25 @@ export function CoordinatorDashboard() {
             <Card>
               <CardHeader>
                 <CardTitle>
-                  {selectedRole === 'projects' ? 'Project Requests' : `${roleName} Collection Management`}
+                  {selectedRole === 'projects' ? 'Pending Faculty Project Approvals' : `${roleName} Collection Management`}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 {selectedRole === 'projects' ? (
-                  <FacultyProjectRequests onBack={() => setActiveTab('analytics')} />
+                  pendingRequests.length === 0 ? (
+                    <Card>
+                      <CardContent className="p-8 text-center">
+                        <CheckCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                        <h3 className="text-lg font-medium text-gray-900 mb-2">No pending project approvals</h3>
+                        <p className="text-gray-600">All faculty project requests have been reviewed.</p>
+                      </CardContent>
+                    </Card>
+                  ) : (
+                    <ProjectApprovalTable
+                      projects={pendingRequests}
+                      onApprove={handleApproveProject}
+                    />
+                  )
                 ) : collectionRequests.length === 0 ? (
                   <Card>
                     <CardContent className="p-8 text-center">

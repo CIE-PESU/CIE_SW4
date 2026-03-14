@@ -10,7 +10,7 @@ import numpy as np
 import faiss
 import pdfplumber
 from sentence_transformers import SentenceTransformer
-from mistralai import Mistral
+from mistralai.client import Mistral
 import concurrent.futures
 import threading
 from functools import partial

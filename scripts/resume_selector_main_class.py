@@ -10,7 +10,7 @@ import numpy as np
 import faiss
 import pdfplumber
 from sentence_transformers import SentenceTransformer
-from mistralai import Mistral
+from mistralai.client import Mistral
 class ResumeSelector:
     """
     A class for processing resumes and finding the best candidates for projects.

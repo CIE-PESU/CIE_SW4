@@ -111,6 +111,7 @@ Expected completion: ${new Date(project.expected_completion_date).toLocaleDateSt
 import sys
 import os
 import json
+import time
 import warnings
 
 # Redirect all prints and warnings to stderr except our final JSON output
@@ -154,7 +155,7 @@ def main():
         sys.stderr.flush()
         
         # Project description
-        project_desc = """${projectDescription.replace(/"/g, '\\"')}"""
+        project_desc = """${projectDescription.replace(/\"/g, '\\"')}"""
         
         # Search for top candidates (get all candidates for ranking)
         search_start = time.time()
@@ -206,7 +207,6 @@ def main():
         print(json.dumps({"error": str(e)}))
 
 if __name__ == "__main__":
-    import time
     main()
 `
 

@@ -84,25 +84,27 @@ model Student {
   library_requests         LibraryRequest[]
   user                     User                     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   opportunity_applications OpportunityApplication[]
+  course_feedbacks         CourseFeedback[]
 
   @@map("students")
 }
 
 model Course {
-  id                 String          @id @default(cuid())
+  id                 String           @id @default(cuid())
   course_description String
   course_end_date    DateTime
   course_enrollments String[]
   course_name        String
   course_start_date  DateTime
   created_by         String
-  created_date       DateTime        @default(now())
+  created_date       DateTime         @default(now())
   modified_by        String?
-  modified_date      DateTime        @updatedAt
-  course_code        String          @unique
+  modified_date      DateTime         @updatedAt
+  course_code        String           @unique
   class_schedules    ClassSchedule[]
   course_units       CourseUnit[]
   enrollments        Enrollment[]
+  feedbacks       CourseFeedback[]
 
   @@map("courses")
 }
@@ -119,6 +121,7 @@ model CourseUnit {
   created_date     DateTime @default(now())
   modified_by      String?
   modified_date    DateTime @updatedAt
+  feedbacks       CourseFeedback[]
   course           Course   @relation(fields: [course_id], references: [id], onDelete: Cascade)
 
   @@unique([course_id, unit_number])
@@ -171,7 +174,7 @@ model Project {
   enrollment_cap           Int?
   enrollment_start_date    DateTime?
   enrollment_end_date      DateTime?
-  ai_prompt_custom         String?             // Custom AI prompt for this project (optional)
+  ai_prompt_custom         String? // Custom AI prompt for this project (optional)
   component_requests       ComponentRequest[]
   project_requests         ProjectRequest[]
   submissions              ProjectSubmission[]
@@ -557,29 +560,29 @@ enum ApplicationStatus {
 }
 
 enum FeedbackStatus {
-  PENDING        // Submitted by faculty, awaiting Platform Manager approval
-  APPROVED       // Approved by Platform Manager, assigned to Developer
-  IN_PROGRESS    // Developer is working on it
-  DONE           // Developer marked as done, awaiting Platform Manager final approval
-  REJECTED       // Rejected by Platform Manager
-  COMPLETED      // Final approval by Platform Manager
+  PENDING // Submitted by faculty, awaiting Platform Manager approval
+  APPROVED // Approved by Platform Manager, assigned to Developer
+  IN_PROGRESS // Developer is working on it
+  DONE // Developer marked as done, awaiting Platform Manager final approval
+  REJECTED // Rejected by Platform Manager
+  COMPLETED // Final approval by Platform Manager
 }
 
 model Feedback {
-  id            String        @id @default(cuid())
-  title         String
-  description   String
-  status        FeedbackStatus @default(PENDING)
-  created_by    String        // Faculty user id
-  approved_by   String?       // Platform Manager user id
-  approved_at   DateTime?
-  completed_at  DateTime?
-  category      String?        // Sidebar section/category
-  image         String?       // Uploaded image path
-  rectifiedImage String?      // Developer's rectified screenshot
-  rejectionReason String?     // Reason for rejection by Platform Manager
-  created_at    DateTime      @default(now())
-  updated_at    DateTime      @updatedAt
+  id              String         @id @default(cuid())
+  title           String
+  description     String
+  status          FeedbackStatus @default(PENDING)
+  created_by      String // Faculty user id
+  approved_by     String? // Platform Manager user id
+  approved_at     DateTime?
+  completed_at    DateTime?
+  category        String? // Sidebar section/category
+  image           String? // Uploaded image path
+  rectifiedImage  String? // Developer's rectified screenshot
+  rejectionReason String? // Reason for rejection by Platform Manager
+  created_at      DateTime       @default(now())
+  updated_at      DateTime       @updatedAt
 
   @@map("feedbacks")
 }
@@ -604,4 +607,21 @@ model DeveloperAssignment {
 
   @@unique([faculty_id])
   @@map("developer_assignments")
+}
+
+model CourseFeedback {
+  id         String   @id @default(cuid())
+  course_id  String
+  student_id String
+  unit_id    String
+  rating     Int      @default(5)
+  comment    String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  course     Course   @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  student    Student  @relation(fields: [student_id], references: [id], onDelete: Cascade)
+  unit       CourseUnit @relation(fields: [unit_id], references: [id], onDelete: Cascade)
+
+  @@unique([student_id, unit_id])
+  @@map("course_feedback")
 }

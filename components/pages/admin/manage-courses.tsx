@@ -23,7 +23,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import { Plus, Trash2, BookOpen, Calendar, Users, RefreshCw, List, X, Search, Filter } from "lucide-react"
+import { Plus, Trash2, BookOpen, Calendar, Users, RefreshCw, List, X, Search, Filter, MessageSquare, Edit, Star, Sparkles, BrainCircuit, TrendingUp, TrendingDown, Minus, Lightbulb, AlertCircle } from "lucide-react"
+import { cn } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast"
 import { useAuth } from "@/components/auth-provider"
 
@@ -54,6 +55,7 @@ interface Course {
     name: string
     email: string
   }
+  status?: "not_started" | "ongoing" | "completed"
 }
 
 interface ManageCoursesProps {
@@ -70,9 +72,14 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
   const [filter, setFilter] = useState("all")
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [courseToDelete, setCourseToDelete] = useState<Course | null>(null)
+  const [isFeedbackSheetOpen, setIsFeedbackSheetOpen] = useState(false)
+  const [courseFeedbacks, setCourseFeedbacks] = useState<any[]>([])
+  const [selectedFeedbackUnitId, setSelectedFeedbackUnitId] = useState<string>("all")
+  const [isFeedbacksLoading, setIsFeedbacksLoading] = useState(false)
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
+  const [aiAnalysis, setAiAnalysis] = useState<any>(null)
   const { toast } = useToast()
   const { user } = useAuth()
-  const [editMode, setEditMode] = useState(false);
 
   const [newCourse, setNewCourse] = useState({
     course_code: "",
@@ -132,8 +139,8 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
         course.course_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         course.course_description.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (course.creator?.name || '').toLowerCase().includes(searchTerm.toLowerCase());
-      // Placeholder filter logic (can be extended)
-      const matchesFilter = filter === "all";
+      // Filter logic including 'My Courses'
+      const matchesFilter = filter === "all" || (filter === "my_courses" && course.created_by === user?.id);
       return matchesSearch && matchesFilter;
     }
   )
@@ -282,6 +289,88 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
     setIsUnitsSheetOpen(true)
   }
 
+  const openFeedbackSheet = async (course: Course, e: React.MouseEvent) => {
+    e.stopPropagation()
+    setSelectedCourse(course)
+    setSelectedFeedbackUnitId("all")
+    setAiAnalysis(null)
+    setIsFeedbackSheetOpen(true)
+    fetchCourseFeedbacks(course.id, "all")
+  }
+
+  const analyzeWithAI = async () => {
+    if (!courseFeedbacks.length || !user?.id || !selectedCourse) return;
+    
+    setIsAnalyzing(true);
+    try {
+      const context = selectedFeedbackUnitId === "all" 
+        ? `the entire course: ${selectedCourse.course_name}`
+        : `Unit ${selectedCourse.course_units?.find((u: any) => u.id === selectedFeedbackUnitId)?.unit_number || 'N/A'} of ${selectedCourse.course_name}`;
+
+      const response = await fetch("/api/courses/feedback/analyze", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "x-user-id": user.id 
+        },
+        body: JSON.stringify({
+          feedbacks: courseFeedbacks,
+          context: context
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setAiAnalysis(data.analysis);
+      } else {
+        const errData = await response.json();
+        const isQuotaError = errData.details?.toLowerCase().includes("429") || errData.details?.toLowerCase().includes("quota");
+        
+        toast({ 
+          title: isQuotaError ? "AI Quota Reached" : "Analysis Failed", 
+          description: isQuotaError 
+            ? "You've reached the free tier limit. Please wait a minute and try again." 
+            : (errData.details || errData.error || "Unable to reach AI services"), 
+          variant: "destructive" 
+        });
+      }
+    } catch (error) {
+      toast({ title: "Analysis Error", description: "Something went wrong during analysis", variant: "destructive" });
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
+  const fetchCourseFeedbacks = async (courseId: string, unitId?: string) => {
+    try {
+      setIsFeedbacksLoading(true)
+      const url = unitId && unitId !== "all" 
+        ? `/api/courses/feedback?courseId=${courseId}&unitId=${unitId}`
+        : `/api/courses/feedback?courseId=${courseId}`;
+        
+      const response = await fetch(url, {
+        headers: {
+          "x-user-id": user?.id || "",
+        },
+      })
+      const data = await response.json()
+      if (response.ok) {
+        setCourseFeedbacks(data.feedbacks || [])
+      } else {
+        throw new Error(data.error || "Failed to fetch feedbacks")
+      }
+    } catch (error) {
+      console.error("Error fetching feedbacks:", error)
+      toast({
+        title: "Error",
+        description: "Failed to load feedback data",
+        variant: "destructive",
+      })
+    } finally {
+      setIsFeedbacksLoading(false)
+    }
+  }
+
   const openEditDialog = (course: Course) => {
     setEditCourse(course)
     setEditCourseUnits(course.course_units.map(unit => ({ ...unit })))
@@ -402,6 +491,16 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
     editCourseUnits
   ])
 
+  const getCourseStatus = (course: Course) => {
+    const now = new Date();
+    const start = new Date(course.course_start_date);
+    const end = new Date(course.course_end_date);
+
+    if (now < start) return { label: "Not Started", color: "bg-blue-500", text: "text-blue-500", light: "bg-blue-50" };
+    if (now > end) return { label: "Completed", color: "bg-green-500", text: "text-green-500", light: "bg-green-50" };
+    return { label: "Ongoing", color: "bg-orange-500", text: "text-orange-500", light: "bg-orange-50" };
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -412,27 +511,21 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
         <div>
           <h1 className="admin-page-title">Course Management</h1>
         </div>
         <div className="flex space-x-2">
           <Button onClick={fetchCourses} variant="outline">
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh
-          </Button>
-          <Button
-            variant={editMode ? "default" : "outline"}
-            onClick={() => setEditMode((v) => !v)}
-          >
-            {editMode ? "Editing..." : "Edit Mode"}
+            <RefreshCw className="h-4 w-4 md:mr-2" />
+            <span className="hidden md:inline">Refresh</span>
           </Button>
 
           <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
             <DialogTrigger asChild>
               <Button>
-                <Plus className="h-4 w-4 mr-2" />
-                Add Course
+                <Plus className="h-4 w-4 md:mr-2" />
+                <span className="hidden md:inline">Add Course</span>
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-[90vw] w-[1100px] max-h-[90vh] h-[750px] overflow-hidden flex flex-col">
@@ -592,86 +685,136 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
         </div>
       </div>
 
-      <div className="flex items-center gap-2 mb-2">
-        <div className="relative w-full max-w-xs">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            placeholder="Search courses..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 w-full"
-          />
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div className="flex items-center gap-2 flex-1">
+          <div className="relative w-full max-w-xs">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Input
+              placeholder="Search courses..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 w-full"
+            />
+          </div>
+          <Filter className="h-5 w-5 text-gray-400 mx-2" />
+          <select
+            value={filter}
+            onChange={e => setFilter(e.target.value)}
+            className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="all">All Courses</option>
+            <option value="my_courses">My Courses</option>
+          </select>
         </div>
-        <Filter className="h-5 w-5 text-gray-400 mx-2" />
-        <select
-          value={filter}
-          onChange={e => setFilter(e.target.value)}
-          className="px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="all">All Courses</option>
-          {/* Add more filter options here if needed */}
-        </select>
+
+        {/* Status Legend */}
+        <div className="flex flex-wrap items-center gap-4 text-sm bg-gray-50 dark:bg-slate-800/50 px-4 py-2 rounded-lg border border-gray-100 dark:border-slate-700">
+          <div className="flex items-center gap-1.5">
+            <div className="h-2 w-2 rounded-full bg-blue-500"></div>
+            <span className="text-gray-600 dark:text-gray-300">Not Started</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <div className="h-2 w-2 rounded-full bg-orange-500"></div>
+            <span className="text-gray-600 dark:text-gray-300">Ongoing</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <div className="h-2 w-2 rounded-full bg-green-500"></div>
+            <span className="text-gray-600 dark:text-gray-300">Completed</span>
+          </div>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {filteredCourses.length === 0 ? (
           <Card className="col-span-2">
             <CardContent className="p-8 text-center">
               <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No courses found</h3>
-              <p className="text-gray-600">Create your first course to get started.</p>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No courses found</h3>
+              <p className="text-gray-600 dark:text-gray-400">Create your first course to get started.</p>
             </CardContent>
           </Card>
         ) : (
           filteredCourses.map((course) => (
-            <div key={course.id} className="admin-card rounded-xl shadow-sm border hover:shadow-md transition-shadow flex flex-col justify-between h-full">
+            <div 
+              key={course.id} 
+              className="admin-card rounded-xl shadow-sm border hover:shadow-md transition-shadow flex flex-col justify-between h-full cursor-pointer"
+              onClick={() => {
+                const selection = window.getSelection();
+                if (selection && selection.toString().length > 0) return;
+                openUnitsSheet(course);
+              }}
+            >
               <CardHeader className="pb-2">
-                <div className="flex justify-between items-start">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center space-x-2">
-                      <BookOpen className="h-4 w-4 text-gray-500" />
-                      <span className="text-xl font-bold text-gray-900 /*dark:text-white*/ truncate">{course.course_name}</span>
-                    </div>
-                    <CardDescription className="mt-1 text-gray-600 text-sm truncate /*dark:text-white*/">{course.course_description}</CardDescription>
+                <div className="flex justify-between items-center mb-2">
+                  <div className="flex items-center space-x-2 min-w-0">
+                    <BookOpen className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                    <span className="text-xl font-bold text-gray-900 dark:text-white truncate">{course.course_name}</span>
                   </div>
-                  <Badge variant="outline" className="ml-2 whitespace-nowrap">{course.course_units?.length || 0} Units</Badge>
+                  <div className="flex items-center gap-2">
+                    <Badge className="bg-slate-200 dark:bg-slate-600 text-slate-900 dark:text-slate-100 border-0 whitespace-nowrap pointer-events-none">
+                      {course.course_units?.length || 0} Units
+                    </Badge>
+                    <Badge className={`${getCourseStatus(course).color} text-white border-0 whitespace-nowrap pointer-events-none`}>
+                      {getCourseStatus(course).label}
+                    </Badge>
+                  </div>
                 </div>
+                <CardDescription className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2">
+                  {course.course_description}
+                </CardDescription>
               </CardHeader>
               <CardContent className="flex-1 flex flex-col justify-between">
                 <div className="space-y-2 mb-2">
-                  <div className="flex items-center space-x-4 text-sm text-gray-700">
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-gray-700 dark:text-gray-300">
                     <span className="flex items-center space-x-1">
-                      <Calendar className="h-4 w-4 text-gray-400" />
+                      <Calendar className="h-4 w-4 text-gray-400 dark:text-gray-500" />
                       <span>{new Date(course.course_start_date).toLocaleDateString()} - {new Date(course.course_end_date).toLocaleDateString()}</span>
                     </span>
                     <span className="flex items-center space-x-1">
-                      <Users className="h-4 w-4 text-gray-400" />
+                      <Users className="h-4 w-4 text-gray-400 dark:text-gray-500" />
                       <span>{course.course_enrollments?.length || 0} enrolled • {course.course_code}</span>
                     </span>
                   </div>
                 </div>
-                <div className="flex items-end justify-between mt-4">
+                <div className="flex flex-col mt-4 space-y-3">
                   <span className="text-xs text-gray-400">Created by: {course.creator?.name || 'Unknown User'}</span>
-                  <div className="flex space-x-2">
-                    <Button size="sm" variant="outline" onClick={() => openUnitsSheet(course)}>
-                      <List className="h-4 w-4 mr-1" />
-                      View Units
-                    </Button>
-                    {editMode && (
-                      <>
-                        <button className="btn-edit" onClick={() => openEditDialog(course)}>
-                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{marginRight: 6}}><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536M9 13l6.586-6.586a2 2 0 112.828 2.828L11.828 15.828a2 2 0 01-2.828 0L9 13zm-6 6v-2a2 2 0 012-2h2" /></svg>
-                          Edit
-                        </button>
-                        <button className="btn-delete" onClick={() => {
-                          setCourseToDelete(course)
-                          setIsDeleteDialogOpen(true)
-                        }}>
-                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{marginRight: 6}}><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                          Delete
-                        </button>
-                      </>
-                    )}
+                  <div className="flex items-center justify-between">
+                    <div className="flex space-x-2">
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openEditDialog(course);
+                        }}
+                      >
+                        <Edit className="h-4 w-4 md:mr-1" />
+                        <span className="hidden md:inline">Edit</span>
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        variant="outline" 
+                        className="text-red-600 hover:text-red-700 hover:bg-red-50" 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setCourseToDelete(course);
+                          setIsDeleteDialogOpen(true);
+                        }}
+                      >
+                        <Trash2 className="h-4 w-4 md:mr-1" />
+                        <span className="hidden md:inline">Delete</span>
+                      </Button>
+                    </div>
+                    <div className="flex space-x-2">
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={(e) => openFeedbackSheet(course, e)}
+                      >
+                        <MessageSquare className="h-4 w-4 md:mr-1" />
+                        <span className="hidden md:inline">View Feedback</span>
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </CardContent>
@@ -708,6 +851,179 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
                   </div>
                 </Card>
               ))
+            )}
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      {/* Course Feedback Sheet */}
+      <Sheet open={isFeedbackSheetOpen} onOpenChange={setIsFeedbackSheetOpen}>
+        <SheetContent className="w-[450px] sm:w-[540px] overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>Course Performance & Feedback</SheetTitle>
+            <SheetDescription>
+              Feedback for {selectedCourse?.course_name} ({selectedCourse?.course_code})
+            </SheetDescription>
+          </SheetHeader>
+          
+          <div className="mt-4 pb-4 border-b flex items-end gap-3">
+            <div className="flex-1">
+              <Label htmlFor="feedback_unit_filter" className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-2 block">
+                Filter by Unit
+              </Label>
+              <select
+                id="feedback_unit_filter"
+                value={selectedFeedbackUnitId}
+                onChange={(e) => {
+                  setSelectedFeedbackUnitId(e.target.value);
+                  setAiAnalysis(null);
+                  if (selectedCourse) fetchCourseFeedbacks(selectedCourse.id, e.target.value);
+                }}
+                className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="all">Overall Performance</option>
+                {selectedCourse?.course_units?.map((unit) => (
+                  <option key={unit.id || unit.unit_number} value={unit.id}>
+                    Unit {unit.unit_number}: {unit.unit_name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <Button 
+              size="sm" 
+              className="bg-purple-600 hover:bg-purple-700 text-white shrink-0"
+              onClick={analyzeWithAI}
+              disabled={isAnalyzing || courseFeedbacks.length === 0}
+            >
+              {isAnalyzing ? <RefreshCw className="h-3.5 w-3.5 animate-spin mr-2" /> : <Sparkles className="h-3.5 w-3.5 mr-2" />}
+              AI Insight
+            </Button>
+          </div>
+
+          <div className="mt-6 space-y-6">
+            {isAnalyzing && (
+              <div className="p-6 border-2 border-dashed border-purple-200 rounded-xl bg-purple-50/30 flex flex-col items-center justify-center text-center">
+                <BrainCircuit className="h-10 w-10 text-purple-400 animate-pulse mb-3" />
+                <p className="text-purple-700 font-bold">Brewing Deep Insights...</p>
+                <p className="text-sm text-purple-500">Our AI is distilling student feedback for you.</p>
+              </div>
+            )}
+
+            {aiAnalysis && !isAnalyzing && (
+              <Card className="border-purple-200 bg-gradient-to-br from-purple-50 to-white overflow-hidden shadow-sm">
+                <CardHeader className="p-4 pb-0 flex flex-row items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 bg-purple-100 rounded-lg">
+                      <Sparkles className="h-4 w-4 text-purple-600" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-sm font-bold text-purple-900 uppercase tracking-tight">AI Intelligent Summary</CardTitle>
+                      <CardDescription className="text-[10px] text-purple-600">Based on {courseFeedbacks.length} student responses</CardDescription>
+                    </div>
+                  </div>
+                  <Badge className={cn(
+                    "capitalize text-[10px] font-bold border-0",
+                    aiAnalysis.sentiment.toLowerCase().includes("positive") ? "bg-green-100 text-green-700" :
+                    aiAnalysis.sentiment.toLowerCase().includes("negative") ? "bg-red-100 text-red-700" :
+                    "bg-slate-100 text-slate-700"
+                  )}>
+                    {aiAnalysis.sentiment.toLowerCase().includes("positive") ? <TrendingUp className="h-3 w-3 mr-1" /> :
+                     aiAnalysis.sentiment.toLowerCase().includes("negative") ? <TrendingDown className="h-3 w-3 mr-1" /> :
+                     <Minus className="h-3 w-3 mr-1" />}
+                    {aiAnalysis.sentiment}
+                  </Badge>
+                </CardHeader>
+                <CardContent className="p-4 space-y-3">
+                  <p className="text-sm text-slate-700 leading-relaxed italic">
+                    "{aiAnalysis.summary}"
+                  </p>
+                  
+                  <div className="space-y-2">
+                    <p className="text-[10px] font-bold text-slate-400 uppercase flex items-center gap-1">
+                      <Lightbulb className="h-3 w-3 text-yellow-500" /> Actionable Recommendations
+                    </p>
+                    <div className="grid gap-2">
+                      {aiAnalysis.insights.map((insight: string, idx: number) => (
+                        <div key={idx} className="flex gap-2 items-start p-2 bg-white/60 rounded-lg border border-purple-50 text-xs text-slate-600">
+                          <AlertCircle className="h-3.5 w-3.5 text-purple-400 shrink-0 mt-0.5" />
+                          <span>{insight}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+            {isFeedbacksLoading ? (
+              <div className="flex justify-center py-8">
+                <RefreshCw className="h-6 w-6 animate-spin text-gray-400" />
+              </div>
+            ) : courseFeedbacks.length === 0 ? (
+              <div className="text-center py-12 bg-gray-50 dark:bg-slate-800/50 rounded-lg border-2 border-dashed border-gray-200 dark:border-slate-700">
+                <MessageSquare className="h-10 w-10 text-gray-300 mx-auto mb-3" />
+                <p className="text-gray-500 font-medium">No feedback submitted yet</p>
+                <p className="text-sm text-gray-400">Students will appear here once they give feedback.</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between px-2">
+                  <span className="text-sm font-medium text-gray-500">{courseFeedbacks.length} Responses</span>
+                  <div className="flex items-center gap-1">
+                    <span className="text-sm font-bold text-gray-900 dark:text-white">
+                      {(courseFeedbacks.reduce((acc, f) => acc + (f.rating || 0), 0) / courseFeedbacks.length).toFixed(1)}
+                    </span>
+                    <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                    <span className="text-xs text-gray-400">Average</span>
+                  </div>
+                </div>
+                {courseFeedbacks.map((feedback) => (
+                  <Card key={feedback.id} className="overflow-hidden border-slate-200 dark:border-slate-700">
+                    <CardHeader className="p-4 pb-2 bg-slate-50/50 dark:bg-slate-800/20">
+                      <div className="flex justify-between items-start">
+                        <div className="flex items-center gap-2">
+                          <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-xs">
+                            {feedback.student?.user?.name?.charAt(0) || 'S'}
+                          </div>
+                          <div>
+                            <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                              {feedback.student?.user?.name}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              Enrolled Student • {new Date(feedback.created_at).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <Badge variant="outline" className="text-[10px] font-bold py-0 h-5 mb-1 bg-white">
+                            Unit {feedback.unit?.unit_number}
+                          </Badge>
+                          <div className="flex items-center justify-end">
+                            {[1, 2, 3, 4, 5].map((s) => (
+                              <Star 
+                                key={s} 
+                                className={cn(
+                                  "h-3 w-3",
+                                  s <= (feedback.rating || 0) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+                                )} 
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="p-4 pt-2">
+                      <div className="mb-2">
+                        <span className="text-[10px] font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-tighter">
+                          {feedback.unit?.unit_name}
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-700 dark:text-gray-300 italic">
+                        "{feedback.comment}"
+                      </p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             )}
           </div>
         </SheetContent>
