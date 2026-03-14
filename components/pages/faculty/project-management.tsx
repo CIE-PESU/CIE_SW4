@@ -1268,7 +1268,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                   <Label htmlFor="dueDate">Expected Completion Date</Label>
                   <Input
                     id="dueDate"
-                    type="datetime-local"
+                    type="date"
                     value={newProject.expected_completion_date}
                     onChange={(e) =>
                       setNewProject({
