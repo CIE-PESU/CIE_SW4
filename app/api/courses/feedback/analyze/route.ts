@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server"
-import { GoogleGenerativeAI } from "@google/generative-ai"
 import { getUserById } from "@/lib/auth"
 
 export async function POST(request: NextRequest) {
@@ -12,20 +11,11 @@ export async function POST(request: NextRequest) {
     }
 
     const { feedbacks } = await request.json()
-    const apiKey = process.env.GEMINI_API_KEY
+    const apiKey = process.env.MISTRAL_API_KEY
     
     if (!apiKey) {
-      return NextResponse.json({ error: "API Key missing" }, { status: 500 })
+      return NextResponse.json({ error: "Mistral API Key missing" }, { status: 500 })
     }
-
-    const genAI = new GoogleGenerativeAI(apiKey)
-    
-    // We verified these models exist with 'curl' for this specific API key
-    const modelsToTry = [
-      "gemini-2.0-flash",
-      "gemini-flash-latest",
-      "gemini-pro-latest"
-    ]
 
     const feedbackText = feedbacks
       .map((f: any) => `Rating: ${f.rating}/5, Comment: ${f.comment}`)
@@ -47,35 +37,41 @@ export async function POST(request: NextRequest) {
     let analysisText = ""
     let lastError: any = null
 
-    for (const modelName of modelsToTry) {
-      try {
-        console.log(`[AI-SYSTEM] Trying model: ${modelName} (API: v1beta)...`)
-        const model = genAI.getGenerativeModel(
-          { model: modelName },
-          { apiVersion: "v1beta" }
-        )
-        
-        const result = await model.generateContent(prompt)
-        const response = await result.response
-        analysisText = response.text()
-        
-        if (analysisText) {
-          console.log(`[AI-SYSTEM] SUCCESS with model: ${modelName}`)
-          break
-        }
-      } catch (error: any) {
-        console.error(`[AI-SYSTEM] FAILED model ${modelName}:`, error.message)
-        lastError = error
-        if (error.message?.includes("429")) {
-          // If it's quota, we should still try the next one because different models have different quotas
-          continue
-        }
+    try {
+      console.log(`[AI-SYSTEM] Trying Mistral API...`)
+      const response = await fetch("https://api.mistral.ai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          "Authorization": `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: "mistral-large-latest",
+          messages: [{ role: "user", content: prompt }],
+          response_format: { type: "json_object" }
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.text();
+        throw new Error(`Mistral API error: ${response.status} - ${errorData}`);
       }
+
+      const data = await response.json();
+      analysisText = data.choices[0].message.content;
+
+      if (analysisText) {
+        console.log(`[AI-SYSTEM] SUCCESS with Mistral model: mistral-large-latest`)
+      }
+    } catch (error: any) {
+      console.error(`[AI-SYSTEM] FAILED Mistral API:`, error.message)
+      lastError = error
     }
 
     if (!analysisText && lastError) {
       return NextResponse.json({ 
-        error: lastError.message?.includes("429") ? "Quota Exceeded" : "AI Analysis Failed", 
+        error: "AI Analysis Failed", 
         details: lastError.message 
       }, { status: 500 })
     }
