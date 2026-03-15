@@ -326,7 +326,7 @@ export function DashboardLayout({ children, currentPage, onPageChange, menuItems
                     }
                   />
                   <span className={cn(
-                    "text-sm font-medium whitespace-nowrap truncate transition-all duration-300",
+                    "text-sm font-medium whitespace-nowrap truncate",
                     sidebarCollapsed && "lg:opacity-0 lg:w-0 lg:hidden"
                   )}>
                     {item.label}
@@ -343,6 +343,9 @@ export function DashboardLayout({ children, currentPage, onPageChange, menuItems
                 opacity: 1;
                 transform: translateX(0);
               }
+            }
+            .cie-sidebar-item {
+              transition-property: transform !important;
             }
             .cie-sidebar-item:not(:disabled):not([disabled]):hover {
               background-color: rgba(231,90,45,0.08) !important;
