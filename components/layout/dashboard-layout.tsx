@@ -295,7 +295,7 @@ export function DashboardLayout({ children, currentPage, onPageChange, menuItems
                   )}
                   style={
                     !item.disabled && currentPage === item.id
-                      ? { backgroundColor: 'rgba(231,90,45,0.12)', color: '#E75A2D' }
+                      ? { backgroundColor: 'rgba(57,153,194,0.12)', color: '#3999C2' }
                       : !item.disabled
                         ? { color: theme === 'dark' ? '#9B98BC' : '#34305E' }
                         : {}
@@ -319,7 +319,7 @@ export function DashboardLayout({ children, currentPage, onPageChange, menuItems
                     )}
                     style={
                       !item.disabled && currentPage === item.id
-                        ? { color: '#E75A2D' }
+                        ? { color: '#3999C2' }
                         : !item.disabled
                           ? { color: theme === 'dark' ? '#9B98BC' : '#34305E' }
                           : {}
@@ -348,11 +348,11 @@ export function DashboardLayout({ children, currentPage, onPageChange, menuItems
               transition-property: transform !important;
             }
             .cie-sidebar-item:not(:disabled):not([disabled]):hover {
-              background-color: rgba(231,90,45,0.08) !important;
-              color: #E75A2D !important;
+              background-color: rgba(57,153,194,0.08) !important;
+              color: #3999C2 !important;
             }
             .cie-sidebar-item:not(:disabled):not([disabled]):hover svg {
-              color: #E75A2D !important;
+              color: #3999C2 !important;
             }
           `}</style>
 
