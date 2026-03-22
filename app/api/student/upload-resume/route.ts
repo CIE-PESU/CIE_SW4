@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
       where: { id: student.id },
       data: {
         resume_id: savedFile.key,
-        resume_path: 'local',
+        resume_path: 'resumes',
       },
     })
     

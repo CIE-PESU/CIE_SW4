@@ -1523,7 +1523,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                             </svg>
                             Edit
                           </button>
-                          <button className="btn-delete" onClick={() => handleDeleteProject(project.id)}>
+                          <button className="btn-delete" onClick={() => { setProjectToDelete(project); setIsDeleteDialogOpen(true); }}>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-4 w-4 mr-1">
                               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                             </svg>
@@ -2328,7 +2328,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                           <td className="px-4 py-3">
                             {application.resume_path ? (
                               <a
-                                href={application.resume_path === 'Uploadthing' ? `https://utfs.io/f/${application.resume_id}` : `/${application.resume_path}`}
+                                href={application.resume_path === 'Uploadthing' ? `https://utfs.io/f/${application.resume_id}` : `/api/files/${application.resume_path}/${application.resume_id}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-blue-600 hover:text-blue-800 underline text-sm flex items-center"
