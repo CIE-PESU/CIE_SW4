@@ -856,15 +856,15 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
         </SheetContent>
       </Sheet>
 
-      {/* Course Feedback Sheet */}
-      <Sheet open={isFeedbackSheetOpen} onOpenChange={setIsFeedbackSheetOpen}>
-        <SheetContent className="w-[450px] sm:w-[540px] overflow-y-auto">
-          <SheetHeader>
-            <SheetTitle>Course Performance & Feedback</SheetTitle>
-            <SheetDescription>
+      {/* Course Feedback Dialog */}
+      <Dialog open={isFeedbackSheetOpen} onOpenChange={setIsFeedbackSheetOpen}>
+        <DialogContent className="max-w-4xl w-[95vw] max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Course Performance & Feedback</DialogTitle>
+            <DialogDescription>
               Feedback for {selectedCourse?.course_name} ({selectedCourse?.course_code})
-            </SheetDescription>
-          </SheetHeader>
+            </DialogDescription>
+          </DialogHeader>
           
           <div className="mt-4 pb-4 border-b flex items-end gap-3">
             <div className="flex-1">
@@ -1026,8 +1026,8 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
               </div>
             )}
           </div>
-        </SheetContent>
-      </Sheet>
+        </DialogContent>
+      </Dialog>
 
       {/* Edit Course Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
