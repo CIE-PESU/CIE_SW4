@@ -61,8 +61,8 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
       category: component.component_category,
       location: component.component_location,
       tagId: component.component_tag_id,
-      imageUrl: component.front_image_id ? `/lab-images/${component.front_image_id}` : null,
-      backImageUrl: component.back_image_id ? `/lab-images/${component.back_image_id}` : null,
+      imageUrl: component.front_image_id ? `/api/files/lab-images/${component.front_image_id}` : null,
+      backImageUrl: component.back_image_id ? `/api/files/lab-images/${component.back_image_id}` : null,
       invoiceNumber: component.invoice_number,
       purchasedFrom: component.purchased_from,
       purchasedDate: component.purchase_date,
@@ -82,6 +82,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const { id } = params
+    const { deleteFile } = await import("@/lib/storage");
 
     // First, find the component to get image IDs
     const component = await prisma.labComponent.findUnique({
@@ -92,28 +93,12 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
       return NextResponse.json({ error: "Component not found" }, { status: 404 })
     }
 
-    console.log(`Deleting component: ${component.component_name}`)
-    console.log(`Front image ID: ${component.front_image_id}`)
-    console.log(`Back image ID: ${component.back_image_id}`)
-
-    // Delete associated image files
+    // Delete associated image files locally
     const imageIds = [component.front_image_id, component.back_image_id]
     for (const imageId of imageIds) {
       if (imageId) {
-        try {
-          const filePath = path.join(process.cwd(), "public", "lab-images", imageId)
-          console.log(`Attempting to delete file: ${filePath}`)
-          await unlink(filePath)
-          console.log(`Successfully deleted file: ${imageId}`)
-        } catch (fileError: any) {
-          // Log error if file deletion fails, but don't block the process
-          // This handles cases where the file might already be deleted
-          if (fileError.code !== 'ENOENT') {
-            console.error(`Failed to delete image file: ${imageId}`, fileError)
-          } else {
-            console.log(`File not found (already deleted): ${imageId}`)
-          }
-        }
+        await deleteFile(imageId, 'lab-images');
+        console.log(`Successfully deleted local file: ${imageId}`)
       }
     }
 

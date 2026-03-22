@@ -123,8 +123,8 @@ export async function GET(req: NextRequest) {
       ...request,
       component: {
         ...request.component,
-        image_url: request.component.front_image_id ? `/lab-images/${request.component.front_image_id}` : null,
-        back_image_url: request.component.back_image_id ? `/lab-images/${request.component.back_image_id}` : null,
+        image_url: request.component.front_image_id ? `/api/files/lab-images/${request.component.front_image_id}` : null,
+        back_image_url: request.component.back_image_id ? `/api/files/lab-images/${request.component.back_image_id}` : null,
       },
       component_name: request.component.component_name,
       student_name: request.student?.user?.name || null,

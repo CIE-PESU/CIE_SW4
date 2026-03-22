@@ -48,7 +48,7 @@ export function Navbar({ sidebarOpen, setSidebarOpen, sidebarCollapsed, onPageCh
               variant="ghost" 
               size="icon" 
               onClick={() => setSidebarOpen(!sidebarOpen)} 
-              className="h-9 w-9 ml-1 text-slate-700 dark:text-slate-400 hover:bg-transparent hover:text-[#E75A2D] dark:hover:text-[#E75A2D] active:text-[#E75A2D] dark:active:text-[#E75A2D] transition-all duration-200 [&_svg]:size-6 hover:scale-[1.15] active:scale-[1.15] select-none"
+              className="h-9 w-9 ml-1 text-slate-700 dark:text-slate-400 hover:bg-transparent hover:text-[#3999C2] dark:hover:text-[#3999C2] active:text-[#3999C2] dark:active:text-[#3999C2] transition-all duration-200 [&_svg]:size-6 hover:scale-[1.15] active:scale-[1.15] select-none"
             >
               <Menu />
             </Button>
@@ -71,7 +71,7 @@ export function Navbar({ sidebarOpen, setSidebarOpen, sidebarCollapsed, onPageCh
         <div className="flex items-center gap-2 justify-end flex-1">
           {/* Dark mode toggle button */}
           <Button
-            className="text-slate-700 dark:text-slate-400 hover:bg-transparent hover:text-[#E75A2D] dark:hover:text-[#E75A2D] active:text-[#E75A2D] dark:active:text-[#E75A2D] transition-all duration-200 [&_svg]:size-6 hover:scale-[1.15] active:scale-[1.15] select-none"
+            className="text-slate-700 dark:text-slate-400 hover:bg-transparent hover:text-[#3999C2] dark:hover:text-[#3999C2] active:text-[#3999C2] dark:active:text-[#3999C2] transition-all duration-200 [&_svg]:size-6 hover:scale-[1.15] active:scale-[1.15] select-none"
             variant="ghost"
             size="icon"
             aria-label="Toggle dark mode"

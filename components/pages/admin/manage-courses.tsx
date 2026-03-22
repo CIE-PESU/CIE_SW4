@@ -62,6 +62,63 @@ interface ManageCoursesProps {
   facultyOnly?: boolean;
 }
 
+function FeedbackCard({ feedback }: { feedback: any }) {
+  return (
+    <Card className="overflow-hidden border-slate-200 dark:border-slate-700">
+      <CardHeader className="p-4 pb-2 bg-slate-50/50 dark:bg-slate-800/20">
+        <div className="flex justify-between items-start">
+          <div className="flex items-center gap-2">
+            <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-xs">
+              {feedback.student?.user?.name?.charAt(0) || 'S'}
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                  {feedback.student?.user?.name}
+                </p>
+                {feedback.is_used ? (
+                  <Badge variant="secondary" className="text-[9px] h-4 px-1 bg-green-50 text-green-600 border-green-100 font-medium">Included in Summary</Badge>
+                ) : (
+                  <Badge variant="secondary" className="text-[9px] h-4 px-1 bg-orange-50 text-orange-600 border-orange-100 font-bold animate-pulse">New / Unused</Badge>
+                )}
+              </div>
+              <p className="text-xs text-gray-500">
+                Enrolled Student • {new Date(feedback.created_at).toLocaleDateString()}
+              </p>
+            </div>
+          </div>
+          <div className="text-right">
+            <Badge variant="outline" className="text-[10px] font-bold py-0 h-5 mb-1 bg-white">
+              Unit {feedback.unit?.unit_number}
+            </Badge>
+            <div className="flex items-center justify-end">
+              {[1, 2, 3, 4, 5].map((s) => (
+                <Star 
+                  key={s} 
+                  className={cn(
+                    "h-3 w-3",
+                    s <= (feedback.rating || 0) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+                  )} 
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent className="p-4 pt-2">
+        <div className="mb-2">
+          <span className="text-[10px] font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-tighter">
+            {feedback.unit?.unit_name}
+          </span>
+        </div>
+        <p className="text-sm text-gray-700 dark:text-gray-300 italic">
+          "{feedback.comment}"
+        </p>
+      </CardContent>
+    </Card>
+  );
+}
+
 export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
   const [courses, setCourses] = useState<Course[]>([])
   const [loading, setLoading] = useState(true)
@@ -315,7 +372,9 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
         },
         body: JSON.stringify({
           feedbacks: courseFeedbacks,
-          context: context
+          context: context,
+          courseId: selectedCourse.id,
+          unitId: selectedFeedbackUnitId
         })
       });
 
@@ -356,6 +415,11 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
       const data = await response.json()
       if (response.ok) {
         setCourseFeedbacks(data.feedbacks || [])
+        if (data.latestSummary) {
+          setAiAnalysis(data.latestSummary)
+        } else {
+          setAiAnalysis(null)
+        }
       } else {
         throw new Error(data.error || "Failed to fetch feedbacks")
       }
@@ -856,15 +920,15 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
         </SheetContent>
       </Sheet>
 
-      {/* Course Feedback Sheet */}
-      <Sheet open={isFeedbackSheetOpen} onOpenChange={setIsFeedbackSheetOpen}>
-        <SheetContent className="w-[450px] sm:w-[540px] overflow-y-auto">
-          <SheetHeader>
-            <SheetTitle>Course Performance & Feedback</SheetTitle>
-            <SheetDescription>
+      {/* Course Feedback Dialog */}
+      <Dialog open={isFeedbackSheetOpen} onOpenChange={setIsFeedbackSheetOpen}>
+        <DialogContent className="max-w-4xl w-[95vw] max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Course Performance & Feedback</DialogTitle>
+            <DialogDescription>
               Feedback for {selectedCourse?.course_name} ({selectedCourse?.course_code})
-            </SheetDescription>
-          </SheetHeader>
+            </DialogDescription>
+          </DialogHeader>
           
           <div className="mt-4 pb-4 border-b flex items-end gap-3">
             <div className="flex-1">
@@ -965,69 +1029,54 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
                 <p className="text-sm text-gray-400">Students will appear here once they give feedback.</p>
               </div>
             ) : (
-              <div className="space-y-4">
-                <div className="flex items-center justify-between px-2">
+              <div className="flex flex-col h-full max-h-[60vh]">
+                <div className="flex items-center justify-between px-2 mb-4">
                   <span className="text-sm font-medium text-gray-500">{courseFeedbacks.length} Responses</span>
                   <div className="flex items-center gap-1">
                     <span className="text-sm font-bold text-gray-900 dark:text-white">
-                      {(courseFeedbacks.reduce((acc, f) => acc + (f.rating || 0), 0) / courseFeedbacks.length).toFixed(1)}
+                      {(courseFeedbacks.reduce((acc, f: any) => acc + (f.rating || 0), 0) / courseFeedbacks.length).toFixed(1)}
                     </span>
                     <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                     <span className="text-xs text-gray-400">Average</span>
                   </div>
                 </div>
-                {courseFeedbacks.map((feedback) => (
-                  <Card key={feedback.id} className="overflow-hidden border-slate-200 dark:border-slate-700">
-                    <CardHeader className="p-4 pb-2 bg-slate-50/50 dark:bg-slate-800/20">
-                      <div className="flex justify-between items-start">
-                        <div className="flex items-center gap-2">
-                          <div className="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-xs">
-                            {feedback.student?.user?.name?.charAt(0) || 'S'}
-                          </div>
-                          <div>
-                            <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                              {feedback.student?.user?.name}
-                            </p>
-                            <p className="text-xs text-gray-500">
-                              Enrolled Student • {new Date(feedback.created_at).toLocaleDateString()}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <Badge variant="outline" className="text-[10px] font-bold py-0 h-5 mb-1 bg-white">
-                            Unit {feedback.unit?.unit_number}
-                          </Badge>
-                          <div className="flex items-center justify-end">
-                            {[1, 2, 3, 4, 5].map((s) => (
-                              <Star 
-                                key={s} 
-                                className={cn(
-                                  "h-3 w-3",
-                                  s <= (feedback.rating || 0) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
-                                )} 
-                              />
-                            ))}
-                          </div>
-                        </div>
+
+                <div className="flex-1 overflow-y-auto pr-2 space-y-6">
+                  {/* New Feedbacks Group */}
+                  {courseFeedbacks.filter((f: any) => !f.is_used).length > 0 && (
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-2 px-2">
+                        <div className="h-2 w-2 rounded-full bg-orange-500 animate-pulse" />
+                        <h3 className="text-sm font-bold text-orange-600 uppercase tracking-wider">New Feedbacks ({courseFeedbacks.filter((f: any) => !f.is_used).length})</h3>
                       </div>
-                    </CardHeader>
-                    <CardContent className="p-4 pt-2">
-                      <div className="mb-2">
-                        <span className="text-[10px] font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-tighter">
-                          {feedback.unit?.unit_name}
-                        </span>
+                      <div className="grid gap-4">
+                        {courseFeedbacks.filter((f: any) => !f.is_used).map((feedback: any) => (
+                          <FeedbackCard key={feedback.id} feedback={feedback} />
+                        ))}
                       </div>
-                      <p className="text-sm text-gray-700 dark:text-gray-300 italic">
-                        "{feedback.comment}"
-                      </p>
-                    </CardContent>
-                  </Card>
-                ))}
+                    </div>
+                  )}
+
+                  {/* Processed Feedbacks Group */}
+                  {courseFeedbacks.filter((f: any) => f.is_used).length > 0 && (
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-2 px-2 pt-2">
+                        <div className="h-2 w-2 rounded-full bg-green-500" />
+                        <h3 className="text-sm font-bold text-green-600 uppercase tracking-wider">Included in Summary ({courseFeedbacks.filter((f: any) => f.is_used).length})</h3>
+                      </div>
+                      <div className="grid gap-4 opacity-80">
+                        {courseFeedbacks.filter((f: any) => f.is_used).map((feedback: any) => (
+                          <FeedbackCard key={feedback.id} feedback={feedback} />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>
-        </SheetContent>
-      </Sheet>
+        </DialogContent>
+      </Dialog>
 
       {/* Edit Course Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>

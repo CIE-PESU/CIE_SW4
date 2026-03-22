@@ -105,6 +105,7 @@ model Course {
   course_units       CourseUnit[]
   enrollments        Enrollment[]
   feedbacks       CourseFeedback[]
+  ai_summaries    AISummary[]
 
   @@map("courses")
 }
@@ -122,6 +123,7 @@ model CourseUnit {
   modified_by      String?
   modified_date    DateTime @updatedAt
   feedbacks       CourseFeedback[]
+  ai_summaries    AISummary[]
   course           Course   @relation(fields: [course_id], references: [id], onDelete: Cascade)
 
   @@unique([course_id, unit_number])
@@ -621,7 +623,23 @@ model CourseFeedback {
   course     Course   @relation(fields: [course_id], references: [id], onDelete: Cascade)
   student    Student  @relation(fields: [student_id], references: [id], onDelete: Cascade)
   unit       CourseUnit @relation(fields: [unit_id], references: [id], onDelete: Cascade)
+  ai_summaries AISummary[] @relation("SummaryToFeedback")
 
   @@unique([student_id, unit_id])
   @@map("course_feedback")
+}
+
+model AISummary {
+  id         String   @id @default(cuid())
+  course_id  String
+  unit_id    String?
+  summary    String   @db.Text
+  sentiment  String
+  insights   Json     // Array of recommendations
+  created_at DateTime @default(now())
+  course     Course   @relation(fields: [course_id], references: [id], onDelete: Cascade)
+  unit       CourseUnit? @relation(fields: [unit_id], references: [id], onDelete: Cascade)
+  feedbacks  CourseFeedback[] @relation("SummaryToFeedback")
+
+  @@map("ai_summaries")
 }

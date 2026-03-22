@@ -1,7 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { writeFile, mkdir } from 'fs/promises'
-import path from 'path'
-import { existsSync } from 'fs'
+import { saveFile } from '@/lib/storage'
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,22 +20,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Only image files are allowed' }, { status: 400 })
     }
     
-    const arrayBuffer = await file.arrayBuffer()
-    const buffer = Buffer.from(arrayBuffer)
-    const fileName = `${Date.now()}_${file.name}`
+    // Save image locally using storage utility
+    const savedFile = await saveFile(file, 'lab-images')
     
-    // Ensure the lab-images directory exists
-    const labImagesDir = path.join(process.cwd(), 'public', 'lab-images')
-    if (!existsSync(labImagesDir)) {
-      await mkdir(labImagesDir, { recursive: true })
-    }
-    
-    const filePath = path.join(labImagesDir, fileName)
-    
-    await writeFile(filePath, buffer)
-    const imageUrl = `/lab-images/${fileName}`
-    
-    return NextResponse.json({ imageUrl })
+    return NextResponse.json({ imageUrl: savedFile.url })
   } catch (error) {
     console.error("Upload error:", error)
     return NextResponse.json({ 
@@ -45,4 +31,5 @@ export async function POST(request: NextRequest) {
       details: error instanceof Error ? error.message : "Unknown error"
     }, { status: 500 })
   }
-} 
+}
+ 

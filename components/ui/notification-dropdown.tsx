@@ -95,7 +95,7 @@ export function NotificationDropdown({ activities, loading = false, onPageChange
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" aria-label="Notifications" className="relative text-slate-700 dark:text-slate-400 hover:bg-transparent hover:text-[#E75A2D] dark:hover:text-[#E75A2D] active:text-[#E75A2D] dark:active:text-[#E75A2D] transition-all duration-200 [&_svg]:size-6 hover:scale-[1.15] active:scale-[1.15] select-none">
+        <Button variant="ghost" size="icon" aria-label="Notifications" className="relative text-slate-700 dark:text-slate-400 hover:bg-transparent hover:text-[#3999C2] dark:hover:text-[#3999C2] active:text-[#3999C2] dark:active:text-[#3999C2] transition-all duration-200 [&_svg]:size-6 hover:scale-[1.15] active:scale-[1.15] select-none">
           <Bell />
           {unreadCount > 0 && (
             <Badge

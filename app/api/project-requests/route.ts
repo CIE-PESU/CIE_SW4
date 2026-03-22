@@ -153,6 +153,12 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
+    // Get student's resume info
+    const student = await prisma.student.findUnique({
+      where: { id: student_id },
+      select: { resume_id: true, resume_path: true }
+    })
+
     const projectRequest = await prisma.projectRequest.create({
       data: {
         project_id,
@@ -161,6 +167,8 @@ export async function POST(request: NextRequest) {
         request_date: new Date(),
         status: "PENDING",
         student_notes: student_notes || null,
+        resume_id: student?.resume_id,
+        resume_path: student?.resume_path,
       },
       include: {
         project: true,

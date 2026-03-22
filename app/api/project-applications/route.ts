@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { getUserById } from "@/lib/auth"
-import { UTApi } from "uploadthing/server";
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,22 +23,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Student profile not found" }, { status: 404 })
     }
 
-    const formData = await request.formData()
-    const project_id = formData.get("project_id") as string
-    const faculty_id = formData.get("faculty_id") as string
-    const student_notes = formData.get("student_notes") as string
-    const resume = formData.get("resume") as File
-
-    if (!project_id || !faculty_id || !resume) {
+    const { project_id, faculty_id, student_notes } = await request.json()
+    
+    if (!project_id || !faculty_id) {
       return NextResponse.json({ 
-        error: "Project ID, Faculty ID, and resume are required" 
+        error: "Project ID and Faculty ID are required" 
       }, { status: 400 })
     }
 
-    // Validate file type
-    if (!resume.type.includes("pdf")) {
-      return NextResponse.json({ 
-        error: "Only PDF files are allowed for resume" 
+    if (!student.resume_id) {
+       return NextResponse.json({ 
+        error: "No resume found. Please upload a resume to your profile before applying." 
       }, { status: 400 })
     }
 
@@ -83,17 +77,6 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
-    // Upload resume using Uploadthing
-    const utapi = new UTApi();
-    const response = await utapi.uploadFiles(resume);
-    if (response.error) {
-      throw new Error(response.error.message);
-    }
-
-    const resumeId = response.data.key;
-    const fileName = resume.name;
-
-    // Create project request with resume information
     const projectRequest = await prisma.projectRequest.create({
       data: {
         project_id,
@@ -102,8 +85,8 @@ export async function POST(request: NextRequest) {
         request_date: new Date(),
         status: "PENDING",
         student_notes: student_notes || null,
-        resume_id: resumeId,
-        resume_path: 'Uploadthing', // Specify that it's using Uploadthing
+        resume_id: student.resume_id,
+        resume_path: student.resume_path,
       },
       include: {
         project: true,

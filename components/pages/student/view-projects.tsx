@@ -140,7 +140,6 @@ export function ViewProjects() {
   const [submissionContent, setSubmissionContent] = useState("")
   const [submissionFile, setSubmissionFile] = useState<File | null>(null)
   const [applicationNotes, setApplicationNotes] = useState("")
-  const [resumeFile, setResumeFile] = useState<File | null>(null)
   const [activeTab, setActiveTab] = useState<'my-projects' | 'available-projects'>('my-projects')
   const [expandedDescriptions, setExpandedDescriptions] = useState<Set<string>>(new Set())
   const { toast } = useToast()
@@ -546,44 +545,43 @@ export function ViewProjects() {
 
     setProjectToApply(project)
     setApplicationNotes("")
-    setResumeFile(null)
     setIsApplyDialogOpen(true)
   }
 
   const handleSubmitApplication = async () => {
-    if (!projectToApply || !resumeFile || !student?.id) {
-      toast({
-        title: "Error",
-        description: "Please select a resume file to upload",
+    if (!projectToApply || !student?.id) return;
+    
+    if (!student.resume_id) {
+       toast({
+        title: "No Resume Found",
+        description: "Please upload your resume in the User Profile section before applying for projects.",
         variant: "destructive",
       })
       return
     }
 
     try {
-      const formData = new FormData()
-      formData.append("project_id", projectToApply.id)
-      formData.append("faculty_id", projectToApply.faculty_creator?.id || "")
-      formData.append("student_notes", applicationNotes)
-      formData.append("resume", resumeFile)
-
       const response = await fetch("/api/project-applications", {
         method: "POST",
         headers: {
+          "Content-Type": "application/json",
           "x-user-id": user?.id || "",
         },
-        body: formData,
+        body: JSON.stringify({
+          project_id: projectToApply.id,
+          faculty_id: projectToApply.faculty_creator?.id || "",
+          student_notes: applicationNotes,
+        }),
       })
 
       if (response.ok) {
         toast({
           title: "Success",
-          description: "Application submitted successfully with resume!",
+          description: "Application submitted successfully using your profile resume!",
         })
         setIsApplyDialogOpen(false)
         setProjectToApply(null)
         setApplicationNotes("")
-        setResumeFile(null)
         fetchData() // Refresh data
       } else {
         const errorData = await response.json()
@@ -1330,19 +1328,23 @@ export function ViewProjects() {
                 rows={4}
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="resume-upload">Resume (PDF required) *</Label>
-              <Input
-                id="resume-upload"
-                type="file"
-                accept="application/pdf"
-                onChange={(e) => setResumeFile(e.target.files?.[0] || null)}
-                required
-              />
-              <p className="text-sm text-gray-600">
-                Please upload your resume in PDF format. This will be shared with the faculty member.
-              </p>
-            </div>
+            {student?.resume_id ? (
+              <div className="flex items-center gap-2 p-3 bg-green-50 rounded-lg border border-green-100">
+                <CheckCircle className="h-5 w-5 text-green-600" />
+                <div>
+                  <p className="text-sm font-semibold text-green-800">Profile Resume Found</p>
+                  <p className="text-xs text-green-600">Your current profile resume will be attached to this application.</p>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 p-3 bg-red-50 rounded-lg border border-red-100">
+                <XCircle className="h-5 w-5 text-red-600" />
+                <div>
+                  <p className="text-sm font-semibold text-red-800">No Resume Found</p>
+                  <p className="text-xs text-red-600">Please upload a resume under "User Profile" first.</p>
+                </div>
+              </div>
+            )}
             {projectToApply && (
               <div className="bg-gray-50 p-3 rounded-lg">
                 <h4 className="font-semibold text-sm">Project Details:</h4>
@@ -1362,7 +1364,6 @@ export function ViewProjects() {
             </Button>
             <Button 
               onClick={handleSubmitApplication}
-              disabled={!resumeFile}
               className="bg-blue-600 hover:bg-blue-700"
             >
               Submit Application
