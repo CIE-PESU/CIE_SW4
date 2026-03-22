@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
+import { prisma } from "@/lib/prisma"
 import { getUserById } from "@/lib/auth"
 
 export async function POST(request: NextRequest) {
@@ -10,7 +11,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "User not authenticated" }, { status: 401 })
     }
 
-    const { feedbacks } = await request.json()
+    const { feedbacks, courseId, unitId } = await request.json()
     const apiKey = process.env.MISTRAL_API_KEY
     
     if (!apiKey) {
@@ -83,6 +84,40 @@ export async function POST(request: NextRequest) {
     }
     
     const analysis = JSON.parse(jsonMatch[0])
+
+    // Save Summary and Link Feedbacks
+    if (courseId) {
+      const normalizedUnitId = unitId === "all" ? null : unitId;
+      
+      // We use a transaction to ensure atomic overwrite
+      await prisma.$transaction(async (tx) => {
+        // Delete existing summaries for this exact context to "overwrite"
+        // Wait, the user said "overwrite this saved one", usually means keep only one.
+        // If we want to keep history we wouldn't delete, but user said overwrite.
+        await tx.aISummary.deleteMany({
+          where: {
+            course_id: courseId,
+            unit_id: normalizedUnitId
+          }
+        });
+
+        const feedbackIds = feedbacks.map((f: any) => f.id).filter(Boolean);
+
+        await tx.aISummary.create({
+          data: {
+            course_id: courseId,
+            unit_id: normalizedUnitId,
+            summary: analysis.summary,
+            sentiment: analysis.sentiment,
+            insights: analysis.insights,
+            feedbacks: {
+              connect: feedbackIds.map((id: string) => ({ id }))
+            }
+          }
+        });
+      });
+    }
+
     return NextResponse.json({ analysis })
 
   } catch (error: any) {

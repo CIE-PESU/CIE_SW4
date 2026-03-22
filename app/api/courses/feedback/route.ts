@@ -22,11 +22,30 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Course ID is required" }, { status: 400 })
     }
 
+    // Fetch latest summary for this context
+    const normalizedUnitId = unitId === "all" ? null : unitId;
+    const latestSummary = await prisma.aISummary.findFirst({
+      where: {
+        course_id: courseId,
+        unit_id: normalizedUnitId
+      },
+      include: {
+        feedbacks: {
+          select: { id: true }
+        }
+      },
+      orderBy: {
+        created_at: "desc"
+      }
+    });
+
+    const usedFeedbackIds = new Set(latestSummary?.feedbacks.map((f: { id: string }) => f.id) || []);
+
     const feedbacks = await prisma.courseFeedback.findMany({
       where: {
         course_id: courseId,
-        ...(unitId ? { unit_id: unitId } : {}),
-        ...(user.role === "STUDENT" ? { student_id: user.id } : {})
+        ...(unitId && unitId !== "all" ? { unit_id: unitId } : {}),
+        ...(user.role === "STUDENT" ? { student_id: user.profileData.id } : {})
       },
       include: {
         student: {
@@ -45,7 +64,24 @@ export async function GET(request: NextRequest) {
       }
     })
 
-    return NextResponse.json({ feedbacks })
+    // Process feedbacks to add "is_used" flag and sort unused ones to the top
+    const processedFeedbacks = feedbacks.map((f: any) => ({
+      ...f,
+      is_used: usedFeedbackIds.has(f.id)
+    })).sort((a, b) => {
+      if (a.is_used === b.is_used) return 0;
+      return a.is_used ? 1 : -1; // unused first
+    });
+
+    return NextResponse.json({ 
+      feedbacks: processedFeedbacks,
+      latestSummary: latestSummary ? {
+        summary: latestSummary.summary,
+        sentiment: latestSummary.sentiment,
+        insights: latestSummary.insights,
+        created_at: latestSummary.created_at
+      } : null
+    })
   } catch (error) {
     console.error("Get feedback error:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })

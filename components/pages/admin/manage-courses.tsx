@@ -315,7 +315,9 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
         },
         body: JSON.stringify({
           feedbacks: courseFeedbacks,
-          context: context
+          context: context,
+          courseId: selectedCourse.id,
+          unitId: selectedFeedbackUnitId
         })
       });
 
@@ -356,6 +358,11 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
       const data = await response.json()
       if (response.ok) {
         setCourseFeedbacks(data.feedbacks || [])
+        if (data.latestSummary) {
+          setAiAnalysis(data.latestSummary)
+        } else {
+          setAiAnalysis(null)
+        }
       } else {
         throw new Error(data.error || "Failed to fetch feedbacks")
       }
@@ -985,9 +992,16 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
                             {feedback.student?.user?.name?.charAt(0) || 'S'}
                           </div>
                           <div>
-                            <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                              {feedback.student?.user?.name}
-                            </p>
+                            <div className="flex items-center gap-2">
+                              <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                                {feedback.student?.user?.name}
+                              </p>
+                              {feedback.is_used ? (
+                                <Badge variant="secondary" className="text-[9px] h-4 px-1 bg-green-50 text-green-600 border-green-100 font-medium">Included in Summary</Badge>
+                              ) : (
+                                <Badge variant="secondary" className="text-[9px] h-4 px-1 bg-orange-50 text-orange-600 border-orange-100 font-bold animate-pulse">New / Unused</Badge>
+                              )}
+                            </div>
                             <p className="text-xs text-gray-500">
                               Enrolled Student • {new Date(feedback.created_at).toLocaleDateString()}
                             </p>
