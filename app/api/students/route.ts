@@ -4,7 +4,11 @@ import bcrypt from "bcryptjs"
 
 export async function GET(request: NextRequest) {
   try {
+    const userId = request.headers.get("x-user-id")
+    const where = userId ? { user_id: userId } : {}
+
     const students = await prisma.student.findMany({
+      where,
       include: {
         user: true,
         enrollments: {

@@ -5,6 +5,7 @@ import { exec } from "child_process"
 import { promisify } from "util"
 import path from "path"
 import fs from "fs/promises"
+import { readEncryptedFile } from "@/lib/storage"
 
 const execAsync = promisify(exec)
 
@@ -67,15 +68,50 @@ export async function POST(request: NextRequest) {
       }, { status: 400 })
     }
 
-    // Check if resumes folder exists
+    // Check if resumes folder exists and collect resumes from students
     const resumesFolder = path.join(process.cwd(), "public", "project-applications", project_id)
     
     try {
-      await fs.access(resumesFolder)
+      // Ensure the directory exists
+      await fs.mkdir(resumesFolder, { recursive: true })
+      
+      console.log(`Gathering resumes for project ${project_id} in ${resumesFolder}`)
+      
+      // Decrypt and copy resumes from student profiles if they are not already in the project folder
+      for (const req of project.project_requests) {
+        if (req.resume_id) {
+          const targetPath = path.join(resumesFolder, req.resume_id)
+          
+          // Check if it already exists to avoid redundant processing
+          try {
+            await fs.access(targetPath)
+            console.log(`Resume ${req.resume_id} already exists in project folder`)
+          } catch {
+            // Document not found in target folder, decrypt and copy it
+            try {
+              console.log(`Decrypting and copying resume ${req.resume_id} for student ${req.student_id}`)
+              const decryptedBuffer = await readEncryptedFile(req.resume_id, 'resumes')
+              await fs.writeFile(targetPath, decryptedBuffer)
+            } catch (err) {
+              console.error(`Error decrypting resume ${req.resume_id} for request ${req.id}:`, err)
+              // If decryption fails, skip this one
+            }
+          }
+        }
+      }
+      
+      // Verify folder still contains some resumes after processing
+      const files = await fs.readdir(resumesFolder)
+      if (files.filter(f => f.endsWith('.pdf')).length === 0) {
+        return NextResponse.json({ 
+          error: "No readable resumes found for any of the applicants" 
+        }, { status: 400 })
+      }
     } catch (error) {
+      console.error("Error preparing resumes folder:", error)
       return NextResponse.json({ 
-        error: "No resumes found for this project" 
-      }, { status: 400 })
+        error: "Failed to prepare resumes for analysis" 
+      }, { status: 500 })
     }
 
     // Prepare project description for the selector
@@ -266,9 +302,10 @@ if __name__ == "__main__":
       // Map results to include student information from database
       const shortlistedCandidates = []
       for (const candidate of result.candidates) {
-        // Find the corresponding project request
+        // Find the corresponding project request by matching either resume_id or checking if resume_id is part of the file_name
         const projectRequest = project.project_requests.find(req => 
-          req.resume_path && req.resume_path.includes(candidate.file_name)
+          req.resume_id === candidate.file_name || 
+          (req.resume_id && candidate.file_name.includes(req.resume_id))
         )
 
         if (projectRequest) {

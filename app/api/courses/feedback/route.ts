@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
       }
     });
 
-    const usedFeedbackIds = new Set(latestSummary?.feedbacks.map((f: { id: string }) => f.id) || []);
+    const usedFeedbackIds = new Set(latestSummary?.feedbacks?.map((f: { id: string }) => f.id) || []);
 
     const feedbacks = await prisma.courseFeedback.findMany({
       where: {

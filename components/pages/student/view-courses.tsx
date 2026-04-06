@@ -610,7 +610,7 @@ export function ViewCourses() {
                               </p>
                               <p className="text-[10px] text-gray-500 flex items-center gap-1">
                                 <Calendar className="h-3 w-3" />
-                                Updated on {new Date(f.updated_at || f.created_at).toLocaleDateString()}
+                                Updated on {new Date(f.updated_at || f.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                               </p>
                             </div>
                           </div>
@@ -658,7 +658,7 @@ export function ViewCourses() {
                       <div key={idx} className="p-2.5 bg-blue-50/30 dark:bg-blue-900/10 border border-blue-50 dark:border-blue-900/30 rounded-lg">
                         <div className="flex justify-between items-center mb-1">
                           <span className="text-[9px] font-bold text-blue-600 dark:text-blue-400">{s.student?.user?.name || "Student"}</span>
-                          <span className="text-[8px] text-gray-400">{new Date(s.created_at).toLocaleDateString([], { month: 'short', day: 'numeric' })}</span>
+                          <span className="text-[8px] text-gray-400">{new Date(s.created_at).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
                         </div>
                         <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-normal italic">
                           "{s.suggestions}"

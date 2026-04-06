@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -142,6 +142,8 @@ export function ViewProjects() {
   const [applicationNotes, setApplicationNotes] = useState("")
   const [activeTab, setActiveTab] = useState<'my-projects' | 'available-projects'>('my-projects')
   const [expandedDescriptions, setExpandedDescriptions] = useState<Set<string>>(new Set())
+  const resumeInputRef = useRef<HTMLInputElement>(null)
+  const [isUploadingResume, setIsUploadingResume] = useState(false)
   const { toast } = useToast()
 
   const [newProject, setNewProject] = useState({
@@ -548,6 +550,57 @@ export function ViewProjects() {
     setIsApplyDialogOpen(true)
   }
 
+  const handleResumeUpload = async (file: File) => {
+    if (!user) return;
+
+    setIsUploadingResume(true);
+    try {
+      const formData = new FormData();
+      formData.append('resume', file);
+
+      const endpoint = '/api/student/upload-resume';
+      
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'x-user-id': user.id,
+        },
+        body: formData,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        toast({
+          title: "Success",
+          description: "Resume uploaded successfully to your profile!",
+        });
+        
+        // Refresh student data to get the new resume_id
+        const studentResponse = await fetch("/api/students", {
+          headers: { "x-user-id": user.id }
+        });
+        if (studentResponse.ok) {
+          const studentData = await studentResponse.json();
+          if (studentData.students && studentData.students.length > 0) {
+            setStudent(studentData.students[0]);
+          }
+        }
+      } else {
+        const error = await response.json();
+        throw new Error(error.error || 'Upload failed');
+      }
+    } catch (error) {
+      console.error('Resume upload error:', error);
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to upload resume",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUploadingResume(false);
+    }
+  };
+
   const handleSubmitApplication = async () => {
     if (!projectToApply || !student?.id) return;
     
@@ -724,6 +777,38 @@ export function ViewProjects() {
                     placeholder="Any additional notes for the faculty advisor..."
                     rows={2}
                   />
+                </div>
+                <div className="space-y-2">
+                  <Label>Profile Resume</Label>
+                  {student?.resume_id ? (
+                    <div className="flex items-center gap-2 p-3 bg-green-50 rounded-lg border border-green-100">
+                      <CheckCircle className="h-5 w-5 text-green-600" />
+                      <div>
+                        <p className="text-sm font-semibold text-green-800">Resume Found</p>
+                        <p className="text-xs text-green-600">Your profile resume will be linked to this project request.</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-100">
+                      <div className="flex items-center gap-2">
+                        <XCircle className="h-5 w-5 text-red-600" />
+                        <div>
+                          <p className="text-sm font-semibold text-red-800">No Resume Found</p>
+                          <p className="text-xs text-red-600">Consider uploading a resume to your profile.</p>
+                        </div>
+                      </div>
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        disabled={isUploadingResume}
+                        onClick={() => resumeInputRef.current?.click()}
+                        className="flex items-center gap-1 border-red-200 text-red-700 hover:bg-red-100"
+                      >
+                        <Upload className="h-3 w-3" /> 
+                        {isUploadingResume ? 'Uploading...' : 'Upload Resume'}
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="flex justify-end space-x-2">
@@ -1337,12 +1422,36 @@ export function ViewProjects() {
                 </div>
               </div>
             ) : (
-              <div className="flex items-center gap-2 p-3 bg-red-50 rounded-lg border border-red-100">
-                <XCircle className="h-5 w-5 text-red-600" />
-                <div>
-                  <p className="text-sm font-semibold text-red-800">No Resume Found</p>
-                  <p className="text-xs text-red-600">Please upload a resume under "User Profile" first.</p>
+              <div className="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-100">
+                <div className="flex items-center gap-2">
+                  <XCircle className="h-5 w-5 text-red-600" />
+                  <div>
+                    <p className="text-sm font-semibold text-red-800">No Resume Found</p>
+                    <p className="text-xs text-red-600">Please upload a resume to your profile to apply.</p>
+                  </div>
                 </div>
+                <Button 
+                  size="sm" 
+                  variant="outline"
+                  disabled={isUploadingResume}
+                  onClick={() => resumeInputRef.current?.click()}
+                  className="flex items-center gap-1 border-red-200 text-red-700 hover:bg-red-100"
+                >
+                  <Upload className="h-3 w-3" /> 
+                  {isUploadingResume ? 'Uploading...' : 'Upload Resume'}
+                </Button>
+                <input
+                  ref={resumeInputRef}
+                  type="file"
+                  accept="application/pdf"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      handleResumeUpload(file);
+                    }
+                  }}
+                />
               </div>
             )}
             {projectToApply && (
@@ -1365,6 +1474,7 @@ export function ViewProjects() {
             <Button 
               onClick={handleSubmitApplication}
               className="bg-blue-600 hover:bg-blue-700"
+              disabled={!student?.resume_id}
             >
               Submit Application
             </Button>
