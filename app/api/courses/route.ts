@@ -93,6 +93,7 @@ export async function POST(request: NextRequest) {
           course_description: data.course_description,
           course_start_date: new Date(data.course_start_date),
           course_end_date: new Date(data.course_end_date),
+          requires_approval: data.requires_approval === true,
           course_enrollments: [],
           created_by: userId,
         }
@@ -235,27 +236,60 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "Invalid request" }, { status: 400 })
     }
 
+    // Check if student profile exists
+    const student = await prisma.student.findUnique({ where: { user_id: userId } })
+    if (!student) {
+      return NextResponse.json({ error: "Student profile not found" }, { status: 404 })
+    }
+
     // Find the course
-    const course = await prisma.course.findUnique({ where: { id: courseId } })
+    const course = await prisma.course.findUnique({ 
+      where: { id: courseId },
+      include: { enrollments: true }
+    })
     if (!course) {
       return NextResponse.json({ error: "Course not found" }, { status: 404 })
     }
 
-    // Check if already enrolled
-    if (course.course_enrollments.includes(userId)) {
-      return NextResponse.json({ error: "Already enrolled in this course" }, { status: 400 })
+    // Check if already enrolled or requested
+    const existingEnrollment = course.enrollments.find(e => e.student_id === student.id)
+    if (existingEnrollment || course.course_enrollments.includes(userId)) {
+      return NextResponse.json({ error: "Already enrolled or requested enrollment for this course" }, { status: 400 })
     }
 
-    // Add user to course_enrollments
-    const updatedCourse = await prisma.course.update({
-      where: { id: courseId },
-      data: {
-        course_enrollments: {
-          set: [...course.course_enrollments, userId]
-        },
-        modified_by: userId,
-      },
-    })
+    let updatedCourse = course;
+
+    if (course.requires_approval) {
+      // Create a pending enrollment record
+      await prisma.enrollment.create({
+        data: {
+          course_id: course.id,
+          student_id: student.id,
+          status: "PENDING",
+        }
+      })
+    } else {
+      // Create accepted enrollment and add to course_enrollments
+      await prisma.$transaction(async (tx) => {
+        await tx.enrollment.create({
+          data: {
+            course_id: course.id,
+            student_id: student.id,
+            status: "ACCEPTED",
+          }
+        })
+        updatedCourse = await tx.course.update({
+          where: { id: courseId },
+          data: {
+            course_enrollments: {
+              set: [...course.course_enrollments, userId]
+            },
+            modified_by: userId,
+          },
+          include: { enrollments: true }
+        })
+      })
+    }
 
     return NextResponse.json({ course: updatedCourse })
   } catch (error) {
@@ -275,7 +309,7 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: "Access denied - Faculty or Admin only" }, { status: 403 })
     }
     const data = await request.json()
-    const { id, course_code, course_name, course_description, course_start_date, course_end_date, course_units } = data
+    const { id, course_code, course_name, course_description, course_start_date, course_end_date, course_units, requires_approval } = data
     if (!id) {
       return NextResponse.json({ error: "Course ID is required" }, { status: 400 })
     }
@@ -305,6 +339,7 @@ export async function PATCH(request: NextRequest) {
           course_description,
           course_start_date: course_start_date ? new Date(course_start_date) : undefined,
           course_end_date: course_end_date ? new Date(course_end_date) : undefined,
+          requires_approval: requires_approval !== undefined ? requires_approval : undefined,
           modified_by: userId,
         },
       })

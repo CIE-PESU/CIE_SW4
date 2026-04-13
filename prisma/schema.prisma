@@ -101,6 +101,7 @@ model Course {
   modified_by        String?
   modified_date      DateTime         @updatedAt
   course_code        String           @unique
+  requires_approval  Boolean          @default(false)
   ai_summaries       AISummary[]
   class_schedules    ClassSchedule[]
   feedbacks          CourseFeedback[]
@@ -136,6 +137,7 @@ model Enrollment {
   enrolled_at DateTime @default(now())
   student_id  String
   grade       String?
+  status      ApplicationStatus @default(ACCEPTED)
   course      Course   @relation(fields: [course_id], references: [id])
   student     Student  @relation(fields: [student_id], references: [id])
 

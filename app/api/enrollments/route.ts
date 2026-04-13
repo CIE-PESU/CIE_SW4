@@ -59,25 +59,61 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    if (existingEnrollment) {
-      return NextResponse.json({ error: "Already enrolled in this course" }, { status: 400 })
+    const course = await prisma.course.findUnique({ where: { id: courseId } })
+    if (!course) {
+      return NextResponse.json({ error: "Course not found" }, { status: 404 })
     }
 
-    const enrollment = await prisma.enrollment.create({
-      data: {
-        course_id: courseId,
-        student_id: student.id,
-        enrolled_at: new Date(),
-      },
-      include: {
-        course: {
-          select: {
-            course_code: true,
-            course_name: true,
+    if (existingEnrollment || course.course_enrollments.includes(userId)) {
+      return NextResponse.json({ error: "Already enrolled or requested enrollment for this course" }, { status: 400 })
+    }
+
+    let enrollment;
+    
+    if (course.requires_approval) {
+      enrollment = await prisma.enrollment.create({
+        data: {
+          course_id: courseId,
+          student_id: student.id,
+          status: "PENDING",
+        },
+        include: {
+          course: {
+            select: {
+              course_code: true,
+              course_name: true,
+            },
           },
         },
-      },
-    })
+      })
+    } else {
+      await prisma.$transaction(async (tx) => {
+        enrollment = await tx.enrollment.create({
+          data: {
+            course_id: courseId,
+            student_id: student.id,
+            status: "ACCEPTED",
+          },
+          include: {
+            course: {
+              select: {
+                course_code: true,
+                course_name: true,
+              },
+            },
+          },
+        })
+        
+        await tx.course.update({
+          where: { id: courseId },
+          data: {
+            course_enrollments: {
+              set: [...course.course_enrollments, userId]
+            }
+          }
+        })
+      })
+    }
 
     return NextResponse.json({ enrollment })
   } catch (error) {

@@ -55,6 +55,8 @@ interface Course {
     name: string
     email: string
   }
+  requires_approval?: boolean
+  enrollments?: any[]
 }
 
 export function ViewCourses() {
@@ -101,7 +103,14 @@ export function ViewCourses() {
   }
 
   const isEnrolled = (course: Course) => {
-    return user && course.course_enrollments.includes(user.id)
+    return user && (course.course_enrollments.includes(user.id) || course.enrollments?.some(e => e.student?.user_id === user.id && e.status === "ACCEPTED"))
+  }
+
+  const getEnrollmentStatus = (course: Course) => {
+    if (!user) return "NONE"
+    if (course.course_enrollments.includes(user.id)) return "ACCEPTED"
+    const enrollment = course.enrollments?.find(e => e.student?.user_id === user.id)
+    return enrollment ? enrollment.status : "NONE"
   }
 
   const handleSignUp = async (courseId: string) => {
@@ -413,7 +422,11 @@ export function ViewCourses() {
                   <div className="flex items-center justify-between mt-4">
                     <span className="text-xs text-gray-500">Created by: {course.creator?.name || course.created_by}</span>
                     <div className="flex space-x-2">
-                      {!enrolled && getCourseStatus(course).label === "Available" && (
+                      {getEnrollmentStatus(course) === "PENDING" ? (
+                        <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 pointer-events-none">Pending Approval</Badge>
+                      ) : getEnrollmentStatus(course) === "REJECTED" ? (
+                        <Badge variant="secondary" className="bg-red-100 text-red-800 pointer-events-none">Enrollment Rejected</Badge>
+                      ) : (!enrolled && getCourseStatus(course).label === "Available" && (
                         <Button 
                           size="sm" 
                           onClick={(e) => {
@@ -422,9 +435,9 @@ export function ViewCourses() {
                           }}
                         >
                           <UserPlus className="h-4 w-4 md:mr-1" />
-                          <span className="hidden md:inline">Sign Up</span>
+                          <span className="hidden md:inline">{course.requires_approval ? "Request Enrollment" : "Sign Up"}</span>
                         </Button>
-                      )}
+                      ))}
                     </div>
                   </div>
                 </CardContent>

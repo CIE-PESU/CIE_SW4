@@ -56,6 +56,8 @@ interface Course {
     email: string
   }
   status?: "not_started" | "ongoing" | "completed"
+  requires_approval?: boolean
+  enrollments?: any[]
 }
 
 interface ManageCoursesProps {
@@ -135,6 +137,7 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
   const [isFeedbacksLoading, setIsFeedbacksLoading] = useState(false)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [aiAnalysis, setAiAnalysis] = useState<any>(null)
+  const [isEnrollmentsSheetOpen, setIsEnrollmentsSheetOpen] = useState(false)
   const { toast } = useToast()
   const { user } = useAuth()
 
@@ -144,6 +147,7 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
     course_description: "",
     course_start_date: "",
     course_end_date: "",
+    requires_approval: false,
   })
 
   const [courseUnits, setCourseUnits] = useState<CourseUnit[]>([
@@ -260,6 +264,7 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
           course_description: "",
           course_start_date: "",
           course_end_date: "",
+          requires_approval: false,
         })
         setCourseUnits([{
           unit_number: 1,
@@ -344,6 +349,40 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
   const openUnitsSheet = (course: Course) => {
     setSelectedCourse(course)
     setIsUnitsSheetOpen(true)
+  }
+
+  const openEnrollmentsSheet = (course: Course) => {
+    setSelectedCourse(course)
+    setIsEnrollmentsSheetOpen(true)
+  }
+
+  const handleEnrollmentAction = async (enrollmentId: string, action: "ACCEPTED" | "REJECTED") => {
+    try {
+      const response = await fetch(`/api/enrollments/${enrollmentId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "x-user-id": user?.id || "",
+        },
+        body: JSON.stringify({ status: action }),
+      });
+      if (response.ok) {
+        toast({ title: "Success", description: `Enrollment ${action.toLowerCase()} successfully` });
+        // Update local state temporarily for UX
+        if (selectedCourse && selectedCourse.enrollments) {
+           const updatedEnrollments = selectedCourse.enrollments.map((e: any) => 
+               e.id === enrollmentId ? { ...e, status: action } : e
+           );
+           setSelectedCourse({ ...selectedCourse, enrollments: updatedEnrollments });
+        }
+        fetchCourses(); // Refetch to sync course_enrollments
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Action failed");
+      }
+    } catch (error) {
+      toast({ title: "Error", description: error instanceof Error ? error.message : "Action failed", variant: "destructive" });
+    }
   }
 
   const openFeedbackSheet = async (course: Course, e: React.MouseEvent) => {
@@ -472,6 +511,7 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
           course_description: editCourse.course_description,
           course_start_date: editCourse.course_start_date,
           course_end_date: editCourse.course_end_date,
+          requires_approval: (editCourse as any).requires_approval,
           course_units: validUnits,
         }),
       })
@@ -653,6 +693,16 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
                           onChange={(e) => setNewCourse(prev => ({ ...prev, course_end_date: e.target.value }))}
                         />
                       </div>
+                    </div>
+                    <div className="flex items-center space-x-2 mt-4 pt-2 border-t">
+                      <input 
+                        type="checkbox" 
+                        id="requires_approval" 
+                        checked={newCourse.requires_approval}
+                        onChange={(e) => setNewCourse(prev => ({ ...prev, requires_approval: e.target.checked }))}
+                        className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <Label htmlFor="requires_approval" className="cursor-pointer">Requires Faculty Approval for Enrollment</Label>
                     </div>
                   </div>
                 </div>
@@ -836,7 +886,7 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
                     </span>
                     <span className="flex items-center space-x-1">
                       <Users className="h-4 w-4 text-gray-400 dark:text-gray-500" />
-                      <span>{course.course_enrollments?.length || 0} enrolled • {course.course_code}</span>
+                      <span>{course.enrollments?.filter(e => e.status === "ACCEPTED").length || course.course_enrollments?.length || 0} enrolled ({(course.enrollments?.filter(e => e.status === "PENDING").length || 0)} pending)</span>
                     </span>
                   </div>
                 </div>
@@ -873,10 +923,21 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
                       <Button 
                         size="sm" 
                         variant="outline"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openEnrollmentsSheet(course);
+                        }}
+                      >
+                        <Users className="h-4 w-4 md:mr-1" />
+                        <span className="hidden md:inline">Enrollments</span>
+                      </Button>
+                      <Button 
+                        size="sm" 
+                        variant="outline"
                         onClick={(e) => openFeedbackSheet(course, e)}
                       >
                         <MessageSquare className="h-4 w-4 md:mr-1" />
-                        <span className="hidden md:inline">View Feedback</span>
+                        <span className="hidden md:inline">Feedback</span>
                       </Button>
                     </div>
                   </div>
@@ -886,6 +947,44 @@ export function ManageCourses({ facultyOnly }: ManageCoursesProps) {
           ))
         )}
       </div>
+
+      {/* Enrollments Sheet */}
+      <Sheet open={isEnrollmentsSheetOpen} onOpenChange={setIsEnrollmentsSheetOpen}>
+        <SheetContent className="w-[400px]">
+          <SheetHeader>
+            <SheetTitle>Manage Enrollments</SheetTitle>
+            <SheetDescription>
+              {selectedCourse?.course_name}
+            </SheetDescription>
+          </SheetHeader>
+          <div className="mt-6 space-y-4">
+            {!selectedCourse?.enrollments || selectedCourse.enrollments.length === 0 ? (
+              <p className="text-gray-500 text-center">No enrollments yet</p>
+            ) : (
+              selectedCourse.enrollments.map((enrollment: any) => (
+                <Card key={enrollment.id} className="p-4">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h4 className="font-medium">{enrollment.student?.user?.name || "Unknown Student"}</h4>
+                      <p className="text-sm text-gray-500">Status: <Badge variant="outline" className={cn({
+                        "text-yellow-600 border-yellow-200 bg-yellow-50": enrollment.status === "PENDING",
+                        "text-green-600 border-green-200 bg-green-50": enrollment.status === "ACCEPTED",
+                        "text-red-600 border-red-200 bg-red-50": enrollment.status === "REJECTED",
+                      })}>{enrollment.status}</Badge></p>
+                    </div>
+                  </div>
+                  {enrollment.status === "PENDING" && (
+                    <div className="mt-4 flex gap-2">
+                      <Button size="sm" onClick={() => handleEnrollmentAction(enrollment.id, "ACCEPTED")} className="w-full bg-green-600 hover:bg-green-700">Approve</Button>
+                      <Button size="sm" variant="outline" onClick={() => handleEnrollmentAction(enrollment.id, "REJECTED")} className="w-full text-red-600 hover:text-red-700 hover:bg-red-50">Reject</Button>
+                    </div>
+                  )}
+                </Card>
+              ))
+            )}
+          </div>
+        </SheetContent>
+      </Sheet>
 
       {/* Course Units Sheet */}
       <Sheet open={isUnitsSheetOpen} onOpenChange={setIsUnitsSheetOpen}>
