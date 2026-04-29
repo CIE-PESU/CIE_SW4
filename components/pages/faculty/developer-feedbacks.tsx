@@ -195,15 +195,15 @@ export default function DeveloperFeedbacks() {
   function getStatusBadge(status: string) {
     switch (status) {
       case "APPROVED":
-        return <Badge className="bg-blue-100 text-blue-800 border-blue-200">Assigned</Badge>;
+        return <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 border-blue-200">Assigned</Badge>;
       case "IN_PROGRESS":
-        return <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200">In Progress</Badge>;
+        return <Badge className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 border-yellow-200">In Progress</Badge>;
       case "DONE":
-        return <Badge className="bg-purple-100 text-purple-800 border-purple-200">Awaiting Approval</Badge>;
+        return <Badge className="bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400 border-purple-200">Awaiting Approval</Badge>;
       case "COMPLETED":
-        return <Badge className="bg-green-100 text-green-800 border-green-200">Completed</Badge>;
+        return <Badge className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 border-green-200">Completed</Badge>;
       case "REJECTED":
-        return <Badge className="bg-red-100 text-red-800 border-red-200">Rejected</Badge>;
+        return <Badge className="bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 border-red-200">Rejected</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
@@ -222,7 +222,7 @@ export default function DeveloperFeedbacks() {
           const isActive = tab === tabObj.id;
           const colorClass = isActive
             ? `border-${tabObj.color}-500 bg-${tabObj.color}-50 ring-2 ring-${tabObj.color}-400 text-${tabObj.color}-600`
-            : `border-gray-200 hover:border-${tabObj.color}-300 hover:bg-${tabObj.color}-50 bg-white text-gray-800`;
+            : `border-gray-200 dark:border-gray-600 hover:border-${tabObj.color}-300 hover:bg-${tabObj.color}-50 bg-white dark:bg-slate-900 text-gray-800 dark:text-gray-100`;
           return (
             <button
               key={tabObj.id}
@@ -230,7 +230,7 @@ export default function DeveloperFeedbacks() {
               onClick={() => setTab(tabObj.id)}
             >
               <tabObj.icon className={`h-6 w-6 mb-1 ${isActive ? `text-${tabObj.color}-600` : `text-${tabObj.color}-400`}`} />
-              <span className={`text-base font-medium ${isActive ? `text-${tabObj.color}-600` : 'text-gray-800'}`}>{tabObj.label}</span>
+              <span className={`text-base font-medium ${isActive ? `text-${tabObj.color}-600` : 'text-gray-800 dark:text-gray-100'}`}>{tabObj.label}</span>
             </button>
           );
         })}
@@ -245,20 +245,20 @@ export default function DeveloperFeedbacks() {
             <CardContent>
               {/* Stat Cards Row - match PM dashboard style */}
               <div className="flex flex-row flex-wrap gap-2 mb-6 justify-center">
-                <div className="flex-1 min-w-[100px] max-w-[140px] bg-white rounded shadow-sm px-2 py-1 flex flex-col items-center justify-center text-center border border-gray-200">
-                  <div className="text-xs text-gray-500 font-medium mb-0.5">Total</div>
+                <div className="flex-1 min-w-[100px] max-w-[140px] bg-white dark:bg-slate-900 rounded shadow-sm px-2 py-1 flex flex-col items-center justify-center text-center border border-gray-200 dark:border-gray-600">
+                  <div className="text-xs text-gray-500 dark:text-gray-400 font-medium mb-0.5">Total</div>
                   <div className="text-lg font-bold leading-tight">{analytics.total}</div>
                 </div>
-                <div className="flex-1 min-w-[100px] max-w-[140px] bg-white rounded shadow-sm px-2 py-1 flex flex-col items-center justify-center text-center border border-gray-200">
-                  <div className="text-xs text-gray-500 font-medium mb-0.5">In Progress</div>
+                <div className="flex-1 min-w-[100px] max-w-[140px] bg-white dark:bg-slate-900 rounded shadow-sm px-2 py-1 flex flex-col items-center justify-center text-center border border-gray-200 dark:border-gray-600">
+                  <div className="text-xs text-gray-500 dark:text-gray-400 font-medium mb-0.5">In Progress</div>
                   <div className="text-lg font-bold leading-tight">{analytics.inProgress}</div>
                 </div>
-                <div className="flex-1 min-w-[100px] max-w-[140px] bg-white rounded shadow-sm px-2 py-1 flex flex-col items-center justify-center text-center border border-gray-200">
-                  <div className="text-xs text-gray-500 font-medium mb-0.5">Rejected</div>
+                <div className="flex-1 min-w-[100px] max-w-[140px] bg-white dark:bg-slate-900 rounded shadow-sm px-2 py-1 flex flex-col items-center justify-center text-center border border-gray-200 dark:border-gray-600">
+                  <div className="text-xs text-gray-500 dark:text-gray-400 font-medium mb-0.5">Rejected</div>
                   <div className="text-lg font-bold leading-tight">{analytics.rejected}</div>
                 </div>
-                <div className="flex-1 min-w-[100px] max-w-[140px] bg-white rounded shadow-sm px-2 py-1 flex flex-col items-center justify-center text-center border border-gray-200">
-                  <div className="text-xs text-gray-500 font-medium mb-0.5">Completed</div>
+                <div className="flex-1 min-w-[100px] max-w-[140px] bg-white dark:bg-slate-900 rounded shadow-sm px-2 py-1 flex flex-col items-center justify-center text-center border border-gray-200 dark:border-gray-600">
+                  <div className="text-xs text-gray-500 dark:text-gray-400 font-medium mb-0.5">Completed</div>
                   <div className="text-lg font-bold leading-tight">{analytics.completed}</div>
                 </div>
               </div>
@@ -280,19 +280,19 @@ export default function DeveloperFeedbacks() {
               <CardTitle>List of Tasks</CardTitle>
             </CardHeader>
             <CardContent>
-              {loading ? <div>Loading...</div> : combinedTasks.length === 0 ? <div className="text-gray-500">No available tasks.</div> : (
+              {loading ? <div>Loading...</div> : combinedTasks.length === 0 ? <div className="text-gray-500 dark:text-gray-400">No available tasks.</div> : (
                 <>
-                  <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
+                  <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-slate-900">
                     <table className="min-w-full text-sm">
                       <thead>
                         <tr>
-                          <th className="text-left font-bold text-gray-700 px-4 py-3 w-1/12 min-w-[60px] text-base">Title</th>
-                          <th className="text-left font-bold text-gray-700 px-4 py-3 w-1/8 min-w-[60px] text-base">Category</th>
-                          <th className="text-left font-bold text-gray-700 px-4 py-3 w-1/3 min-w-[160px] pl-4 text-base">Description</th>
-                          <th className="text-left font-bold text-gray-700 px-4 py-3 w-1/12 min-w-[40px] text-base">Image</th>
-                          <th className="text-left font-bold text-gray-700 px-8 py-3 text-base">Status</th>
-                          <th className="text-left font-bold text-gray-700 px-8 py-3 text-base">Date</th>
-                          <th className="text-left font-bold text-gray-700 px-8 py-3 text-base">Actions</th>
+                          <th className="text-left font-bold text-gray-700 dark:text-gray-300 px-4 py-3 w-1/12 min-w-[60px] text-base">Title</th>
+                          <th className="text-left font-bold text-gray-700 dark:text-gray-300 px-4 py-3 w-1/8 min-w-[60px] text-base">Category</th>
+                          <th className="text-left font-bold text-gray-700 dark:text-gray-300 px-4 py-3 w-1/3 min-w-[160px] pl-4 text-base">Description</th>
+                          <th className="text-left font-bold text-gray-700 dark:text-gray-300 px-4 py-3 w-1/12 min-w-[40px] text-base">Image</th>
+                          <th className="text-left font-bold text-gray-700 dark:text-gray-300 px-8 py-3 text-base">Status</th>
+                          <th className="text-left font-bold text-gray-700 dark:text-gray-300 px-8 py-3 text-base">Date</th>
+                          <th className="text-left font-bold text-gray-700 dark:text-gray-300 px-8 py-3 text-base">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -305,7 +305,7 @@ export default function DeveloperFeedbacks() {
                               <Button
                                 variant="ghost"
                                 size="icon"
-                                className="h-7 w-7 text-gray-400 hover:text-gray-600"
+                                className="h-7 w-7 text-gray-400 hover:text-gray-600 dark:text-gray-400"
                                 onClick={() => {
                                   setInfoDialogOpen(feedback.id);
                                   setInfoDialogImage(feedback.image || null);
@@ -347,7 +347,7 @@ export default function DeveloperFeedbacks() {
                   </div>
                   <div className="flex justify-between items-center mt-4">
                     <Button size="sm" variant="outline" onClick={() => setTasksPage(p => Math.max(1, p - 1))} disabled={tasksPage === 1}>Previous</Button>
-                    <span className="text-xs text-gray-600">Page {tasksPage} of {tasksTotalPages}</span>
+                    <span className="text-xs text-gray-600 dark:text-gray-400">Page {tasksPage} of {tasksTotalPages}</span>
                     <Button size="sm" variant="outline" onClick={() => setTasksPage(p => Math.min(tasksTotalPages, p + 1))} disabled={tasksPage === tasksTotalPages}>Next</Button>
                   </div>
                   <Dialog open={!!infoDialogOpen} onOpenChange={open => { if (!open) { setInfoDialogOpen(null); setInfoDialogImage(null); } }}>
@@ -374,16 +374,16 @@ export default function DeveloperFeedbacks() {
               <CardTitle>Rejected Tasks</CardTitle>
             </CardHeader>
             <CardContent>
-              {loading ? <div>Loading...</div> : rejected.length === 0 ? <div className="text-gray-500">No rejected tasks.</div> : (
+              {loading ? <div>Loading...</div> : rejected.length === 0 ? <div className="text-gray-500 dark:text-gray-400">No rejected tasks.</div> : (
                 <>
                   <div className="space-y-3">
                     {paginatedRejected.map(feedback => (
-                      <div key={feedback.id} className="border-2 border-red-400 rounded p-3 bg-gray-50">
+                      <div key={feedback.id} className="border-2 border-red-400 rounded p-3 bg-gray-50 dark:bg-slate-800 dark:bg-gray-800">
                         <div className="flex flex-row items-center justify-between">
-                          <div className="flex flex-row items-center gap-8 text-base font-medium text-gray-900">
+                          <div className="flex flex-row items-center gap-8 text-base font-medium text-gray-900 dark:text-gray-100">
                             <span className="font-bold">{feedback.title}</span>
                             <span className="text-xs bg-gray-200 rounded px-2 py-0.5 font-medium">{feedback.category}</span>
-                            <span className="text-sm text-gray-700">{feedback.description}</span>
+                            <span className="text-sm text-gray-700 dark:text-gray-300">{feedback.description}</span>
                           </div>
                           <div className="ml-4">{getStatusBadge(feedback.status)}</div>
                         </div>
@@ -396,7 +396,7 @@ export default function DeveloperFeedbacks() {
                   </div>
                   <div className="flex justify-between items-center mt-4">
                     <Button size="sm" variant="outline" onClick={() => setRejectedPage(p => Math.max(1, p - 1))} disabled={rejectedPage === 1}>Previous</Button>
-                    <span className="text-xs text-gray-600">Page {rejectedPage} of {rejectedTotalPages}</span>
+                    <span className="text-xs text-gray-600 dark:text-gray-400">Page {rejectedPage} of {rejectedTotalPages}</span>
                     <Button size="sm" variant="outline" onClick={() => setRejectedPage(p => Math.min(rejectedTotalPages, p + 1))} disabled={rejectedPage === rejectedTotalPages}>Next</Button>
                   </div>
                 </>
@@ -436,17 +436,17 @@ export default function DeveloperFeedbacks() {
                 </div>
               </div>
               {/* Table */}
-              <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
+              <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-slate-900">
                 <table className="min-w-full text-base">
                   <thead>
                     <tr>
-                      <th className="text-left font-bold text-gray-700 px-6 py-3">Title</th>
-                      <th className="text-left font-bold text-gray-700 px-6 py-3">Category</th>
-                      <th className="text-left font-bold text-gray-700 px-6 py-3">Description</th>
-                      <th className="text-left font-bold text-gray-700 px-6 py-3">Image</th>
-                      <th className="text-left font-bold text-gray-700 px-6 py-3">Status</th>
-                      <th className="text-left font-bold text-gray-700 px-6 py-3">Date</th>
-                      <th className="text-left font-bold text-gray-700 px-6 py-3">Rejection Reason</th>
+                      <th className="text-left font-bold text-gray-700 dark:text-gray-300 px-6 py-3">Title</th>
+                      <th className="text-left font-bold text-gray-700 dark:text-gray-300 px-6 py-3">Category</th>
+                      <th className="text-left font-bold text-gray-700 dark:text-gray-300 px-6 py-3">Description</th>
+                      <th className="text-left font-bold text-gray-700 dark:text-gray-300 px-6 py-3">Image</th>
+                      <th className="text-left font-bold text-gray-700 dark:text-gray-300 px-6 py-3">Status</th>
+                      <th className="text-left font-bold text-gray-700 dark:text-gray-300 px-6 py-3">Date</th>
+                      <th className="text-left font-bold text-gray-700 dark:text-gray-300 px-6 py-3">Rejection Reason</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -464,7 +464,7 @@ export default function DeveloperFeedbacks() {
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="h-7 w-7 text-gray-400 hover:text-gray-600"
+                              className="h-7 w-7 text-gray-400 hover:text-gray-600 dark:text-gray-400"
                               onClick={() => {
                                 setInfoDialogOpen(feedback.id + "-image");
                                 setInfoDialogImage(feedback.image || null);
@@ -485,19 +485,19 @@ export default function DeveloperFeedbacks() {
                   </tbody>
                 </table>
                 {/* Pagination Controls */}
-                <div className="flex justify-between items-center p-2 border-t bg-gray-50">
+                <div className="flex justify-between items-center p-2 border-t bg-gray-50 dark:bg-slate-800 dark:bg-gray-800">
                   <button
-                    className="px-3 py-1 rounded bg-gray-200 text-gray-700 disabled:opacity-50"
+                    className="px-3 py-1 rounded bg-gray-200 text-gray-700 dark:text-gray-300 disabled:opacity-50"
                     onClick={() => setHistoryPage((p) => Math.max(1, p - 1))}
                     disabled={historyPage === 1}
                   >
                     Previous
                   </button>
-                  <span className="text-xs text-gray-600">
+                  <span className="text-xs text-gray-600 dark:text-gray-400">
                     Page {historyPage} of {historyTotalPages}
                   </span>
                   <button
-                    className="px-3 py-1 rounded bg-gray-200 text-gray-700 disabled:opacity-50"
+                    className="px-3 py-1 rounded bg-gray-200 text-gray-700 dark:text-gray-300 disabled:opacity-50"
                     onClick={() => setHistoryPage((p) => Math.min(historyTotalPages, p + 1))}
                     disabled={historyPage === historyTotalPages}
                   >

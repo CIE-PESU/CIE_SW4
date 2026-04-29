@@ -178,13 +178,13 @@ export function FacultyHome({ onPageChange }: FacultyHomeProps) {
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {dashboardData.calendar.upcomingClasses.map((classItem: any, index: number) => (
-                      <div key={index} className="p-4 border rounded-lg hover:bg-gray-50 transition-colors">
+                      <div key={index} className="p-4 border rounded-lg hover:bg-gray-50 dark:bg-slate-800 dark:bg-gray-800 transition-colors">
                         <div className="flex justify-between items-start mb-2">
                           <h3 className="font-medium text-lg">{classItem.courseCode}</h3>
-                          <span className="text-sm text-gray-500">{classItem.startTime} - {classItem.endTime}</span>
+                          <span className="text-sm text-gray-500 dark:text-gray-400">{classItem.startTime} - {classItem.endTime}</span>
                         </div>
-                        <p className="text-sm text-gray-600 mb-2">{classItem.courseName}</p>
-                        <div className="flex justify-between items-center text-xs text-gray-500">
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{classItem.courseName}</p>
+                        <div className="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
                           <span>{classItem.location}</span>
                           <span>{classItem.enrolledStudents} students</span>
                         </div>

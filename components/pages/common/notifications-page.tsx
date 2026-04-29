@@ -133,7 +133,7 @@ export function NotificationsPage() {
       'BOOKED': { bg: 'bg-green-100', text: 'text-green-800', border: 'border-green-200' }
     }
 
-    const config = statusConfig[status as keyof typeof statusConfig] || { bg: 'bg-gray-100', text: 'text-gray-800', border: 'border-gray-200' }
+    const config = statusConfig[status as keyof typeof statusConfig] || { bg: 'bg-gray-100 dark:bg-gray-700', text: 'text-gray-800 dark:text-gray-100', border: 'border-gray-200 dark:border-gray-600' }
     
     return (
       <Badge variant="outline" className={`${config.bg} ${config.text} ${config.border}`}>
@@ -185,7 +185,7 @@ export function NotificationsPage() {
         <h1 className="admin-page-title">
           {showHistory ? 'Notification History' : 'Notifications'}
         </h1>
-        <p className="text-gray-600 mt-1">
+        <p className="text-gray-600 dark:text-gray-400 mt-1">
           {showHistory 
             ? `${readCount} read notifications` 
             : unreadCount > 0 
@@ -299,11 +299,11 @@ export function NotificationsPage() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
-                            <p className={`text-base ${isRead ? 'text-gray-600' : 'text-gray-900'} font-medium leading-relaxed`}>
+                            <p className={`text-base ${isRead ? 'text-gray-600 dark:text-gray-400' : 'text-gray-900 dark:text-gray-100'} font-medium leading-relaxed`}>
                               {activity.message}
                             </p>
                             <div className="flex items-center space-x-4 mt-2">
-                              <p className="text-sm text-gray-500">{formatTime(activity.time)}</p>
+                              <p className="text-sm text-gray-500 dark:text-gray-400">{formatTime(activity.time)}</p>
                               <Badge variant="outline" className="text-xs">
                                 {getCategoryLabel(activity.category)}
                               </Badge>
@@ -338,7 +338,7 @@ export function NotificationsPage() {
             {/* Pagination */}
             {totalPages > 1 && (
               <div className="flex items-center justify-between mt-6">
-                <div className="text-sm text-gray-500">
+                <div className="text-sm text-gray-500 dark:text-gray-400">
                   Showing {startIndex + 1} to {Math.min(endIndex, currentActivities.length)} of {currentActivities.length} notifications
                 </div>
                 <div className="flex items-center gap-2">
@@ -381,10 +381,10 @@ export function NotificationsPage() {
           <Card>
             <CardContent className="p-12 text-center">
               <Bell className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
+              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
                 {showHistory ? 'No read notifications' : 'No notifications found'}
               </h3>
-              <p className="text-gray-500">
+              <p className="text-gray-500 dark:text-gray-400">
                 {showHistory 
                   ? 'Read notifications will appear here once you mark some as read.'
                   : searchTerm || statusFilter !== 'all' || categoryFilter !== 'all' 

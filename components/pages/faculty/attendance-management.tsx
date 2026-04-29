@@ -99,13 +99,13 @@ export function AttendanceManagement() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "present":
-        return "bg-green-100 text-green-800"
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
       case "absent":
-        return "bg-red-100 text-red-800"
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
       case "late":
-        return "bg-yellow-100 text-yellow-800"
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100"
     }
   }
 
@@ -187,7 +187,7 @@ export function AttendanceManagement() {
                         <div key={student.id} className="flex items-center justify-between p-3 border rounded-lg">
                           <div>
                             <h4 className="font-medium">{student.name}</h4>
-                            <p className="text-sm text-gray-600">{student.student_id}</p>
+                            <p className="text-sm text-gray-600 dark:text-gray-400">{student.student_id}</p>
                           </div>
                           <div className="flex space-x-2">
                             <Button
@@ -251,7 +251,7 @@ export function AttendanceManagement() {
                     <CardContent>
                       <div className="space-y-2">
                         <div className="flex justify-between">
-                          <span className="text-sm text-gray-600">Average Attendance</span>
+                          <span className="text-sm text-gray-600 dark:text-gray-400">Average Attendance</span>
                           <span className="font-medium">{stats.averageAttendance.toFixed(1)}%</span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
@@ -289,7 +289,7 @@ export function AttendanceManagement() {
                     <div key={student.student_id} className="flex items-center justify-between p-2 border rounded">
                       <div>
                         <h4 className="font-medium">{student.student_name}</h4>
-                        <p className="text-sm text-gray-600">{student.student_id}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{student.student_id}</p>
                       </div>
                       <Badge className={getStatusColor(student.status)}>
                         <div className="flex items-center space-x-1">

@@ -252,7 +252,7 @@ export function ManageDomains() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="admin-page-title">CIE Coordinator Management</h1>
-          <p className="text-sm text-gray-600 mt-1">Assign faculty members as coordinators for different domains</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Assign faculty members as coordinators for different domains</p>
         </div>
         <div className="flex space-x-2">
           <Button onClick={fetchData} variant="outline" size="sm">
@@ -292,7 +292,7 @@ export function ManageDomains() {
                         <SelectItem key={domain.id} value={domain.id}>
                           <div>
                             <div className="font-medium">{domain.name}</div>
-                            <div className="text-xs text-gray-500">{domain.description}</div>
+                            <div className="text-xs text-gray-500 dark:text-gray-400">{domain.description}</div>
                           </div>
                         </SelectItem>
                       ))}
@@ -310,7 +310,7 @@ export function ManageDomains() {
                         <SelectItem key={f.id} value={f.id}>
                           <div>
                             <div className="font-medium">{f.user.name}</div>
-                            <div className="text-xs text-gray-500">{f.department} • {f.user.email}</div>
+                            <div className="text-xs text-gray-500 dark:text-gray-400">{f.department} • {f.user.email}</div>
                           </div>
                         </SelectItem>
                       ))}
@@ -448,7 +448,7 @@ export function ManageDomains() {
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center text-base">
-                    <Building className="h-4 w-4 mr-2 text-gray-500" />
+                    <Building className="h-4 w-4 mr-2 text-gray-500 dark:text-gray-400" />
                     {domain.name}
                   </CardTitle>
                   <Badge variant={isAssigned ? "default" : "secondary"} className="text-xs">
@@ -465,18 +465,18 @@ export function ManageDomains() {
                       {domainAssignments.length === 0 ? (
                         <div className="text-center py-3">
                           <Users className="h-8 w-8 mx-auto mb-1 text-gray-300" />
-                          <p className="text-xs text-gray-500">No coordinator assigned</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">No coordinator assigned</p>
                           <p className="text-xs text-gray-400">Requests will be unhandled</p>
                         </div>
                       ) : (
                         <div className="space-y-2">
                           {domainAssignments.map((assignment) => (
-                            <div key={assignment.id} className="p-2 bg-white border rounded-md flex items-center justify-between">
+                            <div key={assignment.id} className="p-2 bg-white dark:bg-slate-900 border rounded-md flex items-center justify-between">
                               <div>
                                 <h4 className="font-medium text-xs">{assignment.faculty.user.name}</h4>
-                                <p className="text-xs text-gray-500">{assignment.faculty.department}</p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400">{assignment.faculty.department}</p>
                                 <p className="text-xs text-gray-400">{assignment.faculty.user.email}</p>
-                                <div className="mt-1 text-xs text-gray-500">
+                                <div className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                                   Assigned: {new Date(assignment.assigned_at).toLocaleDateString()}
                                 </div>
                               </div>
@@ -497,7 +497,7 @@ export function ManageDomains() {
                 </Accordion>
               </CardContent>
               {editMode && (
-                <div className="flex justify-end gap-2 p-3 border-t bg-gray-100">
+                <div className="flex justify-end gap-2 p-3 border-t bg-gray-100 dark:bg-gray-700">
                   <button className="btn-edit" onClick={() => { setEditDomain({ id: domain.id, name: domain.name, description: domain.description || '' }); setIsEditDomainDialogOpen(true); }}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{marginRight: 6}}><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536M9 13l6.586-6.586a2 2 0 112.828 2.828L11.828 15.828a2 2 0 01-2.828 0L9 13zm-6 6v-2a2 2 0 012-2h2" /></svg>
                     Edit
@@ -528,12 +528,12 @@ export function ManageDomains() {
               const isCoordinator = facultyAssignments.length > 0
               
               return (
-                <div key={f.id} className="admin-card border-gray-200">
+                <div key={f.id} className="admin-card border-gray-200 dark:border-gray-600">
                   <div className="flex items-center justify-between">
                     <div>
                       <h4 className="font-medium text-sm">{f.user.name}</h4>
-                      <p className="text-xs text-gray-600">{f.department}</p>
-                      <p className="text-xs text-gray-500">{f.user.email}</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">{f.department}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{f.user.email}</p>
                       <div className="mt-1 flex flex-wrap gap-1">
                         {facultyAssignments.map((assignment) => (
                           <Badge key={assignment.id} variant="outline" className="text-xs px-1 py-0">
@@ -547,7 +547,7 @@ export function ManageDomains() {
                         {isCoordinator ? "Coordinator" : "Available"}
                       </Badge>
                       {facultyAssignments.length > 1 && (
-                        <p className="text-xs text-gray-500 mt-1">{facultyAssignments.length} domains</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{facultyAssignments.length} domains</p>
                       )}
                     </div>
                   </div>

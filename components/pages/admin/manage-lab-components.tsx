@@ -569,9 +569,9 @@ export function ManageLabComponents() {
 
   const getAvailabilityColor = (available: number, total: number) => {
     const percentage = (available / total) * 100
-    if (percentage === 0) return "bg-red-100 text-red-800"
-    if (percentage < 30) return "bg-yellow-100 text-yellow-800"
-    return "bg-green-100 text-green-800"
+    if (percentage === 0) return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
+    if (percentage < 30) return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
+    return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
   }
 
   const getAvailabilityText = (available: number, total: number) => {
@@ -1427,7 +1427,7 @@ export function ManageLabComponents() {
                     className="mt-1"
                   />
                   {bulkUploadFile && (
-                    <p className="text-sm text-gray-600 mt-1">
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                       Selected: {bulkUploadFile.name} ({(bulkUploadFile.size / 1024).toFixed(1)} KB)
                     </p>
                   )}
@@ -1634,7 +1634,7 @@ export function ManageLabComponents() {
 
                   {/* Individual Items Section */}
                   {trackIndividual && (
-                    <div className="space-y-2 border rounded-lg p-2 bg-gray-50">
+                    <div className="space-y-2 border rounded-lg p-2 bg-gray-50 dark:bg-slate-800 dark:bg-gray-800">
                       <div className="flex items-center justify-between">
                         <Label className="text-sm font-medium">Individual Items</Label>
                         <Button
@@ -1654,7 +1654,7 @@ export function ManageLabComponents() {
                       )}
 
                       {individualItems.length === 0 ? (
-                        <p className="text-xs text-gray-500 text-center py-2">
+                        <p className="text-xs text-gray-500 dark:text-gray-400 text-center py-2">
                           No individual items added. Click "Add Item" to start tracking individual components.
                         </p>
                       ) : (
@@ -1687,7 +1687,7 @@ export function ManageLabComponents() {
                       )}
 
                       {individualItems.length > 0 && (
-                        <div className="text-xs text-gray-600">
+                        <div className="text-xs text-gray-600 dark:text-gray-400">
                           Total items: {individualItems.filter(item => item.unique_id.trim()).length} / {individualItems.length}
                         </div>
                       )}
@@ -1696,7 +1696,7 @@ export function ManageLabComponents() {
 
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-medium text-gray-900 border-b pb-2">Component Images</h3>
+                      <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 border-b pb-2">Component Images</h3>
                       <Button
                         variant="outline"
                         size="sm"
@@ -1723,7 +1723,7 @@ export function ManageLabComponents() {
                             <img
                               src={frontImagePreview}
                               alt="Front Preview"
-                              className="w-full h-40 object-contain rounded-lg bg-gray-50"
+                              className="w-full h-40 object-contain rounded-lg bg-gray-50 dark:bg-slate-800 dark:bg-gray-800"
                             />
                           </div>
                         )}
@@ -1737,7 +1737,7 @@ export function ManageLabComponents() {
                             <img
                               src={backImagePreview}
                               alt="Back Preview"
-                              className="w-full h-40 object-contain rounded-lg bg-gray-50"
+                              className="w-full h-40 object-contain rounded-lg bg-gray-50 dark:bg-slate-800 dark:bg-gray-800"
                             />
                           </div>
                         )}
@@ -1753,7 +1753,7 @@ export function ManageLabComponents() {
                       <Textarea id="description" value={newComponent.component_description} onChange={e => setNewComponent(prev => ({ ...prev, component_description: e.target.value }))} rows={4} className={`mt-1 resize-none leading-relaxed ${formErrors.component_description ? 'border-red-500' : ''}`} placeholder="Describe the component's purpose, key features, and functionality (max 250 characters)" maxLength={250} />
                       <div className="flex justify-between items-center mt-1">
                         {formErrors.component_description && <p className="text-red-500 text-xs">{formErrors.component_description}</p>}
-                        <p className="text-xs text-gray-500 ml-auto">{newComponent.component_description.length}/250 characters</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 ml-auto">{newComponent.component_description.length}/250 characters</p>
                       </div>
                     </div>
                     <div>
@@ -1802,7 +1802,7 @@ export function ManageLabComponents() {
                     </div>
                   </div>
                   <div className="space-y-3">
-                    <h3 className="text-lg font-medium text-gray-900 border-b pb-2">Purchase Details (Optional)</h3>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 border-b pb-2">Purchase Details (Optional)</h3>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <Label htmlFor="invoiceNumber">Invoice Number</Label>
@@ -1895,7 +1895,7 @@ export function ManageLabComponents() {
           />
         </div>
         <span className="flex items-center ml-4 mr-1 text-gray-400"><Filter className="h-5 w-5" /></span>
-        <span className="text-sm text-gray-600 font-medium ml-1">Category</span>
+        <span className="text-sm text-gray-600 dark:text-gray-400 font-medium ml-1">Category</span>
         <div className="w-40 flex flex-col">
           <Select value={selectedCategory} onValueChange={setSelectedCategory}>
             <SelectTrigger className="h-9 text-sm">
@@ -1918,8 +1918,8 @@ export function ManageLabComponents() {
           <Card className="col-span-full">
             <CardContent className="p-8 text-center">
               <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No components found</h3>
-              <p className="text-gray-600">Add your first lab component to get started.</p>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No components found</h3>
+              <p className="text-gray-600 dark:text-gray-400">Add your first lab component to get started.</p>
             </CardContent>
           </Card>
         ) : (
@@ -1938,7 +1938,7 @@ export function ManageLabComponents() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-6 w-6 text-gray-400 hover:text-gray-600"
+                      className="h-6 w-6 text-gray-400 hover:text-gray-600 dark:text-gray-400"
                       onClick={() => {
                         setComponentToView(component)
                         setIsInfoDialogOpen(true)
@@ -1962,7 +1962,7 @@ export function ManageLabComponents() {
                         <img
                           src={component.imageUrl || '/placeholder.jpg'}
                           alt={`Front view of ${component.component_name}`}
-                          className="w-full h-full object-contain rounded-md bg-gray-50"
+                          className="w-full h-full object-contain rounded-md bg-gray-50 dark:bg-slate-800 dark:bg-gray-800"
                         />
                       </div>
 
@@ -1975,7 +1975,7 @@ export function ManageLabComponents() {
                           <img
                             src={component.backImageUrl}
                             alt={`Back view of ${component.component_name}`}
-                            className="w-full h-full object-contain rounded-md bg-gray-50"
+                            className="w-full h-full object-contain rounded-md bg-gray-50 dark:bg-slate-800 dark:bg-gray-800"
                           />
                         </div>
                       )}
@@ -1987,7 +1987,7 @@ export function ManageLabComponents() {
                             <Button
                               variant="secondary"
                               size="icon"
-                              className="absolute right-1 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-white/80 hover:bg-white shadow-sm z-10"
+                              className="absolute right-1 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-white dark:bg-slate-900/80 hover:bg-white dark:bg-slate-900 shadow-sm z-10"
                               onClick={() => setImageStates(prev => ({ ...prev, [component.id]: true }))}
                             >
                               <ChevronRight className="h-3 w-3" />
@@ -1997,7 +1997,7 @@ export function ManageLabComponents() {
                             <Button
                               variant="secondary"
                               size="icon"
-                              className="absolute left-1 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-white/80 hover:bg-white shadow-sm z-10"
+                              className="absolute left-1 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-white dark:bg-slate-900/80 hover:bg-white dark:bg-slate-900 shadow-sm z-10"
                               onClick={() => setImageStates(prev => ({ ...prev, [component.id]: false }))}
                             >
                               <ChevronLeft className="h-3 w-3" />
@@ -2010,11 +2010,11 @@ export function ManageLabComponents() {
                       {component.backImageUrl && (
                         <div className="absolute bottom-1 left-1/2 -translate-x-1/2 flex space-x-1 z-10">
                           <div
-                            className={`w-1 h-1 rounded-full transition-colors duration-300 ${!imageStates[component.id] ? 'bg-white' : 'bg-white/50'
+                            className={`w-1 h-1 rounded-full transition-colors duration-300 ${!imageStates[component.id] ? 'bg-white dark:bg-slate-900' : 'bg-white dark:bg-slate-900/50'
                               }`}
                           />
                           <div
-                            className={`w-1 h-1 rounded-full transition-colors duration-300 ${imageStates[component.id] ? 'bg-white' : 'bg-white/50'
+                            className={`w-1 h-1 rounded-full transition-colors duration-300 ${imageStates[component.id] ? 'bg-white dark:bg-slate-900' : 'bg-white dark:bg-slate-900/50'
                               }`}
                           />
                         </div>
@@ -2022,11 +2022,11 @@ export function ManageLabComponents() {
                     </div>
                   )}
 
-                  <div className="text-xs text-gray-700">
+                  <div className="text-xs text-gray-700 dark:text-gray-300">
                     <div className="flex justify-between items-center">
                       <span><span className="font-medium">Total:</span> {component.component_quantity}</span>
                       <span><span className="font-medium">Available:</span> {component.availableQuantity || 0}</span>
-                      <span className="text-gray-500"><span className="font-medium">Location:</span> {component.component_location}</span>
+                      <span className="text-gray-500 dark:text-gray-400"><span className="font-medium">Location:</span> {component.component_location}</span>
                     </div>
                   </div>
                 </div>
@@ -2140,7 +2140,7 @@ export function ManageLabComponents() {
 
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-medium text-gray-900 border-b pb-2">Component Images</h3>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 border-b pb-2">Component Images</h3>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
@@ -2157,7 +2157,7 @@ export function ManageLabComponents() {
                           <img
                             src={frontImagePreview || editingComponent.imageUrl || ''}
                             alt="Front Preview"
-                            className="w-full h-40 object-contain rounded-lg bg-gray-50"
+                            className="w-full h-40 object-contain rounded-lg bg-gray-50 dark:bg-slate-800 dark:bg-gray-800"
                           />
                         </div>
                       )}
@@ -2176,7 +2176,7 @@ export function ManageLabComponents() {
                           <img
                             src={backImagePreview || editingComponent.backImageUrl || ''}
                             alt="Back Preview"
-                            className="w-full h-40 object-contain rounded-lg bg-gray-50"
+                            className="w-full h-40 object-contain rounded-lg bg-gray-50 dark:bg-slate-800 dark:bg-gray-800"
                           />
                         </div>
                       )}
@@ -2247,7 +2247,7 @@ export function ManageLabComponents() {
                 </div>
 
                 <div className="space-y-3">
-                  <h3 className="text-lg font-medium text-gray-900 border-b pb-2">Purchase Details (Optional)</h3>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 border-b pb-2">Purchase Details (Optional)</h3>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="edit-invoiceNumber">Invoice Number</Label>
@@ -2356,32 +2356,32 @@ export function ManageLabComponents() {
           </DialogHeader>
           {componentToDelete && (
             <div className="space-y-4">
-              <div className="bg-gray-50 rounded-lg p-4 space-y-3">
+              <div className="bg-gray-50 dark:bg-slate-800 dark:bg-gray-800 rounded-lg p-4 space-y-3">
                 <div className="flex items-center gap-2">
-                  <Package className="h-4 w-4 text-gray-500" />
+                  <Package className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                   <span className="font-medium">{componentToDelete.component_name}</span>
                 </div>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span className="text-gray-500">Category:</span>
+                    <span className="text-gray-500 dark:text-gray-400">Category:</span>
                     <p className="font-medium">{componentToDelete.component_category}</p>
                   </div>
                   <div>
-                    <span className="text-gray-500">Location:</span>
+                    <span className="text-gray-500 dark:text-gray-400">Location:</span>
                     <p className="font-medium">{componentToDelete.component_location}</p>
                   </div>
                   <div>
-                    <span className="text-gray-500">Total Quantity:</span>
+                    <span className="text-gray-500 dark:text-gray-400">Total Quantity:</span>
                     <p className="font-medium">{componentToDelete.component_quantity}</p>
                   </div>
                   <div>
-                    <span className="text-gray-500">Available:</span>
+                    <span className="text-gray-500 dark:text-gray-400">Available:</span>
                     <p className="font-medium">{componentToDelete.availableQuantity || 0}</p>
                   </div>
                 </div>
                 {componentToDelete.component_description && (
                   <div>
-                    <span className="text-gray-500 text-sm">Description:</span>
+                    <span className="text-gray-500 dark:text-gray-400 text-sm">Description:</span>
                     <p className="text-sm mt-1">{componentToDelete.component_description}</p>
                   </div>
                 )}
@@ -2435,60 +2435,60 @@ export function ManageLabComponents() {
                   </h3>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <Label className="text-xs font-medium text-gray-500">Component Name</Label>
-                      <div className="text-sm font-medium text-gray-900">{componentToView.component_name}</div>
+                      <Label className="text-xs font-medium text-gray-500 dark:text-gray-400">Component Name</Label>
+                      <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{componentToView.component_name}</div>
                     </div>
                     <div>
-                      <Label className="text-xs font-medium text-gray-500">Category</Label>
-                      <div className="text-sm font-medium text-gray-900">{componentToView.component_category}</div>
+                      <Label className="text-xs font-medium text-gray-500 dark:text-gray-400">Category</Label>
+                      <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{componentToView.component_category}</div>
                     </div>
                     <div>
-                      <Label className="text-xs font-medium text-gray-500">Location</Label>
-                      <div className="text-sm font-medium text-gray-900">{componentToView.component_location}</div>
+                      <Label className="text-xs font-medium text-gray-500 dark:text-gray-400">Location</Label>
+                      <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{componentToView.component_location}</div>
                     </div>
                     <div>
-                      <Label className="text-xs font-medium text-gray-500">Tag ID</Label>
-                      <div className="text-sm font-medium text-gray-900">{componentToView.component_tag_id || '-'}</div>
+                      <Label className="text-xs font-medium text-gray-500 dark:text-gray-400">Tag ID</Label>
+                      <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{componentToView.component_tag_id || '-'}</div>
                     </div>
                     <div>
-                      <Label className="text-xs font-medium text-gray-500">Total Quantity</Label>
-                      <div className="text-sm font-medium text-gray-900">{componentToView.component_quantity}</div>
+                      <Label className="text-xs font-medium text-gray-500 dark:text-gray-400">Total Quantity</Label>
+                      <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{componentToView.component_quantity}</div>
                     </div>
                     <div>
-                      <Label className="text-xs font-medium text-gray-500">Available Quantity</Label>
-                      <div className="text-sm font-medium text-gray-900">{componentToView.availableQuantity || 0}</div>
+                      <Label className="text-xs font-medium text-gray-500 dark:text-gray-400">Available Quantity</Label>
+                      <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{componentToView.availableQuantity || 0}</div>
                     </div>
                   </div>
                   <div className="mt-3">
-                    <Label className="text-xs font-medium text-gray-500">Description</Label>
-                    <div className="text-xs text-gray-700 mt-1">{componentToView.component_description}</div>
+                    <Label className="text-xs font-medium text-gray-500 dark:text-gray-400">Description</Label>
+                    <div className="text-xs text-gray-700 dark:text-gray-300 mt-1">{componentToView.component_description}</div>
                   </div>
                 </div>
 
                 {/* Audit Trail - Separate Section */}
-                <div className="bg-gray-50 rounded-lg p-3">
-                  <h3 className="text-base font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                <div className="bg-gray-50 dark:bg-slate-800 dark:bg-gray-800 rounded-lg p-3">
+                  <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-2 flex items-center gap-2">
                     <History className="h-4 w-4" />
                     Audit Trail
                   </h3>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <Label className="text-xs font-medium text-gray-500">Created By</Label>
-                      <div className="text-sm text-gray-900">{componentToView.created_by || '-'}</div>
+                      <Label className="text-xs font-medium text-gray-500 dark:text-gray-400">Created By</Label>
+                      <div className="text-sm text-gray-900 dark:text-gray-100">{componentToView.created_by || '-'}</div>
                     </div>
                     <div>
-                      <Label className="text-xs font-medium text-gray-500">Created At</Label>
-                      <div className="text-sm text-gray-900">
+                      <Label className="text-xs font-medium text-gray-500 dark:text-gray-400">Created At</Label>
+                      <div className="text-sm text-gray-900 dark:text-gray-100">
                         {componentToView.created_at ? new Date(componentToView.created_at).toLocaleDateString() : '-'}
                       </div>
                     </div>
                     <div>
-                      <Label className="text-xs font-medium text-gray-500">Last Modified By</Label>
-                      <div className="text-sm text-gray-900">{componentToView.modified_by || '-'}</div>
+                      <Label className="text-xs font-medium text-gray-500 dark:text-gray-400">Last Modified By</Label>
+                      <div className="text-sm text-gray-900 dark:text-gray-100">{componentToView.modified_by || '-'}</div>
                     </div>
                     <div>
-                      <Label className="text-xs font-medium text-gray-500">Last Modified At</Label>
-                      <div className="text-sm text-gray-900">
+                      <Label className="text-xs font-medium text-gray-500 dark:text-gray-400">Last Modified At</Label>
+                      <div className="text-sm text-gray-900 dark:text-gray-100">
                         {componentToView.modified_at ? new Date(componentToView.modified_at).toLocaleDateString() : '-'}
                       </div>
                     </div>
@@ -2530,9 +2530,9 @@ export function ManageLabComponents() {
                           return getLabSpecPriority(b.attribute) - getLabSpecPriority(a.attribute)
                         })
                         .map((spec, index) => (
-                          <div key={index} className="grid grid-cols-2 gap-2 text-xs border-b border-gray-100 pb-1">
-                            <div className="font-medium text-gray-600">{spec.attribute}</div>
-                            <div className="text-gray-700">{spec.value}</div>
+                          <div key={index} className="grid grid-cols-2 gap-2 text-xs border-b border-gray-100 dark:border-gray-600 pb-1">
+                            <div className="font-medium text-gray-600 dark:text-gray-400">{spec.attribute}</div>
+                            <div className="text-gray-700 dark:text-gray-300">{spec.value}</div>
                           </div>
                         ))}
                     </div>
@@ -2540,29 +2540,29 @@ export function ManageLabComponents() {
                 )}
 
                 {/* Purchase Details */}
-                <div className="bg-gray-50 rounded-lg p-3">
-                  <h3 className="text-base font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                <div className="bg-gray-50 dark:bg-slate-800 dark:bg-gray-800 rounded-lg p-3">
+                  <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-2 flex items-center gap-2">
                     <Receipt className="h-4 w-4" />
                     Purchase Details
                   </h3>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <Label className="text-xs font-medium text-gray-500">Invoice Number</Label>
-                      <div className="text-sm text-gray-900">{componentToView.invoice_number || '-'}</div>
+                      <Label className="text-xs font-medium text-gray-500 dark:text-gray-400">Invoice Number</Label>
+                      <div className="text-sm text-gray-900 dark:text-gray-100">{componentToView.invoice_number || '-'}</div>
                     </div>
                     <div>
-                      <Label className="text-xs font-medium text-gray-500">Purchased From</Label>
-                      <div className="text-sm text-gray-900">{componentToView.purchased_from || '-'}</div>
+                      <Label className="text-xs font-medium text-gray-500 dark:text-gray-400">Purchased From</Label>
+                      <div className="text-sm text-gray-900 dark:text-gray-100">{componentToView.purchased_from || '-'}</div>
                     </div>
                     <div>
-                      <Label className="text-xs font-medium text-gray-500">Purchase Date</Label>
-                      <div className="text-sm text-gray-900">
+                      <Label className="text-xs font-medium text-gray-500 dark:text-gray-400">Purchase Date</Label>
+                      <div className="text-sm text-gray-900 dark:text-gray-100">
                         {componentToView.purchase_date ? new Date(componentToView.purchase_date).toLocaleDateString() : '-'}
                       </div>
                     </div>
                     <div>
-                      <Label className="text-xs font-medium text-gray-500">Purchase Value</Label>
-                      <div className="text-sm text-gray-900">
+                      <Label className="text-xs font-medium text-gray-500 dark:text-gray-400">Purchase Value</Label>
+                      <div className="text-sm text-gray-900 dark:text-gray-100">
                         {componentToView.purchase_value ? `${componentToView.purchase_currency} ${typeof componentToView.purchase_value === 'number' ? componentToView.purchase_value.toLocaleString() : componentToView.purchase_value}` : '-'}
                       </div>
                     </div>
@@ -2588,9 +2588,9 @@ export function ManageLabComponents() {
           </DialogHeader>
           {categoryToDelete && (
             <div className="space-y-4">
-              <div className="bg-gray-50 rounded-lg p-4">
+              <div className="bg-gray-50 dark:bg-slate-800 dark:bg-gray-800 rounded-lg p-4">
                 <p className="font-medium">Category: {categoryToDelete}</p>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                   This will remove the category from the available options. Components currently using this category will not be affected.
                 </p>
               </div>
@@ -2632,9 +2632,9 @@ export function ManageLabComponents() {
           </DialogHeader>
           {locationToDelete && (
             <div className="space-y-4">
-              <div className="bg-gray-50 rounded-lg p-4">
+              <div className="bg-gray-50 dark:bg-slate-800 dark:bg-gray-800 rounded-lg p-4">
                 <p className="font-medium">Location: {locationToDelete}</p>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                   This will remove the location from the available options. Components currently using this location will not be affected.
                 </p>
               </div>

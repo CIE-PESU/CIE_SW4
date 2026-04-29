@@ -6,10 +6,8 @@ A comprehensive laboratory management system built with Next.js, Prisma, and Pos
 
 ### Prerequisites
 - Node.js (v18 or higher)
-- PostgreSQL
+- PostgreSQL (installed locally)
 - pnpm or npm
-
-### Option 1: Local PostgreSQL Setup
 
 ### 1. Clone the repository
 ```bash
@@ -53,13 +51,13 @@ NODE_ENV="development"
 ```bash
 # Using pnpm
 pnpm prisma generate
-pnpm prisma migrate dev --name update_insight_flow
+pnpm prisma migrate dev --name init
 pnpm prisma db seed
 
 # Or using npm
-npm run prisma:generate
-npm run prisma:migrate
-npm run prisma:seed
+npx prisma generate
+npx prisma migrate dev --name init
+npx prisma db seed
 ```
 
 ### 5. Run the dev server
@@ -72,25 +70,6 @@ npm run dev
 ```
 
 Visit: http://localhost:3000
-
-### Option 2: PostgreSQL with Docker
-
-If you prefer to use Docker for PostgreSQL only:
-
-```bash
-# Start PostgreSQL with Docker
-docker run --name cie-postgres \
-  -e POSTGRES_DB=cie_database \
-  -e POSTGRES_USER=cie_user \
-  -e POSTGRES_PASSWORD=cie_password \
-  -p 5432:5432 \
-  -d postgres:15
-
-# Update your .env file with Docker PostgreSQL connection
-DATABASE_URL="postgresql://cie_user:cie_password@localhost:5432/cie_database"
-```
-
-Then follow steps 1-5 from Option 1 above.
 
 ## � Python AI Setup (for AI Resume Analysis)
 

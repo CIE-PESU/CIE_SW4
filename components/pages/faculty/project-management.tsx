@@ -170,7 +170,7 @@ function ProjectDescription({ description }: { description: string }) {
 
   return (
     <div className="space-y-2">
-      <p className="text-sm text-gray-600">
+      <p className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-400">
         {isExpanded ? description : truncatedDescription}
       </p>
       {needsTruncation && (
@@ -508,45 +508,45 @@ export function ProjectManagement() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "PENDING":
-        return "bg-yellow-100 text-yellow-800";
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
       case "APPROVED":
-        return "bg-green-100 text-green-800";
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
       case "ONGOING":
-        return "bg-blue-100 text-blue-800";
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400";
       case "COMPLETED":
-        return "bg-green-100 text-green-800";
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
       case "OVERDUE":
-        return "bg-red-100 text-red-800";
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
       case "REJECTED":
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100 dark:text-gray-100";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100 dark:text-gray-100";
     }
   };
 
   const getRequestStatusColor = (status: string) => {
     switch (status) {
       case "PENDING":
-        return "bg-yellow-100 text-yellow-800";
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
       case "APPROVED":
-        return "bg-green-100 text-green-800";
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
       case "REJECTED":
-        return "bg-red-100 text-red-800";
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100 dark:text-gray-100";
     }
   };
 
   const getSubmissionStatusColor = (status: string) => {
     switch (status) {
       case "SUBMITTED":
-        return "bg-blue-100 text-blue-800";
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400";
       case "GRADED":
-        return "bg-green-100 text-green-800";
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
       case "LATE":
-        return "bg-red-100 text-red-800";
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100 dark:text-gray-100";
     }
   };
 
@@ -1339,12 +1339,12 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div>
-                        <CardTitle className="text-xl font-bold text-gray-800 flex items-center">
+                        <CardTitle className="text-xl font-bold text-gray-800 dark:text-gray-100 dark:text-gray-100 flex items-center">
                           <FolderOpen className="h-6 w-6 mr-3 text-blue-500" />
                           {project.name}
                         </CardTitle>
                         {course && (
-                          <CardDescription className="mt-2 text-sm text-gray-600">
+                          <CardDescription className="mt-2 text-sm text-gray-600 dark:text-gray-400 dark:text-gray-400">
                             {course.course_name}
                           </CardDescription>
                         )}
@@ -1375,10 +1375,10 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                     <div className="flex-grow">
                       <div className="space-y-2">
                         <div>
-                          <h3 className="text-sm font-semibold text-gray-700">
+                          <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 dark:text-gray-300">
                             Description
                           </h3>
-                          <div className="text-sm text-gray-600 mt-1">
+                          <div className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-400 mt-1">
                             <ProjectDescription description={project.description} />
                           </div>
                         </div>
@@ -1386,7 +1386,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                         {project.components_needed &&
                           project.components_needed.length > 0 && (
                             <div>
-                              <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wide">
+                              <h3 className="text-xs font-semibold text-gray-700 dark:text-gray-300 dark:text-gray-300 uppercase tracking-wide">
                                 Required Components
                               </h3>
                               <div className="flex flex-wrap gap-1 mt-1">
@@ -1422,8 +1422,8 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                     </div>
 
                     <div className="grid grid-cols-2 gap-4 pt-2 mt-auto">
-                      <div className="flex items-center text-sm text-gray-600">
-                        <Calendar className="h-4 w-4 mr-2 text-gray-500" />
+                      <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 dark:text-gray-400">
+                        <Calendar className="h-4 w-4 mr-2 text-gray-500 dark:text-gray-400 dark:text-gray-400" />
                         <div>
                           <p className="font-semibold">Due Date</p>
                           <p>
@@ -1433,8 +1433,8 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-center text-sm text-gray-600">
-                        <Users className="h-4 w-4 mr-2 text-gray-500" />
+                      <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 dark:text-gray-400">
+                        <Users className="h-4 w-4 mr-2 text-gray-500 dark:text-gray-400 dark:text-gray-400" />
                         <div>
                           <p className="font-semibold">Submissions</p>
                           <p>{project.submissions?.length || 0} received</p>
@@ -1446,7 +1446,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                   <div className="p-6 pt-0 space-y-3">
                     {/* Enrollment Status */}
                     <div className="flex items-center justify-between text-sm">
-                      <span className="font-medium text-gray-700">
+                      <span className="font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">
                         Enrollment:
                       </span>
                       <Badge
@@ -1465,7 +1465,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
 
                     {project.enrollment_cap && (
                       <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-600">Applications:</span>
+                        <span className="text-gray-600 dark:text-gray-400 dark:text-gray-400">Applications:</span>
                         <span className="font-medium">
                           {project.project_requests?.length || 0} total
                           {project.project_requests?.filter(
@@ -1581,7 +1581,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                           <FolderOpen className="h-5 w-5 text-blue-600" />
                           <span>{request.project.name}</span>
                         </CardTitle>
-                        <CardDescription className="text-sm text-gray-600">
+                        <CardDescription className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-400">
                           Request from {request.student.user.name} (
                           {request.student.user.email})
                         </CardDescription>
@@ -1594,10 +1594,10 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                   <CardContent className="pt-0">
                     <div className="space-y-3">
                       <div>
-                        <Label className="text-xs font-semibold text-gray-700 tracking-wide">
+                        <Label className="text-xs font-semibold text-gray-700 dark:text-gray-300 dark:text-gray-300 tracking-wide">
                           Description
                         </Label>
-                        <p className="text-sm text-gray-700 leading-relaxed line-clamp-3">
+                        <p className="text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300 leading-relaxed line-clamp-3">
                           {request.project.description}
                         </p>
                       </div>
@@ -1605,7 +1605,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                         request.project.components_needed_details.length >
                           0 && (
                           <div>
-                            <Label className="text-xs font-semibold text-gray-700 tracking-wide">
+                            <Label className="text-xs font-semibold text-gray-700 dark:text-gray-300 dark:text-gray-300 tracking-wide">
                               Required Components
                             </Label>
                             <ul className="list-disc pl-5 text-sm text-muted-foreground">
@@ -1619,7 +1619,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                             </ul>
                           </div>
                         )}
-                      <div className="flex items-center gap-2 text-xs text-gray-500">
+                      <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 dark:text-gray-400">
                         <Calendar className="h-4 w-4" />
                         <span>
                           Requested:{" "}
@@ -1658,7 +1658,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
               ))}
             </div>
           ) : (
-            <div className="text-center py-12 text-gray-500">
+            <div className="text-center py-12 text-gray-500 dark:text-gray-400 dark:text-gray-400">
               <div className="text-lg font-medium mb-2">
                 No student project requests found
               </div>
@@ -1690,7 +1690,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                     </div>
 
                     <div className="space-y-2">
-                      <CardDescription className="text-sm font-medium text-gray-700">
+                      <CardDescription className="text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300">
                         Submitted on{" "}
                         {new Date(
                           submission.submissionDate
@@ -1704,11 +1704,11 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                   <div className="space-y-4">
                     {/* Submission Content */}
                     <div className="space-y-2">
-                      <Label className="text-xs font-semibold text-gray-700 tracking-wide">
+                      <Label className="text-xs font-semibold text-gray-700 dark:text-gray-300 dark:text-gray-300 tracking-wide">
                         Submission Content
                       </Label>
-                      <div className="p-3 bg-gray-50 rounded-md">
-                        <p className="text-sm text-gray-700 leading-relaxed">
+                      <div className="p-3 bg-gray-50 dark:bg-slate-800 dark:bg-gray-800 rounded-md">
+                        <p className="text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300 leading-relaxed">
                           {submission.content}
                         </p>
                       </div>
@@ -1718,7 +1718,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                     {submission.attachments &&
                       submission.attachments.length > 0 && (
                         <div className="space-y-2">
-                          <Label className="text-xs font-semibold text-gray-700 tracking-wide">
+                          <Label className="text-xs font-semibold text-gray-700 dark:text-gray-300 dark:text-gray-300 tracking-wide">
                             Attached Files
                           </Label>
                           <div className="space-y-2">
@@ -1737,7 +1737,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                                   {attachment.split("/").pop() ||
                                     `File ${index + 1}`}
                                 </a>
-                                <span className="text-xs text-gray-500">
+                                <span className="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-400">
                                   (Click to view)
                                 </span>
                               </div>
@@ -1748,8 +1748,8 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
 
                     {/* Grading Section */}
                     {submission.status === "SUBMITTED" && (
-                      <div className="space-y-3 pt-2 border-t border-gray-100">
-                        <Label className="text-xs font-semibold text-gray-700 tracking-wide">
+                      <div className="space-y-3 pt-2 border-t border-gray-100 dark:border-gray-600">
+                        <Label className="text-xs font-semibold text-gray-700 dark:text-gray-300 dark:text-gray-300 tracking-wide">
                           Grade Submission
                         </Label>
                         <div className="grid grid-cols-1 gap-3">
@@ -1860,8 +1860,8 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
 
                     {/* Graded Results */}
                     {submission.status === "GRADED" && (
-                      <div className="space-y-3 pt-2 border-t border-gray-100">
-                        <Label className="text-xs font-semibold text-gray-700 tracking-wide">
+                      <div className="space-y-3 pt-2 border-t border-gray-100 dark:border-gray-600">
+                        <Label className="text-xs font-semibold text-gray-700 dark:text-gray-300 dark:text-gray-300 tracking-wide">
                           Grading Results
                         </Label>
                         <div className="grid grid-cols-2 gap-3">
@@ -1891,7 +1891,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
               </Card>
             ))}
             {submissions.length === 0 && (
-              <div className="text-center py-12 text-gray-500">
+              <div className="text-center py-12 text-gray-500 dark:text-gray-400 dark:text-gray-400">
                 <div className="text-lg font-medium mb-2">
                   No submissions found
                 </div>
@@ -2063,7 +2063,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
 
           <div className="space-y-4">
             {selectedProjectApplications.length === 0 ? (
-              <p className="text-center text-gray-500 py-8">
+              <p className="text-center text-gray-500 dark:text-gray-400 dark:text-gray-400 py-8">
                 No applications yet.
               </p>
             ) : showAIRanking && shortlistResults ? (
@@ -2087,32 +2087,32 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                 {/* Candidates Table */}
                 <div className="border rounded-lg overflow-hidden">
                   <table className="w-full">
-                    <thead className="bg-gray-50">
+                    <thead className="bg-gray-50 dark:bg-slate-800 dark:bg-gray-800">
                       <tr>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-900 dark:text-gray-100">
                           Rank
                         </th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-900 dark:text-gray-100">
                           Candidate
                         </th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-900 dark:text-gray-100">
                           Match Score
                         </th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-900 dark:text-gray-100">
                           Top Skills
                         </th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-900 dark:text-gray-100">
                           Resume
                         </th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-900 dark:text-gray-100">
                           AI Details
                         </th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-900 dark:text-gray-100">
                           Actions
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="bg-white dark:bg-slate-900 divide-y divide-gray-200">
                       {shortlistResults.shortlisted_candidates?.map(
                         (candidate: any, index: number) => {
                           const matchingApplication =
@@ -2126,19 +2126,19 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                           return (
                             <tr
                               key={candidate.request_id || index}
-                              className="hover:bg-gray-50"
+                              className="hover:bg-gray-50 dark:bg-slate-800 dark:bg-gray-800"
                             >
                               <td className="px-4 py-3">
                                 <div className="flex items-center">
                                   <div
                                     className={`rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm ${
                                       index === 0
-                                        ? "bg-yellow-100 text-yellow-800"
+                                        ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
                                         : index === 1
-                                        ? "bg-gray-100 text-gray-800"
+                                        ? "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100 dark:text-gray-100"
                                         : index === 2
-                                        ? "bg-orange-100 text-orange-800"
-                                        : "bg-blue-100 text-blue-800"
+                                        ? "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400"
+                                        : "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
                                     }`}
                                   >
                                     #{index + 1}
@@ -2147,10 +2147,10 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                               </td>
                               <td className="px-4 py-3">
                                 <div>
-                                  <div className="font-medium text-gray-900">
+                                  <div className="font-medium text-gray-900 dark:text-gray-100">
                                     {candidate.student_name}
                                   </div>
-                                  <div className="text-sm text-gray-500">
+                                  <div className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-400">
                                     {candidate.student_email}
                                   </div>
                                 </div>
@@ -2159,10 +2159,10 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                                 <div
                                   className={`inline-flex px-2 py-1 rounded-full text-xs font-semibold ${
                                     candidate.score > 0.8
-                                      ? "bg-green-100 text-green-800"
+                                      ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
                                       : candidate.score > 0.6
-                                      ? "bg-yellow-100 text-yellow-800"
-                                      : "bg-gray-100 text-gray-800"
+                                      ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
+                                      : "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100 dark:text-gray-100"
                                   }`}
                                 >
                                   {(candidate.score * 100).toFixed(1)}%
@@ -2187,7 +2187,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                                     )}
                                   {(candidate.ai_analysis?.skills || [])
                                     .length > 3 && (
-                                    <span className="text-xs text-gray-500">
+                                    <span className="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-400">
                                       +
                                       {(candidate.ai_analysis?.skills || [])
                                         .length - 3}
@@ -2289,39 +2289,39 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                 {/* Applications Table */}
                 <div className="border rounded-lg overflow-hidden">
                   <table className="w-full">
-                    <thead className="bg-gray-50">
+                    <thead className="bg-gray-50 dark:bg-slate-800 dark:bg-gray-800">
                       <tr>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-900 dark:text-gray-100">
                           Student
                         </th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-900 dark:text-gray-100">
                           Status
                         </th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-900 dark:text-gray-100">
                           Applied Date
                         </th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-900 dark:text-gray-100">
                           Resume
                         </th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-900 dark:text-gray-100">
                           Notes
                         </th>
-                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-900">
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-900 dark:text-gray-100">
                           Actions
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="bg-white dark:bg-slate-900 divide-y divide-gray-200">
                       {selectedProjectApplications.map((application) => (
-                        <tr key={application.id} className="hover:bg-gray-50">
+                        <tr key={application.id} className="hover:bg-gray-50 dark:bg-slate-800 dark:bg-gray-800">
                           <td className="px-4 py-3">
                             <div className="flex items-center space-x-2">
-                              <User className="h-4 w-4 text-gray-500" />
+                              <User className="h-4 w-4 text-gray-500 dark:text-gray-400 dark:text-gray-400" />
                               <div>
-                                <div className="font-medium text-gray-900">
+                                <div className="font-medium text-gray-900 dark:text-gray-100">
                                   {application.student.user.name}
                                 </div>
-                                <div className="text-sm text-gray-500">
+                                <div className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-400">
                                   {application.student.user.email}
                                 </div>
                               </div>
@@ -2343,8 +2343,8 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                           </td>
                           <td className="px-4 py-3">
                             <div className="flex items-center space-x-2">
-                              <Calendar className="h-4 w-4 text-gray-500" />
-                              <span className="text-sm text-gray-600">
+                              <Calendar className="h-4 w-4 text-gray-500 dark:text-gray-400 dark:text-gray-400" />
+                              <span className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-400">
                                 {new Date(
                                   application.request_date
                                 ).toLocaleDateString()}
@@ -2377,7 +2377,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                                 onClick={() =>
                                   showApplicationDetails(application)
                                 }
-                                className="text-gray-600 border-gray-300 hover:bg-gray-50"
+                                className="text-gray-600 dark:text-gray-400 dark:text-gray-400 border-gray-300 hover:bg-gray-50 dark:bg-slate-800 dark:bg-gray-800"
                               >
                                 <Info className="h-4 w-4 mr-1" />
                                 View Notes
@@ -2420,7 +2420,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                                 </Button>
                               </div>
                             ) : (
-                              <span className="text-gray-500 text-sm">
+                              <span className="text-gray-500 dark:text-gray-400 dark:text-gray-400 text-sm">
                                 Decision made
                               </span>
                             )}
@@ -2451,7 +2451,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
           </DialogHeader>
           <div className="space-y-6">
             {shortlistResults?.shortlisted_candidates?.length === 0 ? (
-              <p className="text-center text-gray-500 py-8">
+              <p className="text-center text-gray-500 dark:text-gray-400 dark:text-gray-400 py-8">
                 No suitable candidates found by AI analysis.
               </p>
             ) : (
@@ -2498,26 +2498,26 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                       >
                         <div className="flex items-start justify-between mb-4">
                           <div className="flex items-center space-x-3">
-                            <div className="bg-purple-100 text-purple-800 rounded-full w-8 h-8 flex items-center justify-center font-bold">
+                            <div className="bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400 rounded-full w-8 h-8 flex items-center justify-center font-bold">
                               #{index + 1}
                             </div>
                             <div>
-                              <h3 className="font-bold text-lg text-gray-900">
+                              <h3 className="font-bold text-lg text-gray-900 dark:text-gray-100">
                                 {safeCandidate.student_name}
                               </h3>
-                              <p className="text-gray-600 text-sm">
+                              <p className="text-gray-600 dark:text-gray-400 dark:text-gray-400 text-sm">
                                 {safeCandidate.student_email}
                               </p>
                             </div>
                           </div>
                           <div className="text-right">
-                            <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">
+                            <div className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 px-3 py-1 rounded-full text-sm font-semibold">
                               Match Score:{" "}
                               {(safeCandidate.score * 100).toFixed(1)}%
                             </div>
                             {safeCandidate.file_path && (
                               <div className="flex items-center space-x-2 mt-2">
-                                <FileText className="h-4 w-4 text-gray-500" />
+                                <FileText className="h-4 w-4 text-gray-500 dark:text-gray-400 dark:text-gray-400" />
                                 <a
                                   href={`/${safeCandidate.file_path.replace(
                                     /^.*[\\\/]public[\\\/]/,
@@ -2536,7 +2536,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
 
                         <div className="grid md:grid-cols-2 gap-4">
                           <div>
-                            <h4 className="font-semibold text-gray-700 mb-2">
+                            <h4 className="font-semibold text-gray-700 dark:text-gray-300 dark:text-gray-300 mb-2">
                               Key Skills
                             </h4>
                             <div className="flex flex-wrap gap-1">
@@ -2561,7 +2561,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                               ) ||
                                 safeCandidate.ai_analysis.skills.length ===
                                   0) && (
-                                <span className="text-gray-500 text-sm">
+                                <span className="text-gray-500 dark:text-gray-400 dark:text-gray-400 text-sm">
                                   No skills extracted
                                 </span>
                               )}
@@ -2569,10 +2569,10 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                           </div>
 
                           <div>
-                            <h4 className="font-semibold text-gray-700 mb-2">
+                            <h4 className="font-semibold text-gray-700 dark:text-gray-300 dark:text-gray-300 mb-2">
                               Why Selected by AI
                             </h4>
-                            <ul className="text-sm text-gray-600 space-y-1">
+                            <ul className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-400 space-y-1">
                               {Array.isArray(
                                 safeCandidate.ai_analysis.reasons
                               ) &&
@@ -2594,7 +2594,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                               ) ||
                                 safeCandidate.ai_analysis.reasons.length ===
                                   0) && (
-                                <li className="text-gray-500">
+                                <li className="text-gray-500 dark:text-gray-400 dark:text-gray-400">
                                   No specific reasons available
                                 </li>
                               )}
@@ -2605,18 +2605,18 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                         {safeCandidate.ai_analysis.metadata &&
                           Object.keys(safeCandidate.ai_analysis.metadata)
                             .length > 0 && (
-                            <div className="mt-4 p-3 bg-gray-50 rounded">
-                              <h4 className="font-semibold text-gray-700 mb-2">
+                            <div className="mt-4 p-3 bg-gray-50 dark:bg-slate-800 dark:bg-gray-800 rounded">
+                              <h4 className="font-semibold text-gray-700 dark:text-gray-300 dark:text-gray-300 mb-2">
                                 Additional Details
                               </h4>
                               <div className="grid md:grid-cols-3 gap-4 text-sm">
                                 {safeCandidate.ai_analysis.metadata
                                   .experience_years && (
                                   <div>
-                                    <span className="font-medium text-gray-600">
+                                    <span className="font-medium text-gray-600 dark:text-gray-400 dark:text-gray-400">
                                       Experience:
                                     </span>
-                                    <p className="text-gray-800">
+                                    <p className="text-gray-800 dark:text-gray-100 dark:text-gray-100">
                                       {String(
                                         safeCandidate.ai_analysis.metadata
                                           .experience_years
@@ -2628,10 +2628,10 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                                 {safeCandidate.ai_analysis.metadata
                                   .education && (
                                   <div>
-                                    <span className="font-medium text-gray-600">
+                                    <span className="font-medium text-gray-600 dark:text-gray-400 dark:text-gray-400">
                                       Education:
                                     </span>
-                                    <p className="text-gray-800">
+                                    <p className="text-gray-800 dark:text-gray-100 dark:text-gray-100">
                                       {Array.isArray(
                                         safeCandidate.ai_analysis.metadata
                                           .education
@@ -2659,10 +2659,10 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                                 {safeCandidate.ai_analysis.metadata
                                   .job_titles && (
                                   <div>
-                                    <span className="font-medium text-gray-600">
+                                    <span className="font-medium text-gray-600 dark:text-gray-400 dark:text-gray-400">
                                       Recent Role:
                                     </span>
-                                    <p className="text-gray-800">
+                                    <p className="text-gray-800 dark:text-gray-100 dark:text-gray-100">
                                       {Array.isArray(
                                         safeCandidate.ai_analysis.metadata
                                           .job_titles
@@ -2702,10 +2702,10 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                                   .slice(0, 3)
                                   .map(([key, value]) => (
                                     <div key={key}>
-                                      <span className="font-medium text-gray-600 capitalize">
+                                      <span className="font-medium text-gray-600 dark:text-gray-400 dark:text-gray-400 capitalize">
                                         {key.replace(/_/g, " ")}:
                                       </span>
-                                      <p className="text-gray-800">
+                                      <p className="text-gray-800 dark:text-gray-100 dark:text-gray-100">
                                         {typeof value === "object"
                                           ? JSON.stringify(value)
                                           : String(value)}
@@ -2764,7 +2764,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left: AI Reasoning */}
         <div className="lg:col-span-2 bg-purple-50 rounded-lg p-6 flex flex-col">
-          <h4 className="font-semibold text-gray-900 mb-3 flex items-center">
+          <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
             <Brain className="h-5 w-5 mr-2 text-purple-600" />
             Why AI Selected This Candidate
           </h4>
@@ -2781,7 +2781,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
               )}
             </ul>
           ) : (
-            <p className="text-gray-500 italic">
+            <p className="text-gray-500 dark:text-gray-400 dark:text-gray-400 italic">
               No specific reasons available
             </p>
           )}
@@ -2790,8 +2790,8 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
         {/* Right: Profile (top) and Skills (bottom) */}
         <div className="flex flex-col gap-6">
           {/* Profile */}
-          <div className="bg-white rounded-lg shadow p-6 flex flex-col gap-2">
-            <h4 className="font-semibold text-gray-900 mb-2">Profile</h4>
+          <div className="bg-white dark:bg-slate-900 rounded-lg shadow p-6 flex flex-col gap-2">
+            <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">Profile</h4>
             <div>
               <span className="font-medium">Name: </span>
               {selectedCandidateDetails.student_name}
@@ -2801,7 +2801,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
               {selectedCandidateDetails.student_email}
             </div>
             <div>
-              <Badge className="bg-green-100 text-green-800">
+              <Badge className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
                 Match Score: {(selectedCandidateDetails.score * 100).toFixed(1)}%
               </Badge>
             </div>
@@ -2822,8 +2822,8 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
           </div>
 
           {/* Skills */}
-          <div className="bg-white rounded-lg shadow p-6 flex flex-col gap-2">
-            <h4 className="font-semibold text-gray-900 mb-2">Skills</h4>
+          <div className="bg-white dark:bg-slate-900 rounded-lg shadow p-6 flex flex-col gap-2">
+            <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-2">Skills</h4>
             <div className="flex flex-wrap gap-2">
               {(selectedCandidateDetails.ai_analysis?.skills || []).map(
                 (skill: any, index: number) => (
@@ -2840,7 +2840,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
               )}
               {(!selectedCandidateDetails.ai_analysis?.skills ||
                 selectedCandidateDetails.ai_analysis.skills.length === 0) && (
-                <p className="text-gray-500 italic">No skills extracted</p>
+                <p className="text-gray-500 dark:text-gray-400 dark:text-gray-400 italic">No skills extracted</p>
               )}
             </div>
           </div>
@@ -2872,22 +2872,22 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
 
           {selectedApplicationDetails && (
             <div className="space-y-4">
-              <div className="p-4 bg-gray-50 rounded-lg">
+              <div className="p-4 bg-gray-50 dark:bg-slate-800 dark:bg-gray-800 rounded-lg">
                 <div className="flex items-center space-x-2 mb-2">
-                  <User className="h-4 w-4 text-gray-500" />
+                  <User className="h-4 w-4 text-gray-500 dark:text-gray-400 dark:text-gray-400" />
                   <span className="font-semibold">
                     {selectedApplicationDetails.student.user.name}
                   </span>
                 </div>
                 <div className="flex items-center space-x-2 mb-2">
-                  <Mail className="h-4 w-4 text-gray-500" />
-                  <span className="text-sm text-gray-600">
+                  <Mail className="h-4 w-4 text-gray-500 dark:text-gray-400 dark:text-gray-400" />
+                  <span className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-400">
                     {selectedApplicationDetails.student.user.email}
                   </span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Calendar className="h-4 w-4 text-gray-500" />
-                  <span className="text-sm text-gray-600">
+                  <Calendar className="h-4 w-4 text-gray-500 dark:text-gray-400 dark:text-gray-400" />
+                  <span className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-400">
                     Applied:{" "}
                     {new Date(
                       selectedApplicationDetails.request_date
@@ -2898,7 +2898,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
 
               {selectedApplicationDetails.student_notes && (
                 <div className="space-y-2">
-                  <h4 className="font-semibold text-gray-900">Student Notes</h4>
+                  <h4 className="font-semibold text-gray-900 dark:text-gray-100">Student Notes</h4>
                   <div className="p-3 bg-blue-50 rounded-lg">
                     <p className="text-sm text-blue-900">
                       {selectedApplicationDetails.student_notes}
@@ -2909,7 +2909,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
 
               {selectedApplicationDetails.faculty_notes && (
                 <div className="space-y-2">
-                  <h4 className="font-semibold text-gray-900">Your Notes</h4>
+                  <h4 className="font-semibold text-gray-900 dark:text-gray-100">Your Notes</h4>
                   <div className="p-3 bg-purple-50 rounded-lg">
                     <p className="text-sm text-purple-900">
                       {selectedApplicationDetails.faculty_notes}
@@ -2920,7 +2920,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
 
               {!selectedApplicationDetails.student_notes &&
                 !selectedApplicationDetails.faculty_notes && (
-                  <p className="text-gray-500 italic text-center py-4">
+                  <p className="text-gray-500 dark:text-gray-400 dark:text-gray-400 italic text-center py-4">
                     No notes available
                   </p>
                 )}
@@ -2997,7 +2997,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
                   }
                   placeholder="Enter maximum number of students (1-500)"
                 />
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-400">
                   Number of students who can be selected for this project
                 </p>
               </div>
@@ -3042,7 +3042,7 @@ Rank candidates by overall suitability score (0.0 to 1.0) and provide detailed r
             ) : (
               <div className="space-y-4 ">
                 <div className="space-y-2 ">
-                  <Label htmlFor="custom-prompt" className="text-sm font-semibold text-gray-700">
+                  <Label htmlFor="custom-prompt" className="text-sm font-semibold text-gray-700 dark:text-gray-300 dark:text-gray-300">
                     AI Analysis Prompt
                   </Label>
                   <textarea

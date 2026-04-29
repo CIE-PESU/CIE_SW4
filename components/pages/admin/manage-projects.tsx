@@ -150,19 +150,19 @@ export function ManageProjects() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "PENDING":
-        return "bg-yellow-100 text-yellow-800";
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
       case "APPROVED":
-        return "bg-green-100 text-green-800";
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
       case "ONGOING":
-        return "bg-blue-100 text-blue-800";
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400";
       case "COMPLETED":
         return "bg-emerald-100 text-emerald-800";
       case "OVERDUE":
-        return "bg-red-100 text-red-800";
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
       case "REJECTED":
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100";
     }
   };
 
@@ -172,31 +172,31 @@ export function ManageProjects() {
 
   const getTypeColor = (type: string) => {
     return type === "FACULTY_ASSIGNED"
-      ? "bg-purple-100 text-purple-800"
+      ? "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400"
       : "bg-indigo-100 text-indigo-800";
   };
 
   const getEnrollmentStatusColor = (status: string) => {
     switch (status) {
       case "OPEN":
-        return "bg-green-100 text-green-800";
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
       case "CLOSED":
-        return "bg-red-100 text-red-800";
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
       case "NOT_STARTED":
-        return "bg-gray-100 text-gray-600";
+        return "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400";
       default:
-        return "bg-gray-100 text-gray-600";
+        return "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400";
     }
   };
 
   const getSubmissionStatusColor = (status: string) => {
     switch (status) {
       case "SUBMITTED":
-        return "bg-blue-100 text-blue-800";
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400";
       case "GRADED":
-        return "bg-green-100 text-green-800";
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100";
     }
   };
 
@@ -298,7 +298,7 @@ export function ManageProjects() {
 
       {/* Project Cards Grid */}
       {filteredProjects.length === 0 ? (
-        <div className="text-center py-12 text-gray-500">
+        <div className="text-center py-12 text-gray-500 dark:text-gray-400">
           <FolderOpen className="h-12 w-12 mx-auto mb-4 text-gray-300" />
           <div className="text-lg font-medium mb-2">No projects found</div>
           <p className="text-sm">
@@ -335,7 +335,7 @@ export function ManageProjects() {
               <CardContent className="space-y-3">
                 {/* Description */}
                 <p
-                  className="text-sm text-gray-600 overflow-hidden"
+                  className="text-sm text-gray-600 dark:text-gray-400 overflow-hidden"
                   style={{
                     display: "-webkit-box",
                     WebkitLineClamp: 3,
@@ -348,7 +348,7 @@ export function ManageProjects() {
 
                 {/* Faculty Creator */}
                 {project.faculty_creator && (
-                  <div className="flex items-center gap-2 text-sm text-gray-500">
+                  <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                     <User className="h-3.5 w-3.5" />
                     <span>
                       {project.faculty_creator.user.name}
@@ -357,7 +357,7 @@ export function ManageProjects() {
                 )}
 
                 {/* Due Date */}
-                <div className="flex items-center text-sm text-gray-500">
+                <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                   <Calendar className="mr-2 h-3.5 w-3.5" />
                   <span>Due: {formatDate(project.expected_completion_date)}</span>
                 </div>
@@ -371,14 +371,14 @@ export function ManageProjects() {
                     Enrollment: {project.enrollment_status.replace("_", " ")}
                   </Badge>
                   {project.enrollment_cap && (
-                    <span className="text-gray-500 text-xs">
+                    <span className="text-gray-500 dark:text-gray-400 text-xs">
                       Cap: {project.enrollment_cap}
                     </span>
                   )}
                 </div>
 
                 {/* Summary stats */}
-                <div className="flex items-center gap-4 text-xs text-gray-500 pt-1 border-t">
+                <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400 pt-1 border-t">
                   <div className="flex items-center gap-1">
                     <ClipboardList className="h-3.5 w-3.5" />
                     {project.project_requests?.length || 0} Applications
@@ -430,10 +430,10 @@ export function ManageProjects() {
 
                 {/* Description */}
                 <div>
-                  <h4 className="text-sm font-semibold text-gray-700 mb-1">
+                  <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
                     Description
                   </h4>
-                  <p className="text-sm text-gray-600 whitespace-pre-wrap">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 whitespace-pre-wrap">
                     {selectedProject.description || "No description provided."}
                   </p>
                 </div>
@@ -442,41 +442,41 @@ export function ManageProjects() {
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   {selectedProject.faculty_creator && (
                     <div>
-                      <span className="font-medium text-gray-700">Created By</span>
-                      <div className="flex items-center gap-1 mt-1 text-gray-600">
+                      <span className="font-medium text-gray-700 dark:text-gray-300">Created By</span>
+                      <div className="flex items-center gap-1 mt-1 text-gray-600 dark:text-gray-400">
                         <User className="h-3.5 w-3.5" />
                         {selectedProject.faculty_creator.user.name}
                       </div>
-                      <div className="flex items-center gap-1 text-gray-500 text-xs">
+                      <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400 text-xs">
                         <Mail className="h-3 w-3" />
                         {selectedProject.faculty_creator.user.email}
                       </div>
                       {selectedProject.faculty_creator.department && (
-                        <div className="text-gray-500 text-xs mt-0.5">
+                        <div className="text-gray-500 dark:text-gray-400 text-xs mt-0.5">
                           Dept: {selectedProject.faculty_creator.department}
                         </div>
                       )}
                     </div>
                   )}
                   <div>
-                    <span className="font-medium text-gray-700">Due Date</span>
-                    <div className="flex items-center gap-1 mt-1 text-gray-600">
+                    <span className="font-medium text-gray-700 dark:text-gray-300">Due Date</span>
+                    <div className="flex items-center gap-1 mt-1 text-gray-600 dark:text-gray-400">
                       <Calendar className="h-3.5 w-3.5" />
                       {formatDate(selectedProject.expected_completion_date)}
                     </div>
                   </div>
                   <div>
-                    <span className="font-medium text-gray-700">Created</span>
-                    <div className="text-gray-600 mt-1">
+                    <span className="font-medium text-gray-700 dark:text-gray-300">Created</span>
+                    <div className="text-gray-600 dark:text-gray-400 mt-1">
                       {formatDate(selectedProject.created_date)}
                     </div>
                   </div>
                   {selectedProject.enrollment_cap && (
                     <div>
-                      <span className="font-medium text-gray-700">
+                      <span className="font-medium text-gray-700 dark:text-gray-300">
                         Enrollment Cap
                       </span>
-                      <div className="text-gray-600 mt-1">
+                      <div className="text-gray-600 dark:text-gray-400 mt-1">
                         {selectedProject.enrollment_cap} students
                       </div>
                     </div>
@@ -487,7 +487,7 @@ export function ManageProjects() {
                 {selectedProject.components_needed_details &&
                   selectedProject.components_needed_details.length > 0 && (
                     <div>
-                      <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                      <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                         Components Needed
                       </h4>
                       <div className="flex flex-wrap gap-1.5">
@@ -506,7 +506,7 @@ export function ManageProjects() {
                 {selectedProject.project_requests &&
                   selectedProject.project_requests.length > 0 && (
                     <div>
-                      <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1">
+                      <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1">
                         <Users className="h-4 w-4" />
                         Student Applications ({selectedProject.project_requests.length})
                       </h4>
@@ -514,7 +514,7 @@ export function ManageProjects() {
                         {selectedProject.project_requests.map((req) => (
                           <div
                             key={req.id}
-                            className="flex items-center justify-between p-2 rounded-md bg-gray-50 border text-sm"
+                            className="flex items-center justify-between p-2 rounded-md bg-gray-50 dark:bg-slate-800 dark:bg-gray-800 border text-sm"
                           >
                             <div>
                               <span className="font-medium">
@@ -527,10 +527,10 @@ export function ManageProjects() {
                             <Badge
                               className={`text-xs ${
                                 req.status === "APPROVED"
-                                  ? "bg-green-100 text-green-800"
+                                  ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
                                   : req.status === "REJECTED"
-                                  ? "bg-red-100 text-red-800"
-                                  : "bg-yellow-100 text-yellow-800"
+                                  ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
+                                  : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
                               }`}
                             >
                               {req.status}
@@ -545,7 +545,7 @@ export function ManageProjects() {
                 {selectedProject.submissions &&
                   selectedProject.submissions.length > 0 && (
                     <div>
-                      <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-1">
+                      <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1">
                         <FileText className="h-4 w-4" />
                         Submissions ({selectedProject.submissions.length})
                       </h4>
@@ -553,7 +553,7 @@ export function ManageProjects() {
                         {selectedProject.submissions.map((sub) => (
                           <div
                             key={sub.id}
-                            className="flex items-center justify-between p-2 rounded-md bg-gray-50 border text-sm"
+                            className="flex items-center justify-between p-2 rounded-md bg-gray-50 dark:bg-slate-800 dark:bg-gray-800 border text-sm"
                           >
                             <div>
                               <span className="font-medium">
@@ -565,7 +565,7 @@ export function ManageProjects() {
                             </div>
                             <div className="flex items-center gap-2">
                               {sub.marks !== null && (
-                                <span className="text-xs font-medium text-gray-700">
+                                <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
                                   {sub.marks} marks
                                 </span>
                               )}

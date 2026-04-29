@@ -291,17 +291,17 @@ export function LocationBooking() {
 
   const getLocationTypeColor = (type: string) => {
     const colors: { [key: string]: string } = {
-      'LECTURE_HALL': 'bg-blue-100 text-blue-800',
-      'LAB': 'bg-green-100 text-green-800',
-      'AUDITORIUM': 'bg-purple-100 text-purple-800',
-      'SEMINAR_HALL': 'bg-orange-100 text-orange-800',
-      'CABIN': 'bg-gray-100 text-gray-800',
+      'LECTURE_HALL': 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
+      'LAB': 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
+      'AUDITORIUM': 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400',
+      'SEMINAR_HALL': 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400',
+      'CABIN': 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100',
       'CLASSROOM': 'bg-indigo-100 text-indigo-800',
-      'OFFICE': 'bg-red-100 text-red-800',
-      'WAREHOUSE': 'bg-yellow-100 text-yellow-800',
+      'OFFICE': 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
+      'WAREHOUSE': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
       'OTHER': 'bg-slate-100 text-slate-800',
     };
-    return colors[type] || 'bg-gray-100 text-gray-800';
+    return colors[type] || 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100';
   };
 
   const filteredLocations = locations.filter(location => location.is_available);
@@ -358,7 +358,7 @@ export function LocationBooking() {
         <div className="flex items-center space-x-4">
           {/* Search with icon inside */}
           <div className="relative flex-1 max-w-md">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">
               <Search className="h-4 w-4" />
             </span>
             <Input
@@ -369,7 +369,7 @@ export function LocationBooking() {
             />
           </div>
           {/* Filter icon */}
-          <span className="text-gray-500">
+          <span className="text-gray-500 dark:text-gray-400">
             <Filter className="h-5 w-5" />
           </span>
           {/* Filter select */}
@@ -423,7 +423,7 @@ export function LocationBooking() {
               {loading ? (
                 <div className="text-center py-4">Loading rooms...</div>
               ) : filteredLocations.length === 0 ? (
-                <div className="text-center py-4 text-gray-500">No available rooms found</div>
+                <div className="text-center py-4 text-gray-500 dark:text-gray-400">No available rooms found</div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {filteredLocations.map((location) => (
@@ -438,13 +438,13 @@ export function LocationBooking() {
                             <CardDescription className="text-xs">{location.location_type.replace('_', ' ')}</CardDescription>
                           </div>
                           <div className="flex items-center space-x-1 flex-shrink-0">
-                            <Badge className="bg-green-100 text-green-800 text-xs px-1 py-0.5">
+                            <Badge className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 text-xs px-1 py-0.5">
                               Available
                             </Badge>
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="h-6 w-6 text-gray-400 hover:text-gray-600"
+                              className="h-6 w-6 text-gray-400 hover:text-gray-600 dark:text-gray-400"
                               onClick={() => setInfoDialogOpen(location.id)}
                             >
                               <Info className="h-3 w-3" />
@@ -465,7 +465,7 @@ export function LocationBooking() {
                                       <img
                                         src={image}
                                         alt={`${location.name} ${index + 1}`}
-                                        className="w-full h-full object-contain rounded-md bg-gray-50"
+                                        className="w-full h-full object-contain rounded-md bg-gray-50 dark:bg-slate-800 dark:bg-gray-800"
                                         onError={(e) => {
                                           e.currentTarget.src = "/placeholder.jpg"
                                         }}
@@ -475,10 +475,10 @@ export function LocationBooking() {
                                 </CarouselContent>
                                 {location.images.length > 1 && (
                                   <div className="absolute inset-0 flex items-center justify-between px-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <div className="pointer-events-auto bg-white/80 rounded-full">
+                                    <div className="pointer-events-auto bg-white dark:bg-slate-900/80 rounded-full">
                                       <CarouselPrevious className="left-2 top-1/2 -translate-y-1/2" />
                                     </div>
-                                    <div className="pointer-events-auto bg-white/80 rounded-full">
+                                    <div className="pointer-events-auto bg-white dark:bg-slate-900/80 rounded-full">
                                       <CarouselNext className="right-2 top-1/2 -translate-y-1/2" />
                                     </div>
                                   </div>
@@ -488,12 +488,12 @@ export function LocationBooking() {
                           )}
                           
                           <div className="space-y-1">
-                            <div className="grid grid-cols-2 gap-2 text-xs text-gray-700">
+                            <div className="grid grid-cols-2 gap-2 text-xs text-gray-700 dark:text-gray-300">
                               <div><span className="font-medium">Room:</span> {location.room_number}</div>
                               <div><span className="font-medium">Capacity:</span> {location.capacity}</div>
                             </div>
                             
-                            <div className="text-xs text-gray-500">
+                            <div className="text-xs text-gray-500 dark:text-gray-400">
                               <span className="font-medium">Building:</span> {capitalizeWords(location.building)}, {getOrdinal(location.floor)}
                               {location.wing && <span> - {location.wing}</span>}
                             </div>
@@ -540,7 +540,7 @@ export function LocationBooking() {
           </CardHeader>
           <CardContent>
             {myBookings.length === 0 ? (
-              <div className="text-center py-4 text-gray-500">No bookings found</div>
+              <div className="text-center py-4 text-gray-500 dark:text-gray-400">No bookings found</div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {myBookings.map((booking) => (
@@ -549,7 +549,7 @@ export function LocationBooking() {
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <CardTitle className="text-base">{booking.title}</CardTitle>
-                          <p className="text-xs text-gray-600">{booking.location?.room_number}</p>
+                          <p className="text-xs text-gray-600 dark:text-gray-400">{booking.location?.room_number}</p>
                         </div>
                         <Badge className={getLocationTypeColor(booking.location?.location_type)}>
                           {booking.location?.location_type?.replace('_', ' ')}
@@ -557,21 +557,21 @@ export function LocationBooking() {
                       </div>
                     </CardHeader>
                     <CardContent className="space-y-1 pt-0">
-                      <div className="flex items-center space-x-2 text-xs text-gray-600">
+                      <div className="flex items-center space-x-2 text-xs text-gray-600 dark:text-gray-400">
                         <Building className="h-3 w-3" />
                         <span>{capitalizeWords(booking.location?.building)}, {getOrdinal(booking.location?.floor)}</span>
                         {booking.location?.wing && <span>- {booking.location.wing}</span>}
                       </div>
-                      <div className="flex items-center space-x-2 text-xs text-gray-600">
+                      <div className="flex items-center space-x-2 text-xs text-gray-600 dark:text-gray-400">
                         <Calendar className="h-3 w-3" />
                         <span>{new Date(booking.start_time).toLocaleString()} - {new Date(booking.end_time).toLocaleTimeString()}</span>
                       </div>
-                      <div className="flex items-center space-x-2 text-xs text-gray-600">
+                      <div className="flex items-center space-x-2 text-xs text-gray-600 dark:text-gray-400">
                         <Users className="h-3 w-3" />
                         <span>Capacity: {booking.location?.capacity}</span>
                       </div>
                       {booking.purpose && (
-                        <p className="text-xs text-gray-600">Purpose: {booking.purpose}</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-400">Purpose: {booking.purpose}</p>
                       )}
                       <div className="flex justify-end pt-2">
                         <Button 
@@ -733,7 +733,7 @@ export function LocationBooking() {
             <DialogTitle className="text-xl font-semibold">
               📅 Booking Calendar for {calendarLocation?.name}
             </DialogTitle>
-            <p className="text-sm text-gray-600 mt-1">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
               {calendarLocation?.building}, {calendarLocation?.room_number} • Capacity: {calendarLocation?.capacity}
             </p>
           </DialogHeader>
@@ -771,7 +771,7 @@ export function LocationBooking() {
                   <div className="space-y-6">
                     <div className="flex items-center justify-between">
                       <h3 className="text-lg font-semibold flex items-center gap-2">
-                        <Building className="h-5 w-5 text-gray-500" />
+                        <Building className="h-5 w-5 text-gray-500 dark:text-gray-400" />
                         {capitalizeWords(location.name)}
                       </h3>
                       <span className="px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-700">Available</span>
@@ -779,7 +779,7 @@ export function LocationBooking() {
                     <div className="flex flex-row items-end justify-center pl-8">
                       <div>
                         <h4 className="font-medium text-sm">Room Number</h4>
-                        <p className="text-lg font-semibold text-gray-900 text-center">{location.room_number}</p>
+                        <p className="text-lg font-semibold text-gray-900 dark:text-gray-100 text-center">{location.room_number}</p>
                       </div>
                       <div className="ml-16 text-center">
                         <h4 className="font-medium text-sm">Capacity</h4>
@@ -788,7 +788,7 @@ export function LocationBooking() {
                     </div>
                     <div className="space-y-2">
                       <h4 className="font-medium text-sm">Location & Type</h4>
-                      <p className="text-sm text-gray-700">
+                      <p className="text-sm text-gray-700 dark:text-gray-300">
                         {capitalizeWords(location.building)}, {getOrdinal(location.floor)}
                         {location.wing && <span> - {location.wing}</span>} • {location.location_type.replace('_', ' ')}
                       </p>
@@ -796,14 +796,14 @@ export function LocationBooking() {
                     {location.description && (
                       <div className="space-y-2">
                         <h4 className="font-medium text-sm">Description</h4>
-                        <p className="text-sm text-gray-700 whitespace-pre-line">{location.description}</p>
+                        <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-line">{location.description}</p>
                       </div>
                     )}
                   </div>
                 </div>
                 {/* Right: Image Preview */}
                 <div className="flex-1 flex flex-col items-center justify-center min-w-0">
-                  <div className="relative w-full max-w-xs aspect-square bg-gray-50 rounded-lg border flex items-center justify-center overflow-hidden">
+                  <div className="relative w-full max-w-xs aspect-square bg-gray-50 dark:bg-slate-800 dark:bg-gray-800 rounded-lg border flex items-center justify-center overflow-hidden">
                     {location.images && location.images.length > 0 ? (
                       <>
                         <img
@@ -817,7 +817,7 @@ export function LocationBooking() {
                             {/* Left arrow */}
                             {infoImageIndex > 0 && (
                               <button
-                                className="absolute left-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/80 hover:bg-white shadow flex items-center justify-center border z-10"
+                                className="absolute left-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white dark:bg-slate-900/80 hover:bg-white dark:bg-slate-900 shadow flex items-center justify-center border z-10"
                                 onClick={() => setInfoImageIndex(prev => prev - 1)}
                                 type="button"
                                 aria-label="Previous Image"
@@ -828,7 +828,7 @@ export function LocationBooking() {
                             {/* Right arrow */}
                             {infoImageIndex < location.images.length - 1 && (
                               <button
-                                className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/80 hover:bg-white shadow flex items-center justify-center border z-10"
+                                className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white dark:bg-slate-900/80 hover:bg-white dark:bg-slate-900 shadow flex items-center justify-center border z-10"
                                 onClick={() => setInfoImageIndex(prev => prev + 1)}
                                 type="button"
                                 aria-label="Next Image"
@@ -842,7 +842,7 @@ export function LocationBooking() {
                                 <div 
                                   key={index}
                                   className={`w-2 h-2 rounded-full transition-colors duration-300 ${
-                                    index === infoImageIndex ? 'bg-white' : 'bg-white/50'
+                                    index === infoImageIndex ? 'bg-white dark:bg-slate-900' : 'bg-white dark:bg-slate-900/50'
                                   }`}
                                 />
                               ))}

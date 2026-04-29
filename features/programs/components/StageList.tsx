@@ -23,6 +23,7 @@ interface StageListProps {
   onReorder: (newOrderedIds: string[]) => void;
   onEdit: (stage: ProgramStage) => void;
   onDelete: (stage: ProgramStage) => void;
+  onAnalyze?: (stage: ProgramStage) => void;
   onAddClick: () => void;
   isAdmin: boolean;
   isAdminOrFaculty: boolean;
@@ -33,6 +34,7 @@ export function StageList({
   onReorder,
   onEdit,
   onDelete,
+  onAnalyze,
   onAddClick,
   isAdmin,
   isAdminOrFaculty
@@ -83,6 +85,7 @@ export function StageList({
                   stage={stage}
                   onEdit={onEdit}
                   onDelete={onDelete}
+                  onAnalyze={onAnalyze}
                   isAdmin={isAdmin}
                   isAdminOrFaculty={isAdminOrFaculty}
                 />
@@ -98,6 +101,7 @@ export function StageList({
               stage={stage}
               onEdit={onEdit}
               onDelete={onDelete}
+              onAnalyze={onAnalyze}
               isAdmin={isAdmin}
               isAdminOrFaculty={isAdminOrFaculty}
             />

@@ -101,8 +101,8 @@ class OptimizedResumeSelector:
                 print(f"❌ Folder not found: {folder_path}", file=sys.stderr)
             return False
 
-        # Find all PDF files
-        pdf_files = list(folder.glob("*.pdf"))
+        # Find all PDF files recursively (using a set to avoid duplicates on case-insensitive filesystems)
+        pdf_files = list({f for f in folder.rglob("*") if f.suffix.lower() == ".pdf"})
         if not pdf_files:
             if not self.quiet:
                 print(f"❌ No PDF files found in {folder_path}", file=sys.stderr)
@@ -158,7 +158,7 @@ class OptimizedResumeSelector:
             # Process embeddings in batches
             batch_size = 32
             all_embeddings = []
-ama            
+
             for i in range(0, len(self.resumes), batch_size):
                 batch = self.resumes[i:i + batch_size]
                 batch_embeddings = self.embedding_model.encode(batch, show_progress_bar=False)
@@ -381,11 +381,14 @@ ama
 PROJECT DESCRIPTION:
 {project_desc[:500]}
 
+CANDIDATE FILE NAME:
+{candidate.get('file_name', 'Unknown')}
+
 RESUME:
 {truncated_text}
 
 Please respond with ONLY a JSON object containing:
-- "name": candidate's full name from resume
+- "name": candidate's full name from resume (if the text is missing the name, deduce it from the CANDIDATE FILE NAME)
 - "skills": array of 3-5 most relevant technical skills
 - "reasons": array of 2-3 specific reasons why this candidate fits the project
 

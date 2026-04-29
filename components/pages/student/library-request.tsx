@@ -347,11 +347,11 @@ export function LibraryRequest() {
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case "collected":
-        return "bg-green-100 text-green-800"
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
       case "approved":
-        return "bg-red-100 text-red-800"
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100"
     }
   }
 
@@ -394,9 +394,9 @@ export function LibraryRequest() {
 
   const getAvailabilityColor = (available: number, total: number) => {
     const percentage = (available / total) * 100
-    if (percentage === 0) return "bg-red-100 text-red-800"
-    if (percentage < 30) return "bg-yellow-100 text-yellow-800"
-    return "bg-green-100 text-green-800"
+    if (percentage === 0) return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
+    if (percentage < 30) return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
+    return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
   }
 
   const getAvailabilityText = (available: number, total: number) => {
@@ -504,7 +504,7 @@ export function LibraryRequest() {
               />
             </div>
             <span className="flex items-center ml-4 mr-1 text-gray-400"><Filter className="h-5 w-5" /></span>
-            <span className="text-sm text-gray-600 font-medium ml-1">Category</span>
+            <span className="text-sm text-gray-600 dark:text-gray-400 font-medium ml-1">Category</span>
             <div className="w-40 flex flex-col">
               <Select value={categoryFilter} onValueChange={setCategoryFilter}>
                 <SelectTrigger className="h-9 text-sm">
@@ -537,7 +537,7 @@ export function LibraryRequest() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-6 w-6 text-gray-400 hover:text-gray-600"
+                        className="h-6 w-6 text-gray-400 hover:text-gray-600 dark:text-gray-400"
                         onClick={() => setInfoDialogOpen(item.id)}
                       >
                         <Info className="h-3 w-3" />
@@ -557,7 +557,7 @@ export function LibraryRequest() {
                           <img
                             src={item.image_url || '/placeholder.jpg'}
                             alt={`Front view of ${item.item_name}`}
-                            className="w-full h-full object-contain rounded-md bg-gray-50"
+                            className="w-full h-full object-contain rounded-md bg-gray-50 dark:bg-slate-800 dark:bg-gray-800"
                             onError={(e) => {
                               e.currentTarget.src = "/placeholder.jpg"
                             }}
@@ -571,7 +571,7 @@ export function LibraryRequest() {
                             <img
                               src={item.back_image_url || '/placeholder.jpg'}
                               alt={`Back view of ${item.item_name}`}
-                              className="w-full h-full object-contain rounded-md bg-gray-50"
+                              className="w-full h-full object-contain rounded-md bg-gray-50 dark:bg-slate-800 dark:bg-gray-800"
                               onError={(e) => {
                                 e.currentTarget.src = "/placeholder.jpg"
                               }}
@@ -585,7 +585,7 @@ export function LibraryRequest() {
                               <Button
                                 variant="secondary"
                                 size="icon"
-                                className="absolute right-1 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-white/80 hover:bg-white shadow-sm z-10"
+                                className="absolute right-1 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-white dark:bg-slate-900/80 hover:bg-white dark:bg-slate-900 shadow-sm z-10"
                                 onClick={() => setImageStates(prev => ({ ...prev, [item.id]: true }))}
                               >
                                 <ChevronRight className="h-3 w-3" />
@@ -595,7 +595,7 @@ export function LibraryRequest() {
                               <Button
                                 variant="secondary"
                                 size="icon"
-                                className="absolute left-1 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-white/80 hover:bg-white shadow-sm z-10"
+                                className="absolute left-1 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-white dark:bg-slate-900/80 hover:bg-white dark:bg-slate-900 shadow-sm z-10"
                                 onClick={() => setImageStates(prev => ({ ...prev, [item.id]: false }))}
                               >
                                 <ChevronLeft className="h-3 w-3" />
@@ -606,18 +606,18 @@ export function LibraryRequest() {
                         {/* Image Indicators */}
                         {item.back_image_id && (
                           <div className="absolute bottom-1 left-1/2 -translate-x-1/2 flex space-x-1 z-10">
-                            <div className={`w-1 h-1 rounded-full transition-colors duration-300 ${!imageStates[item.id] ? 'bg-white' : 'bg-white/50'}`} />
-                            <div className={`w-1 h-1 rounded-full transition-colors duration-300 ${imageStates[item.id] ? 'bg-white' : 'bg-white/50'}`} />
+                            <div className={`w-1 h-1 rounded-full transition-colors duration-300 ${!imageStates[item.id] ? 'bg-white dark:bg-slate-900' : 'bg-white dark:bg-slate-900/50'}`} />
+                            <div className={`w-1 h-1 rounded-full transition-colors duration-300 ${imageStates[item.id] ? 'bg-white dark:bg-slate-900' : 'bg-white dark:bg-slate-900/50'}`} />
                           </div>
                         )}
                       </div>
                     )}
                     <div className="space-y-1">
-                      <div className="grid grid-cols-2 gap-2 text-xs text-gray-700">
+                      <div className="grid grid-cols-2 gap-2 text-xs text-gray-700 dark:text-gray-300">
                         <div><span className="font-medium">Total:</span> {item.item_quantity}</div>
                         <div><span className="font-medium">Available:</span> {item.available_quantity}</div>
                       </div>
-                      <div className="text-xs text-gray-500">
+                      <div className="text-xs text-gray-500 dark:text-gray-400">
                         <span className="font-medium">Location:</span> {item.item_location}
                       </div>
                     </div>
@@ -669,34 +669,34 @@ export function LibraryRequest() {
                                 {/* Item Info */}
                                 <div className="space-y-3">
                                   <div>
-                                    <h2 className="text-xl font-bold text-gray-900">{selectedItem.item_name}</h2>
-                                    <p className="text-sm text-gray-500">{selectedItem.item_category}</p>
+                                    <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">{selectedItem.item_name}</h2>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">{selectedItem.item_category}</p>
                                   </div>
                                   
                                   <div className="space-y-2">
                                     <div className="flex justify-between">
-                                      <span className="text-sm font-medium text-gray-600">Available:</span>
+                                      <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Available:</span>
                                       <span className="text-sm font-semibold text-green-600">
                                         {selectedItem.available_quantity} of {selectedItem.item_quantity}
                                       </span>
                                     </div>
                                     <div className="flex justify-between">
-                                      <span className="text-sm font-medium text-gray-600">Location:</span>
-                                      <span className="text-sm text-gray-900">{selectedItem.item_location}</span>
+                                      <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Location:</span>
+                                      <span className="text-sm text-gray-900 dark:text-gray-100">{selectedItem.item_location}</span>
                                     </div>
                                   </div>
                                   
                                   {selectedItem.item_description && (
                                     <div>
-                                      <p className="text-sm font-medium text-gray-600 mb-1">Description:</p>
-                                      <p className="text-sm text-gray-700">{selectedItem.item_description}</p>
+                                      <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Description:</p>
+                                      <p className="text-sm text-gray-700 dark:text-gray-300">{selectedItem.item_description}</p>
                                     </div>
                                   )}
                                   
                                   {selectedItem.item_specification && (
                                     <div>
-                                      <p className="text-sm font-medium text-gray-600 mb-1">Specifications:</p>
-                                      <p className="text-sm text-gray-700">{selectedItem.item_specification}</p>
+                                      <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Specifications:</p>
+                                      <p className="text-sm text-gray-700 dark:text-gray-300">{selectedItem.item_specification}</p>
                                     </div>
                                   )}
                                 </div>
@@ -752,22 +752,22 @@ export function LibraryRequest() {
             <Card>
               <CardContent className="p-4 text-center">
                 <Package className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                <h3 className="font-medium text-gray-900 mb-1">No active requests</h3>
-                <p className="text-sm text-gray-600">Submit a book request to get started.</p>
+                <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-1">No active requests</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Submit a book request to get started.</p>
               </CardContent>
             </Card>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
               {activeRequests.filter(Boolean).map((request) => (
-                <div key={request.id} className={`bg-white border rounded-md p-2 hover:shadow-sm transition-shadow ${
-                  request.status === "OVERDUE" ? "border-red-300 bg-red-50" : "border-gray-200"
+                <div key={request.id} className={`bg-white dark:bg-slate-900 border rounded-md p-2 hover:shadow-sm transition-shadow ${
+                  request.status === "OVERDUE" ? "border-red-300 bg-red-50" : "border-gray-200 dark:border-gray-600"
                 }`}>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2 flex-1 min-w-0">
                       <Package className="h-3 w-3 text-blue-600 flex-shrink-0" />
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-medium text-xs text-gray-900 truncate">{request.item?.item_name ?? "Unknown"}</h4>
-                        <p className="text-xs text-gray-500">Due: {new Date(request.required_date).toLocaleDateString()}</p>
+                        <h4 className="font-medium text-xs text-gray-900 dark:text-gray-100 truncate">{request.item?.item_name ?? "Unknown"}</h4>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">Due: {new Date(request.required_date).toLocaleDateString()}</p>
                         {request.status === "OVERDUE" && (
                           <p className="text-xs text-red-600 font-medium">Reservation expired - not collected in time</p>
                         )}
@@ -819,7 +819,7 @@ export function LibraryRequest() {
                   <div className="space-y-6">
                     <div className="flex items-center justify-between">
                       <h3 className="text-lg font-semibold flex items-center gap-2">
-                        <Package className="h-5 w-5 text-gray-500" />
+                        <Package className="h-5 w-5 text-gray-500 dark:text-gray-400" />
                         {item.item_name}
                       </h3>
                       <span className={`px-3 py-1 rounded-full text-sm font-medium ${item.available_quantity > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
@@ -829,7 +829,7 @@ export function LibraryRequest() {
                     <div className="flex flex-row items-end justify-center pl-8">
                       <div>
                         <h4 className="font-medium text-sm">Total Quantity</h4>
-                        <p className="text-lg font-semibold text-gray-900 text-center">{item.item_quantity}</p>
+                        <p className="text-lg font-semibold text-gray-900 dark:text-gray-100 text-center">{item.item_quantity}</p>
                       </div>
                       <div className="ml-16 text-center">
                         <h4 className="font-medium text-sm">Available</h4>
@@ -841,20 +841,20 @@ export function LibraryRequest() {
                     {item.item_specification && (
                       <div className="space-y-2">
                         <h4 className="font-medium text-sm">Specifications</h4>
-                        <p className="text-sm text-gray-700 whitespace-pre-line">{item.item_specification}</p>
+                        <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-line">{item.item_specification}</p>
                       </div>
                     )}
                     {item.item_description && (
                       <div className="space-y-2">
                         <h4 className="font-medium text-sm">Description</h4>
-                        <p className="text-sm text-gray-700 whitespace-pre-line">{item.item_description}</p>
+                        <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-line">{item.item_description}</p>
                       </div>
                     )}
                   </div>
                 </div>
                 {/* Right: Image Preview */}
                 <div className="flex-1 flex flex-col items-center justify-center min-w-0">
-                  <div className="relative w-full max-w-xs aspect-square bg-gray-50 rounded-lg border flex items-center justify-center overflow-hidden">
+                  <div className="relative w-full max-w-xs aspect-square bg-gray-50 dark:bg-slate-800 dark:bg-gray-800 rounded-lg border flex items-center justify-center overflow-hidden">
                     {item.image_url || item.back_image_url ? (
                       <>
                         <img
@@ -868,7 +868,7 @@ export function LibraryRequest() {
                             {/* Left arrow (show only when on back) */}
                             {showBack && (
                               <button
-                                className="absolute left-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/80 hover:bg-white shadow flex items-center justify-center border z-10"
+                                className="absolute left-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white dark:bg-slate-900/80 hover:bg-white dark:bg-slate-900 shadow flex items-center justify-center border z-10"
                                 onClick={() => setShowBack(false)}
                                 type="button"
                                 aria-label="Show Front"
@@ -879,7 +879,7 @@ export function LibraryRequest() {
                             {/* Right arrow (show only when on front) */}
                             {!showBack && (
                               <button
-                                className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/80 hover:bg-white shadow flex items-center justify-center border z-10"
+                                className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white dark:bg-slate-900/80 hover:bg-white dark:bg-slate-900 shadow flex items-center justify-center border z-10"
                                 onClick={() => setShowBack(true)}
                                 type="button"
                                 aria-label="Show Back"

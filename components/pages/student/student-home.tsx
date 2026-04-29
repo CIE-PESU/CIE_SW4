@@ -184,7 +184,7 @@ export function StudentHome({ onPageChange }: StudentHomeProps) {
             </CardHeader>
             <CardContent>
               {todaySchedules.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
                   <Calendar className="h-12 w-12 mx-auto mb-2 opacity-50" />
                   <p>No classes today</p>
                   <p className="text-xs mt-1">Enjoy your free day!</p>
@@ -192,18 +192,18 @@ export function StudentHome({ onPageChange }: StudentHomeProps) {
               ) : (
                 <div className="space-y-4">
                   {todaySchedules.map((schedule, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 transition-colors">
+                    <div key={idx} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 dark:bg-slate-800 dark:bg-gray-800 transition-colors">
                       <div>
                         <h3 className="font-medium">{schedule.course.course_id}</h3>
-                        <p className="text-sm text-gray-600">{schedule.course.course_name}</p>
-                        <div className="flex items-center text-xs text-gray-500 mt-1">
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{schedule.course.course_name}</p>
+                        <div className="flex items-center text-xs text-gray-500 dark:text-gray-400 mt-1">
                           <User className="h-3 w-3 mr-1" />
                           {schedule.faculty?.user?.name}
                         </div>
                       </div>
                       <div className="text-right">
                         <p className="text-sm font-medium">{formatTime(schedule.start_time)} - {formatTime(schedule.end_time)}</p>
-                        <div className="flex items-center text-xs text-gray-500 mt-1">
+                        <div className="flex items-center text-xs text-gray-500 dark:text-gray-400 mt-1">
                           <MapPin className="h-3 w-3 mr-1" />
                           {schedule.room}
                         </div>

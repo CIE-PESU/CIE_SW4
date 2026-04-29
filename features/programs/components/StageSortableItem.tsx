@@ -7,6 +7,7 @@ interface StageSortableItemProps {
   stage: ProgramStage;
   onEdit: (stage: ProgramStage) => void;
   onDelete: (stage: ProgramStage) => void;
+  onAnalyze?: (stage: ProgramStage) => void;
   isAdmin: boolean;
   isAdminOrFaculty: boolean;
 }
@@ -15,6 +16,7 @@ export function StageSortableItem({
   stage,
   onEdit,
   onDelete,
+  onAnalyze,
   isAdmin,
   isAdminOrFaculty
 }: StageSortableItemProps) {
@@ -38,6 +40,7 @@ export function StageSortableItem({
         stage={stage}
         onEdit={onEdit}
         onDelete={onDelete}
+        onAnalyze={onAnalyze}
         isAdmin={isAdmin}
         isAdminOrFaculty={isAdminOrFaculty}
         isDragging={isDragging}

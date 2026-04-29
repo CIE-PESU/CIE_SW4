@@ -123,6 +123,7 @@ model CourseUnit {
   created_date     DateTime @default(now())
   modified_by      String?
   modified_date    DateTime @updatedAt
+  coursework_materials Json?  // Array of { id, type: "file"|"link", name, url, uploaded_at }
   feedbacks       CourseFeedback[]
   ai_summaries    AISummary[]
   course           Course   @relation(fields: [course_id], references: [id], onDelete: Cascade)
@@ -378,6 +379,7 @@ model LocationBooking {
 model LibraryItem {
   id                 String    @id @default(uuid())
   item_name          String
+  author             String?
   item_description   String
   item_specification String?
   item_quantity      Int
@@ -703,8 +705,10 @@ model ProgramStage {
   end_date    DateTime?
   status      String      @default("upcoming") // matches StageStatus type
   created_at  DateTime    @default(now())
-  created_by  String
-  year        ProgramYear @relation(fields: [year_id], references: [id], onDelete: Cascade)
+  created_by        String
+  analysis_results  Json?
+  last_analyzed_at  DateTime?
+  year              ProgramYear @relation(fields: [year_id], references: [id], onDelete: Cascade)
 
   @@map("program_stages")
 }

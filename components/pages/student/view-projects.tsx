@@ -380,20 +380,20 @@ export function ViewProjects() {
   const getStatusColor = (project: Project) => {
     switch (project.status) {
       case "PENDING":
-        return "bg-yellow-100 text-yellow-800"
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
       case "ONGOING":
         if (project.submission) {
-          return "bg-green-100 text-green-800"
+          return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
         }
-        return "bg-blue-100 text-blue-800"
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
       case "COMPLETED":
-        return "bg-green-100 text-green-800"
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
       case "OVERDUE":
-        return "bg-red-100 text-red-800"
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
       case "REJECTED":
-        return "bg-gray-100 text-gray-800"
+        return "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100 dark:text-gray-100"
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100 dark:text-gray-100"
     }
   }
 
@@ -816,16 +816,16 @@ export function ViewProjects() {
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div>
-                        <CardTitle className="text-xl font-bold text-gray-800 flex items-center">
+                        <CardTitle className="text-xl font-bold text-gray-800 dark:text-gray-100 dark:text-gray-100 flex items-center">
                           <FolderOpen className="h-6 w-6 mr-3 text-blue-500" />
                           {project.name}
                         </CardTitle>
                         {course && (
-                          <CardDescription className="mt-2 text-sm text-gray-600">
+                          <CardDescription className="mt-2 text-sm text-gray-600 dark:text-gray-400 dark:text-gray-400">
                             {course.course_name}
                           </CardDescription>
                         )}
-                        <p className="text-sm text-gray-500 mt-1">
+                        <p className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-400 mt-1">
                           {facultyLabel}
                           <span className="font-semibold">{facultyName}</span>
                         </p>
@@ -855,10 +855,10 @@ export function ViewProjects() {
                     <div className="flex-grow">
                       <div className="space-y-2">
                         <div>
-                          <h3 className="text-sm font-semibold text-gray-700">Description</h3>
+                          <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 dark:text-gray-300">Description</h3>
                           <div className="flex items-start gap-2">
                             <p 
-                              className={`text-sm text-gray-600 mt-1 flex-1 ${
+                              className={`text-sm text-gray-600 dark:text-gray-400 dark:text-gray-400 mt-1 flex-1 ${
                                 expandedDescriptions.has(project.id) 
                                   ? '' 
                                   : 'overflow-hidden'
@@ -879,7 +879,7 @@ export function ViewProjects() {
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="h-6 w-6 text-gray-400 hover:text-gray-600 flex-shrink-0"
+                              className="h-6 w-6 text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:text-gray-400 flex-shrink-0"
                               onClick={() => toggleDescriptionExpansion(project.id)}
                               title={expandedDescriptions.has(project.id) ? "Show less" : "Show more"}
                             >
@@ -889,7 +889,7 @@ export function ViewProjects() {
                         </div>
                         {project.components_needed && project.components_needed.length > 0 && (
                           <div>
-                            <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wide">Required Components</h3>
+                            <h3 className="text-xs font-semibold text-gray-700 dark:text-gray-300 dark:text-gray-300 uppercase tracking-wide">Required Components</h3>
                             <div className="flex flex-wrap gap-1 mt-1">
                               {project.components_needed.map((componentId) => {
                                 const component = labComponents.find((c) => c.id === componentId)
@@ -912,15 +912,15 @@ export function ViewProjects() {
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4 pt-2 mt-auto">
-                      <div className="flex items-center text-sm text-gray-600">
-                        <Calendar className="h-4 w-4 mr-2 text-gray-500" />
+                      <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 dark:text-gray-400">
+                        <Calendar className="h-4 w-4 mr-2 text-gray-500 dark:text-gray-400 dark:text-gray-400" />
                         <div>
                           <p className="font-semibold">Due Date</p>
                           <p>{new Date(project.expected_completion_date).toLocaleDateString()}</p>
                         </div>
                       </div>
-                      <div className="flex items-center text-sm text-gray-600">
-                        <Clock className="h-4 w-4 mr-2 text-gray-500" />
+                      <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 dark:text-gray-400">
+                        <Clock className="h-4 w-4 mr-2 text-gray-500 dark:text-gray-400 dark:text-gray-400" />
                         <div>
                           <p className="font-semibold">Time Left</p>
                           <p>{getDaysUntilDue(project.expected_completion_date)} days</p>
@@ -951,7 +951,7 @@ export function ViewProjects() {
                           <FileText className="h-4 w-4 mr-2" />
                           Submitted ✓
                         </Button>
-                        <p className="text-xs text-gray-500 text-center">
+                        <p className="text-xs text-gray-500 dark:text-gray-400 dark:text-gray-400 text-center">
                           Waiting for faculty grading
                         </p>
                       </div>
@@ -1025,24 +1025,24 @@ export function ViewProjects() {
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div>
-                        <CardTitle className="text-xl font-bold text-gray-800 flex items-center">
+                        <CardTitle className="text-xl font-bold text-gray-800 dark:text-gray-100 dark:text-gray-100 flex items-center">
                           <FolderOpen className="h-6 w-6 mr-3 text-blue-500" />
                           {project.name}
                         </CardTitle>
                         {course && (
-                          <CardDescription className="mt-2 text-sm text-gray-600">
+                          <CardDescription className="mt-2 text-sm text-gray-600 dark:text-gray-400 dark:text-gray-400">
                             {course.course_name}
                           </CardDescription>
                         )}
                         <div className="flex items-center space-x-2 mt-2">
-                          <User className="h-4 w-4 text-gray-500" />
-                          <span className="text-sm text-gray-600">
+                          <User className="h-4 w-4 text-gray-500 dark:text-gray-400 dark:text-gray-400" />
+                          <span className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-400">
                             <span className="font-semibold">{facultyName}</span>
                           </span>
                         </div>
                         <div className="flex items-center space-x-2 mt-1">
-                          <Mail className="h-4 w-4 text-gray-500" />
-                          <span className="text-sm text-gray-600">{facultyEmail}</span>
+                          <Mail className="h-4 w-4 text-gray-500 dark:text-gray-400 dark:text-gray-400" />
+                          <span className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-400">{facultyEmail}</span>
                         </div>
                       </div>
                     </div>
@@ -1052,9 +1052,9 @@ export function ViewProjects() {
                       {/* Enrollment Status Badge */}
                       <Badge 
                         className={
-                          isEnrollmentOpen ? "bg-green-100 text-green-800" :
-                          isEnrollmentClosed ? "bg-red-100 text-red-800" :
-                          "bg-yellow-100 text-yellow-800"
+                          isEnrollmentOpen ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" :
+                          isEnrollmentClosed ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" :
+                          "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
                         }
                       >
                         {isEnrollmentOpen ? "Enrollment Open" :
@@ -1078,7 +1078,7 @@ export function ViewProjects() {
 
                       {/* Enrollment Statistics */}
                       {enrollmentCap > 0 && (
-                        <div className="text-sm text-gray-600">
+                        <div className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-400">
                           Applications: {applicationCount} / {enrollmentCap}
                         </div>
                       )}
@@ -1086,10 +1086,10 @@ export function ViewProjects() {
                     <div className="flex-grow">
                       <div className="space-y-2">
                         <div>
-                          <h3 className="text-sm font-semibold text-gray-700">Description</h3>
+                          <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 dark:text-gray-300">Description</h3>
                           <div className="flex items-start gap-2">
                             <p 
-                              className={`text-sm text-gray-600 mt-1 flex-1 ${
+                              className={`text-sm text-gray-600 dark:text-gray-400 dark:text-gray-400 mt-1 flex-1 ${
                                 expandedDescriptions.has(project.id) 
                                   ? '' 
                                   : 'overflow-hidden'
@@ -1110,7 +1110,7 @@ export function ViewProjects() {
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="h-6 w-6 text-gray-400 hover:text-gray-600 flex-shrink-0"
+                              className="h-6 w-6 text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:text-gray-400 flex-shrink-0"
                               onClick={() => toggleDescriptionExpansion(project.id)}
                               title={expandedDescriptions.has(project.id) ? "Show less" : "Show more"}
                             >
@@ -1120,7 +1120,7 @@ export function ViewProjects() {
                         </div>
                         {project.components_needed && project.components_needed.length > 0 && (
                           <div>
-                            <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wide">Required Components</h3>
+                            <h3 className="text-xs font-semibold text-gray-700 dark:text-gray-300 dark:text-gray-300 uppercase tracking-wide">Required Components</h3>
                             <div className="flex flex-wrap gap-1 mt-1">
                               {project.components_needed.map((componentId) => {
                                 const component = labComponents.find((c) => c.id === componentId)
@@ -1136,15 +1136,15 @@ export function ViewProjects() {
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-4 pt-2 mt-auto">
-                      <div className="flex items-center text-sm text-gray-600">
-                        <Calendar className="h-4 w-4 mr-2 text-gray-500" />
+                      <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 dark:text-gray-400">
+                        <Calendar className="h-4 w-4 mr-2 text-gray-500 dark:text-gray-400 dark:text-gray-400" />
                         <div>
                           <p className="font-semibold">Due Date</p>
                           <p>{new Date(project.expected_completion_date).toLocaleDateString()}</p>
                         </div>
                       </div>
-                      <div className="flex items-center text-sm text-gray-600">
-                        <Clock className="h-4 w-4 mr-2 text-gray-500" />
+                      <div className="flex items-center text-sm text-gray-600 dark:text-gray-400 dark:text-gray-400">
+                        <Clock className="h-4 w-4 mr-2 text-gray-500 dark:text-gray-400 dark:text-gray-400" />
                         <div>
                           <p className="font-semibold">Time Left</p>
                           <p>{getDaysUntilDue(project.expected_completion_date)} days</p>
@@ -1255,16 +1255,16 @@ export function ViewProjects() {
               {selectedProject.submission.feedback && (
                 <div className="space-y-2">
                   <Label className="text-sm font-semibold">Faculty Feedback</Label>
-                  <div className="p-3 bg-gray-50 rounded-md">
-                    <p className="text-sm text-gray-700">{selectedProject.submission.feedback}</p>
+                  <div className="p-3 bg-gray-50 dark:bg-slate-800 dark:bg-gray-800 rounded-md">
+                    <p className="text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300">{selectedProject.submission.feedback}</p>
                   </div>
                 </div>
               )}
               
               <div className="space-y-2">
                 <Label className="text-sm font-semibold">Your Submission</Label>
-                <div className="p-3 bg-gray-50 rounded-md">
-                  <p className="text-sm text-gray-700">{selectedProject.submission.content}</p>
+                <div className="p-3 bg-gray-50 dark:bg-slate-800 dark:bg-gray-800 rounded-md">
+                  <p className="text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300">{selectedProject.submission.content}</p>
                 </div>
               </div>
               
@@ -1358,13 +1358,13 @@ export function ViewProjects() {
               </div>
             )}
             {projectToApply && (
-              <div className="bg-gray-50 p-3 rounded-lg">
+              <div className="bg-gray-50 dark:bg-slate-800 dark:bg-gray-800 p-3 rounded-lg">
                 <h4 className="font-semibold text-sm">Project Details:</h4>
-                <p className="text-sm text-gray-700 mt-1">{projectToApply.description}</p>
-                <p className="text-sm text-gray-600 mt-2">
+                <p className="text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300 mt-1">{projectToApply.description}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-400 mt-2">
                   <strong>Faculty:</strong> {projectToApply.faculty_creator?.user.name}
                 </p>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-400">
                   <strong>Due Date:</strong> {new Date(projectToApply.expected_completion_date).toLocaleDateString()}
                 </p>
               </div>

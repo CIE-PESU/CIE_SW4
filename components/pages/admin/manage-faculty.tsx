@@ -479,22 +479,22 @@ export function ManageFaculty() {
                   />
                 </div>
                     <div>
-                      <Label className="text-sm font-medium text-gray-700 mb-2 block">Preview</Label>
+                      <Label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">Preview</Label>
                       {imagePreview ? (
-                        <div className="border rounded-lg p-2 bg-gray-50">
+                        <div className="border rounded-lg p-2 bg-gray-50 dark:bg-slate-800 dark:bg-gray-800">
                           <img
                             src={imagePreview}
                             alt="Profile Preview"
-                            className="w-full h-32 object-contain rounded bg-white"
+                            className="w-full h-32 object-contain rounded bg-white dark:bg-slate-900"
                           />
                         </div>
                       ) : (
-                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center bg-gray-50 h-32 flex items-center justify-center">
+                        <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center bg-gray-50 dark:bg-slate-800 dark:bg-gray-800 h-32 flex items-center justify-center">
                           <div className="text-gray-400">
                             <svg className="mx-auto h-8 w-8 mb-1" stroke="currentColor" fill="none" viewBox="0 0 48 48">
                               <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
-                            <p className="text-xs text-gray-500">No image selected</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">No image selected</p>
                           </div>
                         </div>
                       )}
@@ -536,8 +536,8 @@ export function ManageFaculty() {
         {filteredFaculty.length === 0 ? (
           <Card className="col-span-2">
             <CardContent className="p-8 text-center">
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No faculty members found</h3>
-              <p className="text-gray-600">Add your first faculty member to get started.</p>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No faculty members found</h3>
+              <p className="text-gray-600 dark:text-gray-400">Add your first faculty member to get started.</p>
             </CardContent>
           </Card>
         ) : (
@@ -563,12 +563,12 @@ export function ManageFaculty() {
                 <CardContent>
                   <div className="space-y-4">
                     <div className="grid grid-cols-1 gap-2 text-sm">
-                      <div className="flex items-center space-x-2 text-gray-600">
+                      <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
                         <Mail className="h-4 w-4" />
                         <span>{member.user.email}</span>
                       </div>
                       {member.user.phone && (
-                        <div className="flex items-center space-x-2 text-gray-600">
+                        <div className="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
                           <Phone className="h-4 w-4" />
                           <span>{member.user.phone}</span>
                         </div>
@@ -577,11 +577,11 @@ export function ManageFaculty() {
 
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
-                        <Label className="text-xs font-medium text-gray-500">Faculty ID</Label>
+                        <Label className="text-xs font-medium text-gray-500 dark:text-gray-400">Faculty ID</Label>
                         <p className="font-medium">{member.facultyId}</p>
                       </div>
                       <div>
-                        <Label className="text-xs font-medium text-gray-500">Office</Label>
+                        <Label className="text-xs font-medium text-gray-500 dark:text-gray-400">Office</Label>
                         <p className="font-medium">{member.office || "Not assigned"}</p>
                       </div>
                     </div>
@@ -589,13 +589,13 @@ export function ManageFaculty() {
                     {member.specialization && (
                       <div>
                         <Label className="text-sm font-medium">Specialization</Label>
-                        <p className="text-sm text-gray-600">{member.specialization}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{member.specialization}</p>
                       </div>
                     )}
 
                     <div>
                       <Label className="text-sm font-medium">Office Hours</Label>
-                      <p className="text-sm text-gray-600">{member.officeHours}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">{member.officeHours}</p>
                     </div>
 
                     <div>
@@ -738,22 +738,22 @@ export function ManageFaculty() {
                     />
                   </div>
                   <div>
-                    <Label className="text-sm font-medium text-gray-700 mb-2 block">Preview</Label>
+                    <Label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">Preview</Label>
                     {editImagePreview ? (
-                      <div className="border rounded-lg p-2 bg-gray-50">
+                      <div className="border rounded-lg p-2 bg-gray-50 dark:bg-slate-800 dark:bg-gray-800">
                         <img
                           src={editImagePreview}
                           alt="Profile Preview"
-                          className="w-full h-32 object-contain rounded bg-white"
+                          className="w-full h-32 object-contain rounded bg-white dark:bg-slate-900"
                         />
                       </div>
                     ) : (
-                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center bg-gray-50 h-32 flex items-center justify-center">
+                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center bg-gray-50 dark:bg-slate-800 dark:bg-gray-800 h-32 flex items-center justify-center">
                         <div className="text-gray-400">
                           <svg className="mx-auto h-8 w-8 mb-1" stroke="currentColor" fill="none" viewBox="0 0 48 48">
                             <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                           </svg>
-                          <p className="text-xs text-gray-500">{editFaculty?.profilePhotoUrl ? 'Current image shown' : 'No image selected'}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">{editFaculty?.profilePhotoUrl ? 'Current image shown' : 'No image selected'}</p>
                         </div>
                       </div>
                     )}

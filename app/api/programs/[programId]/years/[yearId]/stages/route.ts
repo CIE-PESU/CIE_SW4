@@ -30,7 +30,9 @@ export async function GET(
       endDate: s.end_date?.toISOString(),
       status: s.status as any,
       createdAt: s.created_at.toISOString(),
-      createdBy: s.created_by
+      createdBy: s.created_by,
+      analysis_results: s.analysis_results as any[] | undefined,
+      last_analyzed_at: s.last_analyzed_at?.toISOString()
     }));
 
     return NextResponse.json({ stages: mappedStages });
@@ -96,7 +98,9 @@ export async function POST(
       endDate: s.end_date?.toISOString(),
       status: s.status as any,
       createdAt: s.created_at.toISOString(),
-      createdBy: s.created_by
+      createdBy: s.created_by,
+      analysis_results: s.analysis_results as any[] | undefined,
+      last_analyzed_at: s.last_analyzed_at?.toISOString()
     };
 
     return NextResponse.json({ stage: mappedStage });

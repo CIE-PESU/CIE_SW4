@@ -43,9 +43,9 @@ export function LabInventoryStatus() {
   )
 
   const getQuantityColor = (quantity: number) => {
-    if (quantity === 0) return "bg-red-100 text-red-800"
-    if (quantity < 10) return "bg-yellow-100 text-yellow-800"
-    return "bg-green-100 text-green-800"
+    if (quantity === 0) return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
+    if (quantity < 10) return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
+    return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
   }
 
   const getQuantityText = (quantity: number) => {
@@ -62,7 +62,7 @@ export function LabInventoryStatus() {
     <div className="space-y-4">
       {/* Search Bar */}
       <div className="flex items-center space-x-2">
-        <Search className="h-4 w-4 text-gray-500" />
+        <Search className="h-4 w-4 text-gray-500 dark:text-gray-400" />
         <Input
           placeholder="Search lab components..."
           value={searchTerm}
@@ -77,7 +77,7 @@ export function LabInventoryStatus() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Components</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Components</p>
                 <p className="text-2xl font-bold">{components.length}</p>
               </div>
               <Cpu className="h-8 w-8 text-blue-600" />
@@ -89,7 +89,7 @@ export function LabInventoryStatus() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Available</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Available</p>
                 <p className="text-2xl font-bold text-green-600">
                   {components.filter(comp => comp.component_quantity > 0).length}
                 </p>
@@ -103,7 +103,7 @@ export function LabInventoryStatus() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Out of Stock</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Out of Stock</p>
                 <p className="text-2xl font-bold text-red-600">
                   {components.filter(comp => comp.component_quantity === 0).length}
                 </p>
@@ -117,7 +117,7 @@ export function LabInventoryStatus() {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Low Stock</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Low Stock</p>
                 <p className="text-2xl font-bold text-yellow-600">
                   {components.filter(comp => 
                     comp.component_quantity > 0 && 
@@ -142,7 +142,7 @@ export function LabInventoryStatus() {
                     <Cpu className="h-5 w-5 text-blue-600" />
                     <div>
                       <h3 className="font-medium">{component.component_name}</h3>
-                      <p className="text-sm text-gray-600">{component.component_category}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">{component.component_category}</p>
                     </div>
                   </div>
                 </div>
@@ -152,7 +152,7 @@ export function LabInventoryStatus() {
                     <p className="text-sm font-medium">
                       Qty: {component.component_quantity}
                     </p>
-                    <p className="text-xs text-gray-500">{component.component_location}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">{component.component_location}</p>
                   </div>
                   
                   <Badge className={getQuantityColor(component.component_quantity)}>
@@ -169,8 +169,8 @@ export function LabInventoryStatus() {
         <Card>
           <CardContent className="p-8 text-center">
             <Cpu className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No components found</h3>
-            <p className="text-gray-600">Try adjusting your search terms.</p>
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No components found</h3>
+            <p className="text-gray-600 dark:text-gray-400">Try adjusting your search terms.</p>
           </CardContent>
         </Card>
       )}

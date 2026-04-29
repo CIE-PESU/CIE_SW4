@@ -58,6 +58,7 @@ export async function POST(req: NextRequest) {
     const item = await prisma.libraryItem.create({
       data: {
         item_name: body.item_name,
+        author: body.author || null,
         item_description: body.item_description,
         item_category: body.item_category,
         item_quantity: Number(body.item_quantity),

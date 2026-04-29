@@ -185,16 +185,16 @@ function ProjectApprovalTable({
         </TableHeader>
         <TableBody>
           {projects.map((project) => (
-            <TableRow key={project.id} className="hover:bg-gray-50">
+            <TableRow key={project.id} className="hover:bg-gray-50 dark:bg-slate-800 dark:bg-gray-800">
               <TableCell className="font-medium text-sm text-left max-w-[160px]">
                 <div className="font-semibold">{project.name}</div>
               </TableCell>
               <TableCell className="text-sm text-left max-w-[240px]">
-                <p className="line-clamp-2 text-gray-600">{project.description || "—"}</p>
+                <p className="line-clamp-2 text-gray-600 dark:text-gray-400">{project.description || "—"}</p>
               </TableCell>
               <TableCell className="text-sm text-left">
                 <div className="font-medium">{project.faculty_creator?.user?.name || "Unknown"}</div>
-                <div className="text-xs text-gray-500">{project.faculty_creator?.user?.email || ""}</div>
+                <div className="text-xs text-gray-500 dark:text-gray-400">{project.faculty_creator?.user?.email || ""}</div>
               </TableCell>
               <TableCell className="text-sm text-center">
                 {project.expected_completion_date
@@ -696,23 +696,23 @@ export function CoordinatorDashboard() {
     const baseClass = "font-medium"
     switch (status) {
       case "PENDING":
-        return <Badge className={`bg-yellow-100 text-yellow-800 ${baseClass}`}>Pending Review</Badge>
+        return <Badge className={`bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 ${baseClass}`}>Pending Review</Badge>
       case "APPROVED":
-        return <Badge className={`bg-blue-100 text-blue-800 ${baseClass}`}>
+        return <Badge className={`bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 ${baseClass}`}>
           {selectedRole === 'projects' ? 'Approved - Awaiting Start' : 'Approved - Awaiting Collection'}
         </Badge>
       case "COLLECTED":
         return isOverdueItem ? 
-          <Badge className={`bg-red-100 text-red-800 ${baseClass}`}>Collected - Overdue</Badge> :
-          <Badge className={`bg-green-100 text-green-800 ${baseClass}`}>Collected</Badge>
+          <Badge className={`bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 ${baseClass}`}>Collected - Overdue</Badge> :
+          <Badge className={`bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 ${baseClass}`}>Collected</Badge>
       case "PENDING_RETURN":
-        return <Badge className={`bg-orange-100 text-orange-800 ${baseClass}`}>Return Requested</Badge>
+        return <Badge className={`bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400 ${baseClass}`}>Return Requested</Badge>
       case "USER_RETURNED":
-        return <Badge className={`bg-purple-100 text-purple-800 ${baseClass}`}>Student Confirmed Return</Badge>
+        return <Badge className={`bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400 ${baseClass}`}>Student Confirmed Return</Badge>
       case "RETURNED":
-        return <Badge className={`bg-green-100 text-green-800 ${baseClass}`}>Returned</Badge>
+        return <Badge className={`bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 ${baseClass}`}>Returned</Badge>
       case "REJECTED":
-        return <Badge className={`bg-red-100 text-red-800 ${baseClass}`}>Rejected</Badge>
+        return <Badge className={`bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 ${baseClass}`}>Rejected</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -982,7 +982,7 @@ export function CoordinatorDashboard() {
     return (
       <div className="flex flex-col items-center justify-center h-64">
         <h1 className="faculty-page-title">CIE Team Coordinator Dashboard</h1>
-        <div className="text-lg text-gray-600">You are not assigned as a coordinator, platform manager, or developer.</div>
+        <div className="text-lg text-gray-600 dark:text-gray-400">You are not assigned as a coordinator, platform manager, or developer.</div>
       </div>
     );
   }
@@ -1001,7 +1001,7 @@ export function CoordinatorDashboard() {
       <div className="space-y-6">
         <div className="text-center">
           <h1 className="faculty-page-title">CIE Team Coordinator Dashboard</h1>
-          <p className="text-gray-600">Choose which role you want to manage</p>
+          <p className="text-gray-600 dark:text-gray-400">Choose which role you want to manage</p>
         </div>
         <div className="mt-10"></div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
@@ -1009,9 +1009,9 @@ export function CoordinatorDashboard() {
             <Card className="cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105 hover:bg-blue-50 hover:border-blue-300" onClick={() => setSelectedRole('library')}>
               <CardContent className="p-8 text-center">
                 <BookOpen className="h-16 w-16 text-blue-600 mx-auto mb-4" />
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Library Coordinator</h3>
-                <p className="text-gray-600 mb-4">Manage library items, requests, and inventory</p>
-                <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">Library Coordinator</h3>
+                <p className="text-gray-600 dark:text-gray-400 mb-4">Manage library items, requests, and inventory</p>
+                <div className="flex items-center justify-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
                   <Package className="h-4 w-4" />
                   <span>Library Management</span>
                 </div>
@@ -1022,9 +1022,9 @@ export function CoordinatorDashboard() {
             <Card className="cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105 hover:bg-green-50 hover:border-green-300" onClick={() => setSelectedRole('lab')}>
               <CardContent className="p-8 text-center">
                 <Package className="h-16 w-16 text-green-600 mx-auto mb-4" />
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Lab Coordinator</h3>
-                <p className="text-gray-600 mb-4">Manage lab components, requests, and inventory</p>
-                <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">Lab Coordinator</h3>
+                <p className="text-gray-600 dark:text-gray-400 mb-4">Manage lab components, requests, and inventory</p>
+                <div className="flex items-center justify-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
                   <Package className="h-4 w-4" />
                   <span>Lab Components Management</span>
                 </div>
@@ -1035,9 +1035,9 @@ export function CoordinatorDashboard() {
             <Card className="cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105 hover:bg-purple-50 hover:border-purple-300" onClick={() => setSelectedRole('projects')}>
               <CardContent className="p-8 text-center">
                 <FolderOpen className="h-16 w-16 text-purple-600 mx-auto mb-4" />
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Projects Coordinator</h3>
-                <p className="text-gray-600 mb-4">Review and approve faculty project requests</p>
-                <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">Projects Coordinator</h3>
+                <p className="text-gray-600 dark:text-gray-400 mb-4">Review and approve faculty project requests</p>
+                <div className="flex items-center justify-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
                   <FolderOpen className="h-4 w-4" />
                   <span>Project Requests Management</span>
                 </div>
@@ -1048,9 +1048,9 @@ export function CoordinatorDashboard() {
             <Card className="cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105 hover:bg-indigo-50 hover:border-indigo-300" onClick={() => setSelectedRole('platformManager')}>
               <CardContent className="p-8 text-center">
                 <Settings className="h-16 w-16 text-indigo-600 mx-auto mb-4" />
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Platform Manager</h3>
-                <p className="text-gray-600 mb-4">Review and approve faculty insights, assign to developers</p>
-                <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">Platform Manager</h3>
+                <p className="text-gray-600 dark:text-gray-400 mb-4">Review and approve faculty insights, assign to developers</p>
+                <div className="flex items-center justify-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
                   <Settings className="h-4 w-4" />
                   <span>Insights Management</span>
                 </div>
@@ -1061,9 +1061,9 @@ export function CoordinatorDashboard() {
             <Card className="cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-105 hover:bg-pink-50 hover:border-pink-300" onClick={() => setSelectedRole('developer')}>
               <CardContent className="p-8 text-center">
                 <BarChart3 className="h-16 w-16 text-pink-600 mx-auto mb-4" />
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Developer</h3>
-                <p className="text-gray-600 mb-4">Work on approved insights and mark as done</p>
-                <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">Developer</h3>
+                <p className="text-gray-600 dark:text-gray-400 mb-4">Work on approved insights and mark as done</p>
+                <div className="flex items-center justify-center space-x-2 text-sm text-gray-500 dark:text-gray-400">
                   <BarChart3 className="h-4 w-4" />
                   <span>Insights Tasks</span>
                 </div>
@@ -1125,39 +1125,39 @@ export function CoordinatorDashboard() {
             <div className="flex flex-row gap-6 justify-center items-center my-6">
               <button
                 className={`flex flex-col items-center justify-center px-8 py-6 rounded-2xl border transition-all duration-200 shadow-sm min-w-[220px] max-w-[260px] h-[110px] text-center select-none
-                  ${activeTab === 'analytics' ? 'border-purple-500 bg-purple-50 ring-2 ring-purple-400 text-purple-600' : 'border-gray-200 hover:border-purple-300 hover:bg-purple-50 bg-white text-gray-800'}`}
+                  ${activeTab === 'analytics' ? 'border-purple-500 bg-purple-50 ring-2 ring-purple-400 text-purple-600' : 'border-gray-200 dark:border-gray-600 hover:border-purple-300 hover:bg-purple-50 bg-white dark:bg-slate-900 text-gray-800 dark:text-gray-100'}`}
                 onClick={() => setActiveTab('analytics')}
               >
                 <BarChart3 className={`h-6 w-6 mb-1 ${activeTab === 'analytics' ? 'text-purple-600' : 'text-purple-400'}`} />
-                <span className={`text-base font-medium ${activeTab === 'analytics' ? 'text-purple-600' : 'text-gray-800'}`}>Analytics</span>
+                <span className={`text-base font-medium ${activeTab === 'analytics' ? 'text-purple-600' : 'text-gray-800 dark:text-gray-100'}`}>Analytics</span>
               </button>
               <button
                 className={`flex flex-col items-center justify-center px-8 py-6 rounded-2xl border transition-all duration-200 shadow-sm min-w-[220px] max-w-[260px] h-[110px] text-center select-none
-                  ${activeTab === 'collection' ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-400 text-blue-600' : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50 bg-white text-gray-800'}`}
+                  ${activeTab === 'collection' ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-400 text-blue-600' : 'border-gray-200 dark:border-gray-600 hover:border-blue-300 hover:bg-blue-50 bg-white dark:bg-slate-900 text-gray-800 dark:text-gray-100'}`}
                 onClick={() => setActiveTab('collection')}
               >
                 <CheckCircle className={`h-6 w-6 mb-1 ${activeTab === 'collection' ? 'text-blue-600' : 'text-blue-400'}`} />
-                <span className={`text-base font-medium ${activeTab === 'collection' ? 'text-blue-600' : 'text-gray-800'}`}>
+                <span className={`text-base font-medium ${activeTab === 'collection' ? 'text-blue-600' : 'text-gray-800 dark:text-gray-100'}`}>
                   {selectedRole === 'projects' ? 'Pending Requests' : 'Awaiting Collection'}
                 </span>
               </button>
               <button
                 className={`flex flex-col items-center justify-center px-8 py-6 rounded-2xl border transition-all duration-200 shadow-sm min-w-[220px] max-w-[260px] h-[110px] text-center select-none
-                  ${activeTab === 'returns' ? 'border-green-500 bg-green-50 ring-2 ring-green-400 text-green-600' : 'border-gray-200 hover:border-green-300 hover:bg-green-50 bg-white text-gray-800'}`}
+                  ${activeTab === 'returns' ? 'border-green-500 bg-green-50 ring-2 ring-green-400 text-green-600' : 'border-gray-200 dark:border-gray-600 hover:border-green-300 hover:bg-green-50 bg-white dark:bg-slate-900 text-gray-800 dark:text-gray-100'}`}
                 onClick={() => setActiveTab('returns')}
               >
                 <Package className={`h-6 w-6 mb-1 ${activeTab === 'returns' ? 'text-green-600' : 'text-green-400'}`} />
-                <span className={`text-base font-medium ${activeTab === 'returns' ? 'text-green-600' : 'text-gray-800'}`}>
+                <span className={`text-base font-medium ${activeTab === 'returns' ? 'text-green-600' : 'text-gray-800 dark:text-gray-100'}`}>
                   {selectedRole === 'projects' ? 'Active Projects' : 'Active Loans'}
                 </span>
               </button>
               <button
                 className={`flex flex-col items-center justify-center px-8 py-6 rounded-2xl border transition-all duration-200 shadow-sm min-w-[220px] max-w-[260px] h-[110px] text-center select-none
-                  ${activeTab === 'history' ? 'border-orange-500 bg-orange-50 ring-2 ring-orange-400 text-orange-600' : 'border-gray-200 hover:border-orange-300 hover:bg-orange-50 bg-white text-gray-800'}`}
+                  ${activeTab === 'history' ? 'border-orange-500 bg-orange-50 ring-2 ring-orange-400 text-orange-600' : 'border-gray-200 dark:border-gray-600 hover:border-orange-300 hover:bg-orange-50 bg-white dark:bg-slate-900 text-gray-800 dark:text-gray-100'}`}
           onClick={() => setActiveTab('history')}
         >
                 <Clock className={`h-6 w-6 mb-1 ${activeTab === 'history' ? 'text-orange-600' : 'text-orange-400'}`} />
-                <span className={`text-base font-medium ${activeTab === 'history' ? 'text-orange-600' : 'text-gray-800'}`}>History</span>
+                <span className={`text-base font-medium ${activeTab === 'history' ? 'text-orange-600' : 'text-gray-800 dark:text-gray-100'}`}>History</span>
               </button>
             </div>
           ) : null}
@@ -1173,23 +1173,23 @@ export function CoordinatorDashboard() {
               <CardContent>
                 {/* Minimal Stat Cards Row - outside the graph section */}
                 <div className="flex flex-row flex-wrap gap-2 mb-2 justify-center">
-                  <div className="flex-1 min-w-[100px] max-w-[140px] bg-white rounded shadow-sm px-2 py-1 flex flex-col items-center justify-center text-center border border-gray-200">
-                    <div className="text-xs text-gray-500 font-medium mb-0.5">Total Requests</div>
+                  <div className="flex-1 min-w-[100px] max-w-[140px] bg-white dark:bg-slate-900 rounded shadow-sm px-2 py-1 flex flex-col items-center justify-center text-center border border-gray-200 dark:border-gray-600">
+                    <div className="text-xs text-gray-500 dark:text-gray-400 font-medium mb-0.5">Total Requests</div>
                     <div className="text-lg font-bold leading-tight">{requests.length}</div>
                   </div>
-                  <div className="flex-1 min-w-[100px] max-w-[140px] bg-white rounded shadow-sm px-2 py-1 flex flex-col items-center justify-center text-center border border-gray-200">
-                    <div className="text-xs text-gray-500 font-medium mb-0.5">
+                  <div className="flex-1 min-w-[100px] max-w-[140px] bg-white dark:bg-slate-900 rounded shadow-sm px-2 py-1 flex flex-col items-center justify-center text-center border border-gray-200 dark:border-gray-600">
+                    <div className="text-xs text-gray-500 dark:text-gray-400 font-medium mb-0.5">
                       {selectedRole === 'projects' ? 'Active Projects' : 'Active Loans'}
                     </div>
                     <div className="text-lg font-bold leading-tight">{returnRequests.length}</div>
                   </div>
-                  <div className="flex-1 min-w-[100px] max-w-[140px] bg-white rounded shadow-sm px-2 py-1 flex flex-col items-center justify-center text-center border border-gray-200">
-                    <div className="text-xs text-gray-500 font-medium mb-0.5">Overdue</div>
+                  <div className="flex-1 min-w-[100px] max-w-[140px] bg-white dark:bg-slate-900 rounded shadow-sm px-2 py-1 flex flex-col items-center justify-center text-center border border-gray-200 dark:border-gray-600">
+                    <div className="text-xs text-gray-500 dark:text-gray-400 font-medium mb-0.5">Overdue</div>
                     <div className="text-lg font-bold leading-tight text-red-600">{returnRequests.filter(isOverdue).length}</div>
                   </div>
                 </div>
                 {/* Request Status Overview - Only the graph in the card, no extra border or div below */}
-                <div className="bg-white shadow rounded-t-lg px-4 pt-4 pb-2">
+                <div className="bg-white dark:bg-slate-900 shadow rounded-t-lg px-4 pt-4 pb-2">
                   <StatusBarChart
                     title={''}
                     data={selectedRole === 'projects' ? [
@@ -1223,8 +1223,8 @@ export function CoordinatorDashboard() {
                     <Card>
                       <CardContent className="p-8 text-center">
                         <CheckCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">No pending project approvals</h3>
-                        <p className="text-gray-600">All faculty project requests have been reviewed.</p>
+                        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No pending project approvals</h3>
+                        <p className="text-gray-600 dark:text-gray-400">All faculty project requests have been reviewed.</p>
                       </CardContent>
                     </Card>
                   ) : (
@@ -1237,10 +1237,10 @@ export function CoordinatorDashboard() {
                   <Card>
                     <CardContent className="p-8 text-center">
                       <CheckCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                      <h3 className="text-lg font-medium text-gray-900 mb-2">
+                      <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
                         {selectedRole === 'projects' ? 'No projects awaiting approval' : 'No items awaiting collection'}
                       </h3>
-                      <p className="text-gray-600">All approved {roleName.toLowerCase()} items have been collected.</p>
+                      <p className="text-gray-600 dark:text-gray-400">All approved {roleName.toLowerCase()} items have been collected.</p>
                     </CardContent>
                   </Card>
                 ) : (
@@ -1264,14 +1264,14 @@ export function CoordinatorDashboard() {
                             const requesterType = getRequesterType(request);
                             
                             return (
-                              <TableRow key={request.id} className="hover:bg-gray-50">
+                              <TableRow key={request.id} className="hover:bg-gray-50 dark:bg-slate-800 dark:bg-gray-800">
                                 <TableCell className="font-medium text-sm text-left">
                                   <div>
                                     <div className="font-medium text-sm">{getRequesterName(request)}</div>
-                                    <div className="text-xs text-gray-500">
+                                    <div className="text-xs text-gray-500 dark:text-gray-400">
                                       {requesterType === "Student" ? `SRN: ${requesterId}` : requesterType}
                                     </div>
-                                    <div className="text-xs text-gray-500">{getRequesterEmail(request)}</div>
+                                    <div className="text-xs text-gray-500 dark:text-gray-400">{getRequesterEmail(request)}</div>
                                   </div>
                                 </TableCell>
                                 <TableCell className="font-medium text-sm text-left">{getItemName(request)}</TableCell>
@@ -1345,8 +1345,8 @@ export function CoordinatorDashboard() {
                     <Card>
                       <CardContent className="p-8 text-center">
                         <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">No active projects</h3>
-                        <p className="text-gray-600">All projects are either pending approval or completed.</p>
+                        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No active projects</h3>
+                        <p className="text-gray-600 dark:text-gray-400">All projects are either pending approval or completed.</p>
                       </CardContent>
                     </Card>
                   ) : (
@@ -1365,7 +1365,7 @@ export function CoordinatorDashboard() {
                           </TableHeader>
                           <TableBody>
                             {returnRequests.map((project) => (
-                              <TableRow key={project.id} className="hover:bg-gray-50">
+                              <TableRow key={project.id} className="hover:bg-gray-50 dark:bg-slate-800 dark:bg-gray-800">
                                 <TableCell className="font-medium text-sm text-left">{project.name}</TableCell>
                                 <TableCell className="font-medium text-sm text-left">
                                   {project.faculty_creator?.user?.name || project.faculty?.user?.name || "Unknown"}
@@ -1442,8 +1442,8 @@ export function CoordinatorDashboard() {
                         <Card>
                           <CardContent className="p-8 text-center">
                             <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                            <h3 className="text-lg font-medium text-gray-900 mb-2">No active {roleName.toLowerCase()} loans</h3>
-                            <p className="text-gray-600">All {roleName.toLowerCase()} items have been returned.</p>
+                            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No active {roleName.toLowerCase()} loans</h3>
+                            <p className="text-gray-600 dark:text-gray-400">All {roleName.toLowerCase()} items have been returned.</p>
                           </CardContent>
                         </Card>
                       );
@@ -1458,7 +1458,7 @@ export function CoordinatorDashboard() {
                         {/* Search and Filter Bar */}
                         <div className="flex items-center space-x-4 mb-4">
                           <div className="flex items-center space-x-2">
-                            <Search className="h-4 w-4 text-gray-500" />
+                            <Search className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                             <Input
                               placeholder="Search by name, SRN, or item..."
                               value={searchTerm}
@@ -1485,7 +1485,7 @@ export function CoordinatorDashboard() {
                                 <DropdownMenuItem
                                   key={filter}
                                   onClick={() => setActiveFilter(filter)}
-                                  className={activeFilter === filter ? 'bg-gray-100' : ''}
+                                  className={activeFilter === filter ? 'bg-gray-100 dark:bg-gray-700' : ''}
                                 >
                                   {filter === 'all' ? 'All' :
                                    filter === 'due' ? 'Due' :
@@ -1516,7 +1516,7 @@ export function CoordinatorDashboard() {
                               <TableBody>
                                 {paginatedActiveLoans.length === 0 ? (
                                   <TableRow>
-                                    <TableCell colSpan={8} className="text-center py-8 text-gray-500">
+                                    <TableCell colSpan={8} className="text-center py-8 text-gray-500 dark:text-gray-400">
                                       No results found for the current search/filter.
                                     </TableCell>
                                   </TableRow>
@@ -1527,11 +1527,11 @@ export function CoordinatorDashboard() {
                                     const borrower = request.student?.user?.name || request.faculty?.user?.name || "Unknown"
                                     const borrowerId = request.student?.student_id || "Faculty"
                                     return (
-                                      <TableRow key={request.id} className="hover:bg-gray-50">
+                                      <TableRow key={request.id} className="hover:bg-gray-50 dark:bg-slate-800 dark:bg-gray-800">
                                         <TableCell className="font-medium text-sm text-left">
                                           <div>
                                             <div className="font-medium text-sm">{borrower}</div>
-                                            <div className="text-xs text-gray-500">
+                                            <div className="text-xs text-gray-500 dark:text-gray-400">
                                               {request.student ? `SRN: ${borrowerId}` : 'Faculty'}
                                             </div>
                                           </div>
@@ -1540,11 +1540,11 @@ export function CoordinatorDashboard() {
                                         <TableCell className="text-sm font-medium text-center">{request.quantity}</TableCell>
                                         <TableCell className="text-center">
                                           {overdue ? (
-                                            <Badge className="bg-red-100 text-red-800 font-medium">
+                                            <Badge className="bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 font-medium">
                                               Due
                                             </Badge>
                                           ) : (
-                                            <Badge className="bg-yellow-100 text-yellow-800 font-medium">
+                                            <Badge className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 font-medium">
                                               Not Due
                                             </Badge>
                                           )}
@@ -1568,7 +1568,7 @@ export function CoordinatorDashboard() {
                                           {request.fine_amount && request.fine_amount > 0 ? (
                                             <div className="text-sm">
                                               <span className="text-red-600">₹{request.fine_amount}</span>
-                                              <div className="text-xs text-gray-500">
+                                              <div className="text-xs text-gray-500 dark:text-gray-400">
                                                 {request.fine_paid ? "Paid" : "Pending"}
                                               </div>
                                             </div>
@@ -1648,19 +1648,19 @@ export function CoordinatorDashboard() {
                           </CardContent>
                         </Card>
                         {/* Pagination Controls for Active Loans */}
-                        <div className="flex justify-between items-center p-2 border-t bg-gray-50">
+                        <div className="flex justify-between items-center p-2 border-t bg-gray-50 dark:bg-slate-800 dark:bg-gray-800">
                           <button
-                            className="px-3 py-1 rounded bg-gray-200 text-gray-700 disabled:opacity-50"
+                            className="px-3 py-1 rounded bg-gray-200 text-gray-700 dark:text-gray-300 disabled:opacity-50"
                             onClick={() => setActiveLoansPage((p) => Math.max(1, p - 1))}
                             disabled={activeLoansPage === 1}
                           >
                             Previous
                           </button>
-                          <span className="text-xs text-gray-600">
+                          <span className="text-xs text-gray-600 dark:text-gray-400">
                             Page {activeLoansPage} of {activeLoansTotalPages}
                           </span>
                           <button
-                            className="px-3 py-1 rounded bg-gray-200 text-gray-700 disabled:opacity-50"
+                            className="px-3 py-1 rounded bg-gray-200 text-gray-700 dark:text-gray-300 disabled:opacity-50"
                             onClick={() => setActiveLoansPage((p) => Math.min(activeLoansTotalPages, p + 1))}
                             disabled={activeLoansPage === activeLoansTotalPages}
                           >
@@ -1683,7 +1683,7 @@ export function CoordinatorDashboard() {
               <CardContent>
                 <div className="flex items-center space-x-4 mb-4">
                   <div className="flex items-center space-x-2">
-                    <Search className="h-4 w-4 text-gray-500" />
+                    <Search className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                     <Input
                       placeholder="Search by borrower, item, or SRN..."
                       value={historySearchTerm}
@@ -1709,7 +1709,7 @@ export function CoordinatorDashboard() {
                         <DropdownMenuItem
                           key={filter}
                           onClick={() => setHistoryFilter(filter)}
-                          className={historyFilter === filter ? 'bg-gray-100' : ''}
+                          className={historyFilter === filter ? 'bg-gray-100 dark:bg-gray-700' : ''}
                         >
                           {filter === 'all' ? 'All' :
                             filter === 'due' ? 'Due' :
@@ -1777,24 +1777,24 @@ function HistoryTable({ data, roleName, searchTerm = "", filter = "all", isOverd
       case 'PENDING': return 'text-yellow-600';
       case 'APPROVED': return 'text-blue-600';
       case 'COLLECTED': return 'text-green-600';
-      case 'RETURNED': return 'text-gray-600';
+      case 'RETURNED': return 'text-gray-600 dark:text-gray-400';
       case 'REJECTED': return 'text-red-600';
-      default: return 'text-gray-500';
+      default: return 'text-gray-500 dark:text-gray-400';
     }
   };
 
   return (
-    <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
+    <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-slate-900">
       <table className="min-w-full text-sm">
         <thead>
           <tr>
-            <th className="text-left font-bold text-gray-700 px-4 py-3">Borrower</th>
-            <th className="text-left font-bold text-gray-700 px-4 py-3">{roleName === 'Lab' ? 'Lab Item' : 'Item'}</th>
-            <th className="text-left font-bold text-gray-700 px-4 py-3">Qty</th>
-            <th className="text-left font-bold text-gray-700 px-4 py-3">Status</th>
-            <th className="text-left font-bold text-gray-700 px-4 py-3">Collected</th>
-            <th className="text-left font-bold text-gray-700 px-4 py-3">Due Date</th>
-            <th className="text-left font-bold text-gray-700 px-4 py-3">Fine</th>
+            <th className="text-left font-bold text-gray-700 dark:text-gray-300 px-4 py-3">Borrower</th>
+            <th className="text-left font-bold text-gray-700 dark:text-gray-300 px-4 py-3">{roleName === 'Lab' ? 'Lab Item' : 'Item'}</th>
+            <th className="text-left font-bold text-gray-700 dark:text-gray-300 px-4 py-3">Qty</th>
+            <th className="text-left font-bold text-gray-700 dark:text-gray-300 px-4 py-3">Status</th>
+            <th className="text-left font-bold text-gray-700 dark:text-gray-300 px-4 py-3">Collected</th>
+            <th className="text-left font-bold text-gray-700 dark:text-gray-300 px-4 py-3">Due Date</th>
+            <th className="text-left font-bold text-gray-700 dark:text-gray-300 px-4 py-3">Fine</th>
           </tr>
         </thead>
         <tbody>
@@ -1816,7 +1816,7 @@ function HistoryTable({ data, roleName, searchTerm = "", filter = "all", isOverd
                 <tr key={req.id} className="border-t">
                   <td className="px-4 py-3 align-top truncate">
                     <div className="font-medium text-sm truncate">{borrower}</div>
-                    <div className="text-xs text-gray-500 truncate">{(req as any).student ? `SRN: ${borrowerId}` : 'Faculty'}</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400 truncate">{(req as any).student ? `SRN: ${borrowerId}` : 'Faculty'}</div>
                   </td>
                   <td className="px-4 py-3 align-top font-medium text-sm truncate">{item}</td>
                   <td className="px-4 py-3 align-top text-sm">{qty}</td>
@@ -1831,19 +1831,19 @@ function HistoryTable({ data, roleName, searchTerm = "", filter = "all", isOverd
         </tbody>
       </table>
       {/* Pagination Controls */}
-      <div className="flex justify-between items-center p-2 border-t bg-gray-50">
+      <div className="flex justify-between items-center p-2 border-t bg-gray-50 dark:bg-slate-800 dark:bg-gray-800">
         <button
-          className="px-3 py-1 rounded bg-gray-200 text-gray-700 disabled:opacity-50"
+          className="px-3 py-1 rounded bg-gray-200 text-gray-700 dark:text-gray-300 disabled:opacity-50"
           onClick={() => setPage((p) => Math.max(1, p - 1))}
           disabled={page === 1}
         >
           Previous
         </button>
-        <span className="text-xs text-gray-600">
+        <span className="text-xs text-gray-600 dark:text-gray-400">
           Page {page} of {totalPages}
         </span>
         <button
-          className="px-3 py-1 rounded bg-gray-200 text-gray-700 disabled:opacity-50"
+          className="px-3 py-1 rounded bg-gray-200 text-gray-700 dark:text-gray-300 disabled:opacity-50"
           onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
           disabled={page === totalPages}
         >

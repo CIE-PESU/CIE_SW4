@@ -454,17 +454,17 @@ export function ManageLocations() {
 
   const getLocationTypeColor = (type: string) => {
     const colors: { [key: string]: string } = {
-      'LECTURE_HALL': 'bg-blue-100 text-blue-800',
-      'LAB': 'bg-green-100 text-green-800',
-      'AUDITORIUM': 'bg-purple-100 text-purple-800',
-      'SEMINAR_HALL': 'bg-orange-100 text-orange-800',
-      'CABIN': 'bg-gray-100 text-gray-800',
+      'LECTURE_HALL': 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
+      'LAB': 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
+      'AUDITORIUM': 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400',
+      'SEMINAR_HALL': 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400',
+      'CABIN': 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100',
       'CLASSROOM': 'bg-indigo-100 text-indigo-800',
-      'OFFICE': 'bg-red-100 text-red-800',
-      'WAREHOUSE': 'bg-yellow-100 text-yellow-800',
+      'OFFICE': 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
+      'WAREHOUSE': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
       'OTHER': 'bg-slate-100 text-slate-800',
     };
-    return colors[type] || 'bg-gray-100 text-gray-800';
+    return colors[type] || 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100';
   };
 
   return (
@@ -665,7 +665,7 @@ export function ManageLocations() {
                         onChange={(e) => e.target.files && handleImageUpload(e.target.files)}
                         disabled={uploadingImages}
                       />
-                      {uploadingImages && <span className="text-sm text-gray-500">Uploading...</span>}
+                      {uploadingImages && <span className="text-sm text-gray-500 dark:text-gray-400">Uploading...</span>}
                     </div>
                     {formData.images.length > 0 && (
                       <div className="grid grid-cols-4 gap-4">
@@ -700,7 +700,7 @@ export function ManageLocations() {
                             <img 
                               src={previewImage} 
                               alt="Location Preview" 
-                              className="w-full h-96 object-contain rounded-lg bg-gray-50" 
+                              className="w-full h-96 object-contain rounded-lg bg-gray-50 dark:bg-slate-800 dark:bg-gray-800" 
                             />
                           </div>
                           <div className="flex justify-end">
@@ -771,8 +771,8 @@ export function ManageLocations() {
         <div className="text-center py-12">
           <div className="max-w-md mx-auto">
             <Building className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No locations found</h3>
-            <p className="text-gray-500 mb-6">
+            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No locations found</h3>
+            <p className="text-gray-500 dark:text-gray-400 mb-6">
               {searchTerm || locationTypeFilter !== '' 
                 ? 'No locations match your search criteria. Try adjusting your filters.'
                 : 'No locations have been created yet. Get started by adding your first location.'
@@ -791,7 +791,7 @@ export function ManageLocations() {
                       <Building className="h-4 w-4 flex-shrink-0" />
                       <span className="truncate">{capitalizeWords(location.name)}</span>
                     </CardTitle>
-                    <p className="text-xs text-gray-600">{location.room_number} • {location.location_type.replace('_', ' ')}</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">{location.room_number} • {location.location_type.replace('_', ' ')}</p>
                   </div>
                   <div className="flex items-center space-x-1 flex-shrink-0">
                     <Badge className={getLocationTypeColor(location.location_type) + " text-xs px-1 py-0.5"}>
@@ -812,7 +812,7 @@ export function ManageLocations() {
                               <img
                                 src={image}
                                 alt={`${location.name} ${index + 1}`}
-                                className="w-full h-full object-contain rounded-md bg-gray-50"
+                                className="w-full h-full object-contain rounded-md bg-gray-50 dark:bg-slate-800 dark:bg-gray-800"
                               />
                             </CarouselItem>
                           ))}
@@ -820,10 +820,10 @@ export function ManageLocations() {
                         {/* Navigation Buttons */}
                         {location.images.length > 1 && (
                           <div className="absolute inset-0 flex items-center justify-between px-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <div className="pointer-events-auto bg-white/80 rounded-full">
+                            <div className="pointer-events-auto bg-white dark:bg-slate-900/80 rounded-full">
                               <CarouselPrevious className="left-2 top-1/2 -translate-y-1/2 h-6 w-6" />
                             </div>
-                            <div className="pointer-events-auto bg-white/80 rounded-full">
+                            <div className="pointer-events-auto bg-white dark:bg-slate-900/80 rounded-full">
                               <CarouselNext className="right-2 top-1/2 -translate-y-1/2 h-6 w-6" />
                             </div>
                           </div>
@@ -834,7 +834,7 @@ export function ManageLocations() {
                             {location.images.map((_, index) => (
                               <div 
                                 key={index}
-                                className="w-1 h-1 rounded-full bg-white/70"
+                                className="w-1 h-1 rounded-full bg-white dark:bg-slate-900/70"
                               />
                             ))}
                           </div>
@@ -843,14 +843,14 @@ export function ManageLocations() {
                     </div>
                   )}
                   
-                  <div className="text-xs text-gray-700">
+                  <div className="text-xs text-gray-700 dark:text-gray-300">
                     <div className="flex justify-between items-center mb-1">
                       <span><span className="font-medium">Capacity:</span> {location.capacity}</span>
                       <span><span className="font-medium">Floor:</span> {getOrdinal(location.floor)}</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span><span className="font-medium">Building:</span> {capitalizeWords(location.building)}</span>
-                      <span className="text-gray-500"><span className="font-medium">Bookings:</span> {location.bookings?.length || 0}</span>
+                      <span className="text-gray-500 dark:text-gray-400"><span className="font-medium">Bookings:</span> {location.bookings?.length || 0}</span>
                     </div>
                     {location.wing && (
                       <div className="mt-1">
@@ -940,9 +940,9 @@ export function ManageLocations() {
           </DialogHeader>
           {locationTypeToDelete && (
             <div className="space-y-4">
-              <div className="bg-gray-50 rounded-lg p-4">
+              <div className="bg-gray-50 dark:bg-slate-800 dark:bg-gray-800 rounded-lg p-4">
                 <p className="font-medium">Location Type: {locationTypeToDelete.replace(/_/g, ' ')}</p>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                   This will remove the location type from the available options. Locations currently using this type will not be affected.
                 </p>
               </div>

@@ -58,6 +58,7 @@ export function getTimeUntilExpiry(requestDate: string): { expired: boolean, tim
 interface LibraryItem {
   id: string
   item_name: string
+  author?: string | null
   item_description: string
   item_category: string
   item_quantity: number
@@ -335,14 +336,14 @@ export function LibraryDashboard() {
 
   const getStatusBadge = (status: string, overdue?: boolean) => {
     if (status === "COLLECTED" && overdue) {
-      return <Badge className="bg-red-100 text-red-800">Overdue</Badge>
+      return <Badge className="bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">Overdue</Badge>
     }
     
     switch (status) {
       case "APPROVED":
-        return <Badge className="bg-blue-100 text-blue-800">Reserved</Badge>
+        return <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">Reserved</Badge>
       case "COLLECTED":
-        return <Badge className="bg-green-100 text-green-800">Active Loan</Badge>
+        return <Badge className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">Active Loan</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -358,8 +359,8 @@ export function LibraryDashboard() {
               <Card>
                 <CardContent className="p-8 text-center">
                   <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No reserved items</h3>
-                  <p className="text-gray-600">Items you reserve will appear here, ready for collection.</p>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No reserved items</h3>
+                  <p className="text-gray-600 dark:text-gray-400">Items you reserve will appear here, ready for collection.</p>
                 </CardContent>
               </Card>
             ) : (
@@ -369,7 +370,7 @@ export function LibraryDashboard() {
                   const isUrgent = expiryInfo.minutesLeft <= 30 && !expiryInfo.expired
                   
                   return (
-                    <Card key={request.id} className={`flex flex-col h-full hover:shadow-lg hover:scale-105 transition-all duration-200 border border-gray-200 bg-white ${
+                    <Card key={request.id} className={`flex flex-col h-full hover:shadow-lg hover:scale-105 transition-all duration-200 border border-gray-200 dark:border-gray-600 bg-white dark:bg-slate-900 ${
                       expiryInfo.expired 
                         ? 'border-red-300 bg-red-50' 
                         : isUrgent 
@@ -383,15 +384,15 @@ export function LibraryDashboard() {
                               <Package className="h-5 w-5 flex-shrink-0 text-purple-600" />
                               <span className="truncate">{request.item?.item_name || "Unknown Item"}</span>
                             </CardTitle>
-                            <CardDescription className="text-xs text-gray-500">{request.item?.item_category || "Unknown Category"}</CardDescription>
+                            <CardDescription className="text-xs text-gray-500 dark:text-gray-400">{request.item?.item_category || "Unknown Category"}</CardDescription>
                           </div>
                           <div className="flex items-center space-x-1 flex-shrink-0">
                             <Badge className={`text-xs px-2 py-0.5 rounded-full font-medium ${
                               expiryInfo.expired 
-                                ? 'bg-red-100 text-red-800' 
+                                ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' 
                                 : isUrgent 
-                                  ? 'bg-orange-100 text-orange-800' 
-                                  : 'bg-blue-100 text-blue-800'
+                                  ? 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400' 
+                                  : 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
                             }`}>
                               {expiryInfo.expired ? 'Expired' : isUrgent ? 'Urgent' : 'Reserved'}
                             </Badge>
@@ -401,19 +402,19 @@ export function LibraryDashboard() {
                       
                       {/* Image Display */}
                       {request.item?.image_url && (
-                        <div className="relative w-full h-48 mb-2 px-8 pt-2 p-3 bg-white border border-gray-200 shadow-sm rounded-lg flex items-center justify-center">
+                        <div className="relative w-full h-48 mb-2 px-8 pt-2 p-3 bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-600 shadow-sm rounded-lg flex items-center justify-center">
                           <div className="w-full h-full">
                             <img
                               src={request.item.image_url || '/placeholder.jpg'}
                               alt={`Cover of ${request.item?.item_name || "Library Item"}`}
-                              className="object-contain max-w-[70%] max-h-[80%] mx-auto rounded-md bg-gray-50"
+                              className="object-contain max-w-[70%] max-h-[80%] mx-auto rounded-md bg-gray-50 dark:bg-slate-800 dark:bg-gray-800"
                               onError={(e) => {
                                 e.currentTarget.src = "/placeholder.jpg"
                               }}
                             />
                             {expiryInfo.expired && (
                               <div className="absolute inset-0 bg-red-600 bg-opacity-75 flex items-center justify-center rounded-md">
-                                <Badge className="bg-red-100 text-red-800 text-xs">
+                                <Badge className="bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 text-xs">
                                   EXPIRED
                                 </Badge>
                               </div>
@@ -424,7 +425,7 @@ export function LibraryDashboard() {
                       
                       <CardContent className="flex-grow flex flex-col p-3 pt-2">
                         <div className="flex-grow">
-                          <div className="grid grid-cols-2 gap-2 text-xs text-gray-700">
+                          <div className="grid grid-cols-2 gap-2 text-xs text-gray-700 dark:text-gray-300">
                             <div>
                               <span className="font-medium">Reserved:</span> {new Date(request.request_date).toLocaleDateString()}
                             </div>
@@ -492,8 +493,8 @@ export function LibraryDashboard() {
               <Card>
                 <CardContent className="p-8 text-center">
                   <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No active loans</h3>
-                  <p className="text-gray-600">Items you collect will appear here.</p>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No active loans</h3>
+                  <p className="text-gray-600 dark:text-gray-400">Items you collect will appear here.</p>
                 </CardContent>
               </Card>
             ) : (
@@ -503,7 +504,7 @@ export function LibraryDashboard() {
                   const daysOverdue = request.due_date ? getOverdueDays(request.due_date) : 0
                   
                   return (
-                    <Card key={request.id} className={`flex flex-col h-full hover:shadow-lg hover:scale-105 transition-all duration-200 border border-gray-200 bg-white ${
+                    <Card key={request.id} className={`flex flex-col h-full hover:shadow-lg hover:scale-105 transition-all duration-200 border border-gray-200 dark:border-gray-600 bg-white dark:bg-slate-900 ${
                       overdue ? "border-red-200 bg-red-50" : ""
                     }`}>
                       <CardHeader className="p-3 pb-0">
@@ -513,11 +514,11 @@ export function LibraryDashboard() {
                               <Package className="h-5 w-5 flex-shrink-0 text-purple-600" />
                               <span className="truncate">{request.item?.item_name || "Unknown Item"}</span>
                             </CardTitle>
-                            <CardDescription className="text-xs text-gray-500">{request.item?.item_category || "Unknown Category"}</CardDescription>
+                            <CardDescription className="text-xs text-gray-500 dark:text-gray-400">{request.item?.item_category || "Unknown Category"}</CardDescription>
                           </div>
                           <div className="flex items-center space-x-1 flex-shrink-0">
                             <Badge className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                              overdue ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'
+                              overdue ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' : 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
                             }`}>
                               {overdue ? 'Overdue' : 'Active Loan'}
                             </Badge>
@@ -527,12 +528,12 @@ export function LibraryDashboard() {
                       
                       {/* Image Display */}
                       {request.item?.image_url && (
-                        <div className="relative w-full h-48 mb-2 px-8 pt-2 p-3 bg-white border border-gray-200 shadow-sm rounded-lg flex items-center justify-center">
+                        <div className="relative w-full h-48 mb-2 px-8 pt-2 p-3 bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-600 shadow-sm rounded-lg flex items-center justify-center">
                           <div className="w-full h-full">
                             <img
                               src={request.item.image_url || '/placeholder.jpg'}
                               alt={`Cover of ${request.item?.item_name || "Library Item"}`}
-                              className="object-contain max-w-[70%] max-h-[80%] mx-auto rounded-md bg-gray-50"
+                              className="object-contain max-w-[70%] max-h-[80%] mx-auto rounded-md bg-gray-50 dark:bg-slate-800 dark:bg-gray-800"
                               onError={(e) => {
                                 e.currentTarget.src = "/placeholder.jpg"
                               }}
@@ -543,7 +544,7 @@ export function LibraryDashboard() {
                       
                       <CardContent className="flex-grow flex flex-col p-3 pt-2">
                         <div className="flex-grow">
-                          <div className="grid grid-cols-2 gap-2 text-xs text-gray-700">
+                          <div className="grid grid-cols-2 gap-2 text-xs text-gray-700 dark:text-gray-300">
                             <div>
                               <span className="font-medium">Collected:</span> {request.collection_date ? new Date(request.collection_date).toLocaleDateString() : "N/A"}
                             </div>
@@ -581,8 +582,8 @@ export function LibraryDashboard() {
               <Card>
                 <CardContent className="p-8 text-center">
                   <CheckCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No overdue items</h3>
-                  <p className="text-gray-600">Keep up the good work! Return items on time.</p>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No overdue items</h3>
+                  <p className="text-gray-600 dark:text-gray-400">Keep up the good work! Return items on time.</p>
                 </CardContent>
               </Card>
             ) : (
@@ -592,7 +593,7 @@ export function LibraryDashboard() {
                   const fineAmount = daysOverdue * 5 // ₹5 per day
                   
                   return (
-                    <Card key={request.id} className="flex flex-col h-full hover:shadow-lg hover:scale-105 transition-all duration-200 border border-gray-200 bg-white border-red-300 bg-red-50">
+                    <Card key={request.id} className="flex flex-col h-full hover:shadow-lg hover:scale-105 transition-all duration-200 border border-gray-200 dark:border-gray-600 bg-white dark:bg-slate-900 border-red-300 bg-red-50">
                       <CardHeader className="p-3 pb-0">
                         <div className="flex justify-between items-start">
                           <div className="flex-1 min-w-0">
@@ -600,10 +601,10 @@ export function LibraryDashboard() {
                               <Package className="h-5 w-5 flex-shrink-0 text-purple-600" />
                               <span className="truncate">{request.item?.item_name || "Unknown Item"}</span>
                             </CardTitle>
-                            <CardDescription className="text-xs text-gray-500">{request.item?.item_category || "Unknown Category"}</CardDescription>
+                            <CardDescription className="text-xs text-gray-500 dark:text-gray-400">{request.item?.item_category || "Unknown Category"}</CardDescription>
                           </div>
                           <div className="flex items-center space-x-1 flex-shrink-0">
-                            <Badge className="text-xs px-2 py-0.5 rounded-full font-medium bg-red-100 text-red-800">
+                            <Badge className="text-xs px-2 py-0.5 rounded-full font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">
                               Overdue
                             </Badge>
                           </div>
@@ -612,12 +613,12 @@ export function LibraryDashboard() {
                       
                       {/* Image Display */}
                       {request.item?.image_url && (
-                        <div className="relative w-full h-48 mb-2 px-8 pt-2 p-3 bg-white border border-gray-200 shadow-sm rounded-lg flex items-center justify-center">
+                        <div className="relative w-full h-48 mb-2 px-8 pt-2 p-3 bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-600 shadow-sm rounded-lg flex items-center justify-center">
                           <div className="w-full h-full">
                             <img
                               src={request.item.image_url || '/placeholder.jpg'}
                               alt={`Cover of ${request.item?.item_name || "Library Item"}`}
-                              className="object-contain max-w-[70%] max-h-[80%] mx-auto rounded-md bg-gray-50"
+                              className="object-contain max-w-[70%] max-h-[80%] mx-auto rounded-md bg-gray-50 dark:bg-slate-800 dark:bg-gray-800"
                               onError={(e) => {
                                 e.currentTarget.src = "/placeholder.jpg"
                               }}
@@ -628,7 +629,7 @@ export function LibraryDashboard() {
                       
                       <CardContent className="flex-grow flex flex-col p-3 pt-2">
                         <div className="flex-grow">
-                          <div className="grid grid-cols-2 gap-2 text-xs text-gray-700">
+                          <div className="grid grid-cols-2 gap-2 text-xs text-gray-700 dark:text-gray-300">
                             <div>
                               <span className="font-medium">Due:</span> {request.due_date ? new Date(request.due_date).toLocaleDateString() : "N/A"}
                             </div>
@@ -682,7 +683,7 @@ export function LibraryDashboard() {
                       />
                     </div>
                     <span className="flex items-center ml-4 mr-1 text-gray-400"><Filter className="h-5 w-5" /></span>
-                    <span className="text-sm text-gray-600 font-medium ml-1">Category</span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400 font-medium ml-1">Category</span>
                     <div className="w-40 flex flex-col">
                       <Select value={categoryFilter} onValueChange={setCategoryFilter}>
                         <SelectTrigger className="h-9 text-sm">
@@ -701,8 +702,8 @@ export function LibraryDashboard() {
                     {filteredItems.length === 0 ? (
                       <div className="col-span-full text-center py-8">
                         <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">No items found</h3>
-                        <p className="text-gray-600">Try adjusting your search terms.</p>
+                        <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No items found</h3>
+                        <p className="text-gray-600 dark:text-gray-400">Try adjusting your search terms.</p>
                       </div>
                     ) : (
                       filteredItems.map((item) => {
@@ -714,7 +715,7 @@ export function LibraryDashboard() {
                         return (
                           <Card 
                             key={item.id} 
-                            className={`flex flex-col h-full hover:shadow-lg hover:scale-105 transition-all duration-200 border border-gray-200 bg-white ${isUnavailable ? 'opacity-60 bg-gray-50 border-gray-200' : ''}`}
+                            className={`flex flex-col h-full hover:shadow-lg hover:scale-105 transition-all duration-200 border border-gray-200 dark:border-gray-600 bg-white dark:bg-slate-900 ${isUnavailable ? 'opacity-60 bg-gray-50 dark:bg-slate-800 dark:bg-gray-800 border-gray-200 dark:border-gray-600' : ''}`}
                           >
                             <CardHeader className="px-3 py-3 mb-0">
                               <div className="flex justify-between items-start">
@@ -723,14 +724,17 @@ export function LibraryDashboard() {
                                     <Package className="h-5 w-5 flex-shrink-0 text-purple-600" />
                                     <span className="truncate">{item.item_name}</span>
                                   </CardTitle>
-                                  <CardDescription className="text-xs text-gray-500">{item.item_category}</CardDescription>
+                                  {item.author && (
+                                    <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mt-0.5">by {item.author}</p>
+                                  )}
+                                  <CardDescription className="text-xs text-gray-500 dark:text-gray-400">{item.item_category}</CardDescription>
                                 </div>
                                 <div className="flex items-center space-x-1 flex-shrink-0">
-                                  <Badge className={`text-xs px-2 py-0.5 rounded-full font-medium ${item.available_quantity > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>{item.available_quantity > 0 ? ` Available` : 'Out of stock'}</Badge>
+                                  <Badge className={`text-xs px-2 py-0.5 rounded-full font-medium ${item.available_quantity > 0 ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'}`}>{item.available_quantity > 0 ? ` Available` : 'Out of stock'}</Badge>
                                   <Button
                                     variant="ghost"
                                     size="icon"
-                                    className="h-6 w-6 text-gray-400 hover:text-gray-600"
+                                    className="h-6 w-6 text-gray-400 hover:text-gray-600 dark:text-gray-400"
                                     onClick={() => setInfoDialogOpen(item.id)}
                                   >
                                     <Info className="h-4 w-4" />
@@ -740,13 +744,13 @@ export function LibraryDashboard() {
                             </CardHeader>
                             {/* Image Display */}
                             {(item.image_url || item.back_image_url) && (
-                              <div className="relative w-full h-48 mb-2 px-3 bg-white border border-gray-200 shadow-sm rounded-lg flex items-center justify-center">
+                              <div className="relative w-full h-48 mb-2 px-3 bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-600 shadow-sm rounded-lg flex items-center justify-center">
                                 {/* Front Image */}
                                 <div className={`absolute inset-0 w-full h-full transition-opacity duration-300 ease-in-out ${imageStates[item.id] ? 'opacity-0' : 'opacity-100'}`}>
                                   <img
                                     src={item.image_url || '/placeholder.jpg'}
                                     alt={`Front view of ${item.item_name}`}
-                                    className="object-contain w-full h-full rounded-md bg-gray-50"
+                                    className="object-contain w-full h-full rounded-md bg-gray-50 dark:bg-slate-800 dark:bg-gray-800"
                                     onError={(e) => {
                                       e.currentTarget.src = "/placeholder.jpg"
                                     }}
@@ -758,7 +762,7 @@ export function LibraryDashboard() {
                                     <img
                                       src={item.back_image_url}
                                       alt={`Back view of ${item.item_name}`}
-                                      className="object-contain w-full h-full rounded-md bg-gray-50"
+                                      className="object-contain w-full h-full rounded-md bg-gray-50 dark:bg-slate-800 dark:bg-gray-800"
                                       onError={(e) => {
                                         e.currentTarget.src = "/placeholder.jpg"
                                       }}
@@ -772,7 +776,7 @@ export function LibraryDashboard() {
                                       <Button
                                         variant="secondary"
                                         size="icon"
-                                        className="absolute right-1 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-white/80 hover:bg-white shadow-sm z-10"
+                                        className="absolute right-1 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-white dark:bg-slate-900/80 hover:bg-white dark:bg-slate-900 shadow-sm z-10"
                                         onClick={() => setImageStates(prev => ({ ...prev, [item.id]: true }))}
                                       >
                                         <ChevronRight className="h-3 w-3" />
@@ -782,7 +786,7 @@ export function LibraryDashboard() {
                                       <Button
                                         variant="secondary"
                                         size="icon"
-                                        className="absolute left-1 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-white/80 hover:bg-white shadow-sm z-10"
+                                        className="absolute left-1 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-white dark:bg-slate-900/80 hover:bg-white dark:bg-slate-900 shadow-sm z-10"
                                         onClick={() => setImageStates(prev => ({ ...prev, [item.id]: false }))}
                                       >
                                         <ChevronLeft className="h-3 w-3" />
@@ -793,8 +797,8 @@ export function LibraryDashboard() {
                                 {/* Image Indicators */}
                                 {item.back_image_url && (
                                   <div className="absolute bottom-1 left-1/2 -translate-x-1/2 flex space-x-1 z-10">
-                                    <div className={`w-1 h-1 rounded-full transition-colors duration-300 ${!imageStates[item.id] ? 'bg-white' : 'bg-white/50'}`} />
-                                    <div className={`w-1 h-1 rounded-full transition-colors duration-300 ${imageStates[item.id] ? 'bg-white' : 'bg-white/50'}`} />
+                                    <div className={`w-1 h-1 rounded-full transition-colors duration-300 ${!imageStates[item.id] ? 'bg-white dark:bg-slate-900' : 'bg-white dark:bg-slate-900/50'}`} />
+                                    <div className={`w-1 h-1 rounded-full transition-colors duration-300 ${imageStates[item.id] ? 'bg-white dark:bg-slate-900' : 'bg-white dark:bg-slate-900/50'}`} />
                                   </div>
                                 )}
                               </div>
@@ -802,11 +806,11 @@ export function LibraryDashboard() {
                             <CardContent className="flex-grow flex flex-col p-3 pt-0">
                               {/* Remove space-y-3 from the details area to eliminate extra gap */}
                               <div className="flex-grow">
-                                <div className="grid grid-cols-2 gap-2 text-xs text-gray-700">
+                                <div className="grid grid-cols-2 gap-2 text-xs text-gray-700 dark:text-gray-300">
                                   <div><span className="font-medium">Available:</span> {item.available_quantity}</div>
                                   <div><span className="font-medium">Total:</span> {item.item_quantity}</div>
                                 </div>
-                                <div className="text-xs text-gray-500 mt-0">
+                                <div className="text-xs text-gray-500 dark:text-gray-400 mt-0">
                                   <span className="font-medium">Location:</span> {item.item_location}
                                 </div>
                               </div>
@@ -814,7 +818,7 @@ export function LibraryDashboard() {
                                 size="sm"
                                 className={`w-full h-8 text-xs mt-3 ${
                                   isUnavailable
-                                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed hover:bg-gray-300' 
+                                    ? 'bg-gray-300 text-gray-500 dark:text-gray-400 cursor-not-allowed hover:bg-gray-300' 
                                     : ''
                                 }`}
                                 disabled={!canBorrow}
@@ -862,7 +866,7 @@ export function LibraryDashboard() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="admin-page-title">Library</h1>
-          <p className="text-gray-600 mt-1">Reserve and manage your books</p>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">Reserve and manage your books</p>
         </div>
         <Button onClick={fetchData} variant="outline">
           <RefreshCw className="h-4 w-4 mr-2" />
@@ -885,12 +889,12 @@ export function LibraryDashboard() {
               }`} />
               <div>
                 <p className={`text-2xl font-bold transition-colors duration-200 ${
-                  currentView === 'browse' ? 'text-purple-700' : 'text-gray-900'
+                  currentView === 'browse' ? 'text-purple-700' : 'text-gray-900 dark:text-gray-100'
                 }`}>
                   {items.reduce((sum, item) => sum + item.available_quantity, 0)}
                 </p>
                 <p className={`text-sm transition-colors duration-200 ${
-                  currentView === 'browse' ? 'text-purple-600' : 'text-gray-600'
+                  currentView === 'browse' ? 'text-purple-600' : 'text-gray-600 dark:text-gray-400'
                 }`}>Available Books</p>
               </div>
             </div>
@@ -910,10 +914,10 @@ export function LibraryDashboard() {
               }`} />
               <div>
                 <p className={`text-2xl font-bold transition-colors duration-200 ${
-                  currentView === 'reserved' ? 'text-blue-700' : 'text-gray-900'
+                  currentView === 'reserved' ? 'text-blue-700' : 'text-gray-900 dark:text-gray-100'
                 }`}>{reservedItems.length}</p>
                 <p className={`text-sm transition-colors duration-200 ${
-                  currentView === 'reserved' ? 'text-blue-600' : 'text-gray-600'
+                  currentView === 'reserved' ? 'text-blue-600' : 'text-gray-600 dark:text-gray-400'
                 }`}>Reserved</p>
               </div>
             </div>
@@ -933,10 +937,10 @@ export function LibraryDashboard() {
               }`} />
               <div>
                 <p className={`text-2xl font-bold transition-colors duration-200 ${
-                  currentView === 'active' ? 'text-yellow-700' : 'text-gray-900'
+                  currentView === 'active' ? 'text-yellow-700' : 'text-gray-900 dark:text-gray-100'
                 }`}>{activeLoans.length}</p>
                 <p className={`text-sm transition-colors duration-200 ${
-                  currentView === 'active' ? 'text-yellow-600' : 'text-gray-600'
+                  currentView === 'active' ? 'text-yellow-600' : 'text-gray-600 dark:text-gray-400'
                 }`}>Active Loans</p>
               </div>
             </div>
@@ -956,10 +960,10 @@ export function LibraryDashboard() {
               }`} />
               <div>
                 <p className={`text-2xl font-bold transition-colors duration-200 ${
-                  currentView === 'overdue' ? 'text-red-700' : 'text-gray-900'
+                  currentView === 'overdue' ? 'text-red-700' : 'text-gray-900 dark:text-gray-100'
                 }`}>{overdueItems.length}</p>
                 <p className={`text-sm transition-colors duration-200 ${
-                  currentView === 'overdue' ? 'text-red-600' : 'text-gray-600'
+                  currentView === 'overdue' ? 'text-red-600' : 'text-gray-600 dark:text-gray-400'
                 }`}>Overdue Items</p>
               </div>
             </div>
@@ -982,7 +986,7 @@ export function LibraryDashboard() {
           {selectedItem && (
             <div className="space-y-4">
               <div className="flex items-center space-x-4">
-                <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden">
+                <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
                   <img
                     src={selectedItem.image_url || "/placeholder.jpg"}
                     alt={selectedItem.item_name}
@@ -994,7 +998,7 @@ export function LibraryDashboard() {
                 </div>
                 <div>
                   <h3 className="font-medium">{selectedItem.item_name}</h3>
-                  <p className="text-sm text-gray-600">{selectedItem.item_category}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{selectedItem.item_category}</p>
                   <p className="text-sm text-green-600">{selectedItem.available_quantity} available</p>
                 </div>
               </div>
@@ -1050,13 +1054,13 @@ export function LibraryDashboard() {
                 {/* Left: Details */}
                 <div className="flex-1 space-y-4 min-w-0">
                   <div>
-                    <h2 className="text-xl font-bold text-gray-900">{item.item_name}</h2>
-                    <p className="text-sm text-gray-500">{item.item_category}</p>
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">{item.item_name}</h2>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{item.item_category}</p>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <h4 className="font-medium text-sm">Total Quantity</h4>
-                      <p className="text-lg font-semibold text-gray-900">{item.item_quantity}</p>
+                      <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">{item.item_quantity}</p>
                     </div>
                     <div>
                       <h4 className="font-medium text-sm">Available</h4>
@@ -1066,25 +1070,25 @@ export function LibraryDashboard() {
                   {item.item_description && (
                     <div>
                       <h4 className="font-medium text-sm">Description</h4>
-                      <p className="text-sm text-gray-600">{item.item_description}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">{item.item_description}</p>
                     </div>
                   )}
                   {item.item_specification && (
                     <div>
                       <h4 className="font-medium text-sm">Specifications</h4>
-                      <p className="text-sm text-gray-600">{item.item_specification}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">{item.item_specification}</p>
                     </div>
                   )}
                 </div>
                 {/* Right: Image Preview with toggle */}
                 <div className="flex flex-col items-center justify-center w-full md:w-64">
-                  <div className="relative w-full aspect-[3/4] p-2 bg-white border border-gray-200 shadow-sm rounded-lg flex items-center justify-center">
+                  <div className="relative w-full aspect-[3/4] p-2 bg-white dark:bg-slate-900 border border-gray-200 dark:border-gray-600 shadow-sm rounded-lg flex items-center justify-center">
                     {/* Front Image */}
                     <div className={`absolute inset-0 w-full h-full transition-opacity duration-300 ease-in-out ${imageStates[item.id] ? 'opacity-0' : 'opacity-100'}`}>
                       <img
                         src={item.image_url || '/placeholder.jpg'}
                         alt={`Front view of ${item.item_name}`}
-                        className="object-contain w-full h-full rounded-md bg-gray-50"
+                        className="object-contain w-full h-full rounded-md bg-gray-50 dark:bg-slate-800 dark:bg-gray-800"
                         onError={(e) => {
                           e.currentTarget.src = "/placeholder.jpg"
                         }}
@@ -1096,7 +1100,7 @@ export function LibraryDashboard() {
                         <img
                           src={item.back_image_url}
                           alt={`Back view of ${item.item_name}`}
-                          className="object-contain w-full h-full rounded-md bg-gray-50"
+                          className="object-contain w-full h-full rounded-md bg-gray-50 dark:bg-slate-800 dark:bg-gray-800"
                           onError={(e) => {
                             e.currentTarget.src = "/placeholder.jpg"
                           }}
@@ -1110,7 +1114,7 @@ export function LibraryDashboard() {
                           <Button
                             variant="secondary"
                             size="icon"
-                            className="absolute right-1 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-white/80 hover:bg-white shadow-sm z-10"
+                            className="absolute right-1 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-white dark:bg-slate-900/80 hover:bg-white dark:bg-slate-900 shadow-sm z-10"
                             onClick={() => setImageStates(prev => ({ ...prev, [item.id]: true }))}
                           >
                             <ChevronRight className="h-3 w-3" />
@@ -1120,7 +1124,7 @@ export function LibraryDashboard() {
                           <Button
                             variant="secondary"
                             size="icon"
-                            className="absolute left-1 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-white/80 hover:bg-white shadow-sm z-10"
+                            className="absolute left-1 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-white dark:bg-slate-900/80 hover:bg-white dark:bg-slate-900 shadow-sm z-10"
                             onClick={() => setImageStates(prev => ({ ...prev, [item.id]: false }))}
                           >
                             <ChevronLeft className="h-3 w-3" />
@@ -1131,8 +1135,8 @@ export function LibraryDashboard() {
                     {/* Image Indicators */}
                     {item.back_image_url && (
                       <div className="absolute bottom-1 left-1/2 -translate-x-1/2 flex space-x-1 z-10">
-                        <div className={`w-1 h-1 rounded-full transition-colors duration-300 ${!imageStates[item.id] ? 'bg-white' : 'bg-white/50'}`} />
-                        <div className={`w-1 h-1 rounded-full transition-colors duration-300 ${imageStates[item.id] ? 'bg-white' : 'bg-white/50'}`} />
+                        <div className={`w-1 h-1 rounded-full transition-colors duration-300 ${!imageStates[item.id] ? 'bg-white dark:bg-slate-900' : 'bg-white dark:bg-slate-900/50'}`} />
+                        <div className={`w-1 h-1 rounded-full transition-colors duration-300 ${imageStates[item.id] ? 'bg-white dark:bg-slate-900' : 'bg-white dark:bg-slate-900/50'}`} />
                       </div>
                     )}
                   </div>

@@ -137,17 +137,17 @@ export function FacultyProjectRequests({ onBack }: FacultyProjectRequestsProps) 
   const getStatusColor = (status: string) => {
     switch (status) {
       case "PENDING":
-        return "bg-yellow-100 text-yellow-800"
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
       case "APPROVED":
-        return "bg-green-100 text-green-800"
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
       case "ONGOING":
-        return "bg-blue-100 text-blue-800"
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
       case "COMPLETED":
-        return "bg-green-100 text-green-800"
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
       case "REJECTED":
-        return "bg-red-100 text-red-800"
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100 dark:text-gray-100"
     }
   }
 
@@ -164,7 +164,7 @@ export function FacultyProjectRequests({ onBack }: FacultyProjectRequestsProps) 
       <div className="flex justify-between items-center">
         <div>
           <h1 className="faculty-page-title">Faculty Project Requests</h1>
-          <p className="text-gray-600">Review and approve faculty project requests</p>
+          <p className="text-gray-600 dark:text-gray-400 dark:text-gray-400">Review and approve faculty project requests</p>
         </div>
         <div className="flex items-center gap-2">
           <Button onClick={onBack} variant="outline" size="sm">
@@ -189,7 +189,7 @@ export function FacultyProjectRequests({ onBack }: FacultyProjectRequestsProps) 
                       <FolderOpen className="h-5 w-5 text-blue-600" />
                       <span>{project.name}</span>
                     </CardTitle>
-                    <CardDescription className="text-sm text-gray-600">
+                    <CardDescription className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-400">
                       Request from {project.faculty_creator?.user.name} ({project.faculty_creator?.user.email})
                     </CardDescription>
                   </div>
@@ -200,7 +200,7 @@ export function FacultyProjectRequests({ onBack }: FacultyProjectRequestsProps) 
                 <div>
                   <div className="flex items-start gap-2">
                     <p 
-                      className={`text-sm text-gray-700 flex-1 ${
+                      className={`text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300 flex-1 ${
                         expandedDescriptions.has(project.id) 
                           ? '' 
                           : 'overflow-hidden'
@@ -221,7 +221,7 @@ export function FacultyProjectRequests({ onBack }: FacultyProjectRequestsProps) 
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-6 w-6 text-gray-400 hover:text-gray-600 flex-shrink-0"
+                      className="h-6 w-6 text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:text-gray-400 flex-shrink-0"
                       onClick={() => toggleDescriptionExpansion(project.id)}
                       title={expandedDescriptions.has(project.id) ? "Show less" : "Show more"}
                     >
@@ -230,19 +230,19 @@ export function FacultyProjectRequests({ onBack }: FacultyProjectRequestsProps) 
                   </div>
                 </div>
                 
-                <div className="flex items-center text-sm text-gray-500">
+                <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 dark:text-gray-400">
                   <Calendar className="mr-2 h-4 w-4" />
                   <span>Due: {new Date(project.expected_completion_date).toLocaleDateString()}</span>
                 </div>
 
-                <div className="flex items-center text-sm text-gray-500">
+                <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 dark:text-gray-400">
                   <Users className="mr-2 h-4 w-4" />
                   <span>Department: {project.faculty_creator?.department}</span>
                 </div>
 
                 {project.components_needed_details && project.components_needed_details.length > 0 && (
                   <div>
-                    <h4 className="text-sm font-medium text-gray-700 mb-2">Required Components:</h4>
+                    <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 dark:text-gray-300 mb-2">Required Components:</h4>
                     <div className="flex flex-wrap gap-1">
                       {project.components_needed_details.slice(0, 3).map((component) => (
                         <Badge key={component.id} variant="outline" className="text-xs">
@@ -355,7 +355,7 @@ export function FacultyProjectRequests({ onBack }: FacultyProjectRequestsProps) 
           ))}
         </div>
       ) : (
-        <div className="text-center py-12 text-gray-500">
+        <div className="text-center py-12 text-gray-500 dark:text-gray-400 dark:text-gray-400">
           <div className="text-lg font-medium mb-2">No pending project requests</div>
           <p className="text-sm">Faculty project requests will appear here when they need approval.</p>
         </div>

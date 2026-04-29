@@ -25,6 +25,8 @@ export interface ProgramStage {
   status: StageStatus;        // default: "upcoming"
   createdAt: string;
   createdBy: string;          // user ID ref
+  analysis_results?: any[];   // JSON from AI analysis
+  last_analyzed_at?: string;  // ISO date
 }
 
 export interface ProgramYear {

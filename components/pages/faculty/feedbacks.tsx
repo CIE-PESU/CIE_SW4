@@ -195,7 +195,7 @@ export default function FacultyFeedbacks() {
         
         {feedbacks.length > 0 && (
           <div className="space-y-4 pt-6">
-            <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+            <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 flex items-center gap-2">
               <MessageSquare className="h-5 w-5 text-blue-600" />
               Your Previous Submissions
             </h3>

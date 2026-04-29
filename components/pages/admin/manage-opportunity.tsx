@@ -361,7 +361,7 @@ export default function ManageOpportunity() {
               <div className="font-bold text-xl">{opp.title}</div>
               <span className={`px-2 py-1 rounded text-xs font-semibold ${opp.type === 'INTERN' ? 'bg-blue-100 text-blue-700' : opp.type === 'TA' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>{opp.type}</span>
             </div>
-            <div className="text-gray-600 mb-3">{opp.description}</div>
+            <div className="text-gray-600 dark:text-gray-400 mb-3">{opp.description}</div>
             <div className="flex flex-col gap-1 text-sm mb-4">
               <div>
                 <span className="font-medium">Application:</span>
@@ -373,16 +373,16 @@ export default function ManageOpportunity() {
               </div>
               <div>
                 <span className="font-medium">Status:</span>
-                <span className={`ml-1 ${opp.status === 'OPEN' ? 'text-green-600' : 'text-gray-600'}`}>{opp.status}</span>
+                <span className={`ml-1 ${opp.status === 'OPEN' ? 'text-green-600' : 'text-gray-600 dark:text-gray-400'}`}>{opp.status}</span>
               </div>
               <div>
                 <span className="font-medium">Applicants:</span>
                 <span className="ml-1">{opp.applications?.length ?? 0}</span>
               </div>
             </div>
-            <div className="flex flex-col gap-1 text-sm mb-4 bg-white/60 rounded p-2">
+            <div className="flex flex-col gap-1 text-sm mb-4 bg-white dark:bg-slate-900/60 rounded p-2">
               <div className="flex items-center gap-2">
-                <UserIcon className="h-4 w-4 text-gray-500" />
+                <UserIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                 <span className="font-medium">{opp.faculty?.user?.name}</span>
               </div>
               <span className="text-gray-400 ml-6">{opp.faculty?.user?.email}</span>

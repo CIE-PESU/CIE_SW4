@@ -1,7 +1,7 @@
 import { ProgramStage } from "../types/program.types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { GripVertical, Edit, Trash2 } from "lucide-react";
+import { GripVertical, Edit, Trash2, Brain } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface StageCardProps {
@@ -12,6 +12,7 @@ interface StageCardProps {
   isAdminOrFaculty: boolean;
   isDragging?: boolean;
   dragHandleProps?: any;
+  onAnalyze?: (stage: ProgramStage) => void;
 }
 
 export function StageCard({ 
@@ -21,7 +22,8 @@ export function StageCard({
   isAdmin, 
   isAdminOrFaculty, 
   isDragging,
-  dragHandleProps 
+  dragHandleProps,
+  onAnalyze
 }: StageCardProps) {
   
   const getStatusColor = (status: string) => {
@@ -82,6 +84,17 @@ export function StageCard({
           </div>
           
           <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            {isAdminOrFaculty && onAnalyze && (
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="h-8 w-8 text-indigo-500 hover:text-indigo-600 hover:bg-indigo-50"
+                onClick={() => onAnalyze(stage)}
+                title="Analyze Resumes"
+              >
+                <Brain className="h-4 w-4" />
+              </Button>
+            )}
             {isAdminOrFaculty && (
               <Button 
                 variant="ghost" 

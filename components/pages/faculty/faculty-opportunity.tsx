@@ -171,14 +171,14 @@ export default function FacultyOpportunity() {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 w-full">
           {filteredOpportunities.length === 0 && <div className='col-span-full'>No assigned opportunities found.</div>}
           {filteredOpportunities.map(opp => (
-            <Card key={opp.id} className="border p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow bg-white flex flex-col h-full">
+            <Card key={opp.id} className="border p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow bg-white dark:bg-slate-900 flex flex-col h-full">
               <CardContent className="flex flex-col flex-1">
                 <div className="font-bold text-lg mb-1">{opp.title} <span className="ml-2 text-xs bg-gray-200 px-2 py-1 rounded">{opp.type}</span></div>
-                <div className="text-gray-600 mb-2 line-clamp-2">{opp.description}</div>
+                <div className="text-gray-600 dark:text-gray-400 mb-2 line-clamp-2">{opp.description}</div>
                 <div className="grid grid-cols-2 gap-2 text-sm mb-2">
                   <div><span className="font-medium">Due Date:</span> {opp.applicationEndDate?.slice(0,10)}</div>
                   <div><span className="font-medium">Capacity:</span> {opp.capacity}</div>
-                  <div><span className="font-medium">Status:</span> <span className={opp.status === 'OPEN' ? 'text-green-600' : 'text-gray-600'}>{opp.status}</span></div>
+                  <div><span className="font-medium">Status:</span> <span className={opp.status === 'OPEN' ? 'text-green-600' : 'text-gray-600 dark:text-gray-400'}>{opp.status}</span></div>
                 </div>
                 <div className="mt-auto pt-2 flex gap-2">
                   <Dialog>
@@ -211,13 +211,13 @@ export default function FacultyOpportunity() {
                               </thead>
                               <tbody>
                                 {applications.map(app => (
-                                  <tr key={app.id} className="border-b align-middle hover:bg-gray-50 transition">
+                                  <tr key={app.id} className="border-b align-middle hover:bg-gray-50 dark:bg-slate-800 dark:bg-gray-800 transition">
                                     <td className="py-4 px-4 whitespace-normal">
                                       <div className="flex items-center gap-2">
-                                        <UserIcon className="h-5 w-5 text-gray-500" />
+                                        <UserIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
                                         <span className="font-semibold text-base">{app.studentName || '-'}</span>
                                       </div>
-                                      {app.studentUserId && <div className="text-xs text-gray-500 break-all ml-7">{app.studentUserId}</div>}
+                                      {app.studentUserId && <div className="text-xs text-gray-500 dark:text-gray-400 break-all ml-7">{app.studentUserId}</div>}
                                     </td>
                                     <td className="py-4 px-4">
                                       <span className={

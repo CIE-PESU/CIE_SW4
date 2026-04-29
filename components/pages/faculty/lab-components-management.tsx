@@ -280,19 +280,19 @@ export function LabComponentsManagement() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "PENDING":
-        return "bg-yellow-100 text-yellow-800"
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
       case "APPROVED":
-        return "bg-green-100 text-green-800"
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
       case "COLLECTED":
-        return "bg-blue-100 text-blue-800"
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
       case "USER_RETURNED":
-        return "bg-purple-100 text-purple-800"
+        return "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400"
       case "RETURNED":
-        return "bg-gray-100 text-gray-800"
+        return "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100"
       case "REJECTED":
-        return "bg-red-100 text-red-800"
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100"
     }
   }
 
@@ -372,7 +372,7 @@ export function LabComponentsManagement() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="faculty-page-title">Lab Components</h1>
-          <p className="text-gray-600">Manage lab component requests and inventory</p>
+          <p className="text-gray-600 dark:text-gray-400">Manage lab component requests and inventory</p>
         </div>
         <Button onClick={fetchData} variant="outline">
           <RefreshCw className="h-4 w-4 mr-2" />
@@ -395,12 +395,12 @@ export function LabComponentsManagement() {
               }`} />
               <div>
                 <p className={`text-2xl font-bold transition-colors duration-200 ${
-                  currentView === 'pending' ? 'text-yellow-700' : 'text-gray-900'
+                  currentView === 'pending' ? 'text-yellow-700' : 'text-gray-900 dark:text-gray-100'
                 }`}>
                   {pendingRequests.length}
                 </p>
                 <p className={`text-sm transition-colors duration-200 ${
-                  currentView === 'pending' ? 'text-yellow-600' : 'text-gray-600'
+                  currentView === 'pending' ? 'text-yellow-600' : 'text-gray-600 dark:text-gray-400'
                 }`}>Pending Approvals</p>
               </div>
             </div>
@@ -420,10 +420,10 @@ export function LabComponentsManagement() {
               }`} />
               <div>
                 <p className={`text-2xl font-bold transition-colors duration-200 ${
-                  currentView === 'active' ? 'text-blue-700' : 'text-gray-900'
+                  currentView === 'active' ? 'text-blue-700' : 'text-gray-900 dark:text-gray-100'
                 }`}>{activeRequests.length}</p>
                 <p className={`text-sm transition-colors duration-200 ${
-                  currentView === 'active' ? 'text-blue-600' : 'text-gray-600'
+                  currentView === 'active' ? 'text-blue-600' : 'text-gray-600 dark:text-gray-400'
                 }`}>Active Loans</p>
               </div>
             </div>
@@ -443,10 +443,10 @@ export function LabComponentsManagement() {
               }`} />
               <div>
                 <p className={`text-2xl font-bold transition-colors duration-200 ${
-                  currentView === 'overdue' ? 'text-red-700' : 'text-gray-900'
+                  currentView === 'overdue' ? 'text-red-700' : 'text-gray-900 dark:text-gray-100'
                 }`}>{overdueRequests.length}</p>
                 <p className={`text-sm transition-colors duration-200 ${
-                  currentView === 'overdue' ? 'text-red-600' : 'text-gray-600'
+                  currentView === 'overdue' ? 'text-red-600' : 'text-gray-600 dark:text-gray-400'
                 }`}>Overdue Items</p>
               </div>
             </div>
@@ -466,10 +466,10 @@ export function LabComponentsManagement() {
               }`} />
               <div>
                 <p className={`text-2xl font-bold transition-colors duration-200 ${
-                  currentView === 'inventory' ? 'text-green-700' : 'text-gray-900'
+                  currentView === 'inventory' ? 'text-green-700' : 'text-gray-900 dark:text-gray-100'
                 }`}>{totalInventory}</p>
                 <p className={`text-sm transition-colors duration-200 ${
-                  currentView === 'inventory' ? 'text-green-600' : 'text-gray-600'
+                  currentView === 'inventory' ? 'text-green-600' : 'text-gray-600 dark:text-gray-400'
                 }`}>Total Inventory</p>
               </div>
             </div>
@@ -505,9 +505,9 @@ export function LabComponentsManagement() {
                   <span>On Loan:</span>
                   <span className="font-medium">{component.component_quantity - component.available_quantity}</span>
                 </div>
-                <div className="text-xs text-gray-500">Location: {component.component_location}</div>
+                <div className="text-xs text-gray-500 dark:text-gray-400">Location: {component.component_location}</div>
                 {component.available_quantity === 0 && (
-                  <Badge className="bg-red-100 text-red-800 text-xs">Out of Stock</Badge>
+                  <Badge className="bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 text-xs">Out of Stock</Badge>
                 )}
               </div>
             </CardContent>
@@ -518,7 +518,7 @@ export function LabComponentsManagement() {
       {/* Search Bar */}
       <div className="flex items-center space-x-4">
         <div className="flex items-center space-x-2 flex-1 max-w-md">
-          <Search className="h-4 w-4 text-gray-500" />
+          <Search className="h-4 w-4 text-gray-500 dark:text-gray-400" />
           <Input
             placeholder={currentView === 'inventory' ? "Search components..." : "Search requests by name, component, or project..."}
             value={searchTerm}
@@ -536,8 +536,8 @@ export function LabComponentsManagement() {
               <Card>
                 <CardContent className="p-8 text-center">
                   <Clock className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No pending requests</h3>
-                  <p className="text-gray-600">All component requests have been processed.</p>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No pending requests</h3>
+                  <p className="text-gray-600 dark:text-gray-400">All component requests have been processed.</p>
                 </CardContent>
               </Card>
             ) : (
@@ -553,13 +553,13 @@ export function LabComponentsManagement() {
                         </Avatar>
                         <div>
                           <h3 className="font-medium">{request.student?.user?.name || request.faculty?.user?.name || "Unknown"}</h3>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
                             {request.component?.component_name || "Unknown Component"} - Qty: {request.quantity}
                           </p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
                             Requested: {new Date(request.request_date).toLocaleDateString()}
                           </p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
                             Required by: {new Date(request.required_date).toLocaleDateString()}
                           </p>
                           {request.project && (
@@ -568,14 +568,14 @@ export function LabComponentsManagement() {
                             </p>
                           )}
                           {request.purpose && (
-                            <p className="text-xs text-gray-600 mt-1">
+                            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">
                               Purpose: {request.purpose}
                             </p>
                           )}
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <Badge className="bg-yellow-100 text-yellow-800">
+                        <Badge className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400">
                           <Clock className="h-3 w-3 mr-1" />
                           Pending
                         </Badge>
@@ -602,13 +602,13 @@ export function LabComponentsManagement() {
                             <div className="space-y-4">
                               <div>
                                 <h4 className="font-medium">Request Details</h4>
-                                <p className="text-sm text-gray-600">
+                                <p className="text-sm text-gray-600 dark:text-gray-400">
                                   {request.component?.component_name} - {request.quantity} units
                                 </p>
-                                <p className="text-sm text-gray-600">
+                                <p className="text-sm text-gray-600 dark:text-gray-400">
                                   Requester: {request.student?.user?.name || request.faculty?.user?.name}
                                 </p>
-                                <p className="text-sm text-gray-600">
+                                <p className="text-sm text-gray-600 dark:text-gray-400">
                                   Purpose: {request.purpose}
                                 </p>
                               </div>
@@ -659,8 +659,8 @@ export function LabComponentsManagement() {
               <Card>
                 <CardContent className="p-8 text-center">
                   <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No active loans</h3>
-                  <p className="text-gray-600">No components are currently on loan.</p>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No active loans</h3>
+                  <p className="text-gray-600 dark:text-gray-400">No components are currently on loan.</p>
                 </CardContent>
               </Card>
             ) : (
@@ -676,13 +676,13 @@ export function LabComponentsManagement() {
                         </Avatar>
                         <div>
                           <h3 className="font-medium">{request.student?.user?.name || request.faculty?.user?.name || "Unknown"}</h3>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
                             {request.component?.component_name || "Unknown Component"} - Qty: {request.quantity}
                           </p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
                             Collected: {request.collection_date ? new Date(request.collection_date).toLocaleDateString() : "Approved"}
                           </p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
                             Due: {new Date(request.required_date).toLocaleDateString()}
                           </p>
                           {isOverdue(request.required_date) && (
@@ -742,8 +742,8 @@ export function LabComponentsManagement() {
               <Card>
                 <CardContent className="p-8 text-center">
                   <AlertTriangle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No overdue items</h3>
-                  <p className="text-gray-600">All components have been returned on time.</p>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No overdue items</h3>
+                  <p className="text-gray-600 dark:text-gray-400">All components have been returned on time.</p>
                 </CardContent>
               </Card>
             ) : (
@@ -759,10 +759,10 @@ export function LabComponentsManagement() {
                         </Avatar>
                         <div>
                           <h3 className="font-medium">{request.student?.user?.name || request.faculty?.user?.name || "Unknown"}</h3>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
                             {request.component?.component_name || "Unknown Component"} - Qty: {request.quantity}
                           </p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
                             Due: {new Date(request.required_date).toLocaleDateString()}
                           </p>
                           <p className="text-xs text-red-600 font-medium">
@@ -771,7 +771,7 @@ export function LabComponentsManagement() {
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <Badge className="bg-red-100 text-red-800">
+                        <Badge className="bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">
                           <AlertTriangle className="h-3 w-3 mr-1" />
                           Overdue
                         </Badge>
@@ -822,11 +822,11 @@ export function LabComponentsManagement() {
                       <span>On Loan:</span>
                       <span className="font-medium">{component.component_quantity - component.available_quantity}</span>
                     </div>
-                    <div className="text-xs text-gray-500">
+                    <div className="text-xs text-gray-500 dark:text-gray-400">
                       Location: {component.component_location}
                     </div>
                     {component.available_quantity === 0 && (
-                      <Badge className="bg-red-100 text-red-800 text-xs">
+                      <Badge className="bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 text-xs">
                         Out of Stock
                       </Badge>
                     )}

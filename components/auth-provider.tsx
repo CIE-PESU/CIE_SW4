@@ -32,24 +32,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {
-    // Check for stored user session
-    const storedUser = localStorage.getItem("cie-user")
-    if (storedUser) {
-      try {
-        const userData = JSON.parse(storedUser)
-        setUser(userData)
-        // Optionally refresh user data from server
-        refreshUserData(userData.id)
-      } catch (error) {
-        console.error("Error parsing stored user:", error)
-        localStorage.removeItem("cie-user")
-      }
-    }
-    setIsLoading(false)
-  }, [])
+  const logout = useCallback(() => {
+    setUser(null)
+    localStorage.removeItem("cie-user")
+  }, []);
 
-  const refreshUserData = async (userId: string) => {
+  const refreshUserData = useCallback(async (userId: string) => {
     try {
       const response = await fetch("/api/auth/me", {
         headers: {
@@ -66,12 +54,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.warn("User session invalid, logging out")
         logout()
       }
+      // On other errors (e.g. 500), keep the existing session — don't log out
     } catch (error) {
+      // Network error — keep the existing local session, don't log the user out
       console.error("Error refreshing user data:", error)
-      // If there's a network error or other issue, also log out to be safe
-      logout()
     }
-  }
+  }, [logout]);
+
+  useEffect(() => {
+    // Check for stored user session
+    const storedUser = localStorage.getItem("cie-user")
+    if (storedUser) {
+      try {
+        const userData = JSON.parse(storedUser)
+        setUser(userData)
+        // Refresh user data from server in background
+        refreshUserData(userData.id)
+      } catch (error) {
+        console.error("Error parsing stored user:", error)
+        localStorage.removeItem("cie-user")
+      }
+    }
+    setIsLoading(false)
+  }, [refreshUserData])
 
   const login = useCallback(async (email: string, password: string): Promise<boolean> => {
     try {
@@ -90,17 +95,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (response.ok) {
         const { user: userData } = await response.json()
         console.log("Login successful, user data:", userData)
-        
-        // Force state update by setting user to null first, then to userData
-        setUser(null)
-        
-        // Use setTimeout to ensure state update happens
-        setTimeout(() => {
-          setUser(userData)
-          localStorage.setItem("cie-user", JSON.stringify(userData))
-          console.log("User state updated after login")
-        }, 0)
-        
+        // Set user directly — no null-then-set hack needed
+        setUser(userData)
+        localStorage.setItem("cie-user", JSON.stringify(userData))
         return true
       } else {
         const { error } = await response.json()
@@ -113,16 +110,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const logout = useCallback(() => {
-    setUser(null)
-    localStorage.removeItem("cie-user")
-  }, []);
-
   const refreshUser = useCallback(async () => {
     if (user) {
       await refreshUserData(user.id)
     }
-  }, [user]);
+  }, [user, refreshUserData]);
 
   const value = React.useMemo(() => ({
     user,

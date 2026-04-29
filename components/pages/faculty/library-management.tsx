@@ -509,23 +509,23 @@ export function LibraryManagement() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "PENDING":
-        return "bg-yellow-100 text-yellow-800"
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
       case "APPROVED":
-        return "bg-green-100 text-green-800"
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
       case "COLLECTED":
-        return "bg-blue-100 text-blue-800"
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
       case "PENDING_RETURN":
-        return "bg-orange-100 text-orange-800"
+        return "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400"
       case "RETURNED":
-        return "bg-purple-100 text-purple-800"
+        return "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400"
       case "REJECTED":
-        return "bg-red-100 text-red-800"
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
       case "OVERDUE":
-        return "bg-red-100 text-red-800"
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
       case "EXPIRED":
-        return "bg-red-100 text-red-800"
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100"
     }
   }
 
@@ -554,9 +554,9 @@ export function LibraryManagement() {
 
   const getAvailabilityColor = (available: number, total: number) => {
     const percentage = (available / total) * 100
-    if (percentage === 0) return "bg-red-100 text-red-800"
-    if (percentage < 30) return "bg-yellow-100 text-yellow-800"
-    return "bg-green-100 text-green-800"
+    if (percentage === 0) return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
+    if (percentage < 30) return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
+    return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
   }
 
   const getAvailabilityText = (available: number, total: number) => {
@@ -592,7 +592,7 @@ export function LibraryManagement() {
               <Clock className="h-5 w-5 text-yellow-600" />
               <div>
                 <p className="text-2xl font-bold">{pendingRequests.length}</p>
-                <p className="text-sm text-gray-600">Pending Requests</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Pending Requests</p>
               </div>
             </div>
           </CardContent>
@@ -603,7 +603,7 @@ export function LibraryManagement() {
               <Package className="h-5 w-5 text-blue-600" />
               <div>
                 <p className="text-2xl font-bold">{activeRequests.length}</p>
-                <p className="text-sm text-gray-600">Active Loans</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Active Loans</p>
               </div>
             </div>
           </CardContent>
@@ -614,7 +614,7 @@ export function LibraryManagement() {
               <Clock className="h-5 w-5 text-orange-600" />
               <div>
                 <p className="text-2xl font-bold">{pendingReturnRequests.length}</p>
-                <p className="text-sm text-gray-600">Pending Returns</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Pending Returns</p>
               </div>
             </div>
           </CardContent>
@@ -625,7 +625,7 @@ export function LibraryManagement() {
               <AlertTriangle className="h-5 w-5 text-red-600" />
               <div>
                 <p className="text-2xl font-bold">{overdueRequests.length}</p>
-                <p className="text-sm text-gray-600">Overdue Items</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Overdue Items</p>
               </div>
             </div>
           </CardContent>
@@ -638,7 +638,7 @@ export function LibraryManagement() {
                 <p className="text-2xl font-bold">
                   {items.reduce((sum, item) => sum + item.available_quantity, 0)}
                 </p>
-                <p className="text-sm text-gray-600">Available Items</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Available Items</p>
               </div>
             </div>
           </CardContent>
@@ -662,8 +662,8 @@ export function LibraryManagement() {
               <Card>
                 <CardContent className="p-8 text-center">
                   <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No active requests</h3>
-                  <p className="text-gray-600">You haven't made any library requests yet.</p>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No active requests</h3>
+                  <p className="text-gray-600 dark:text-gray-400">You haven't made any library requests yet.</p>
                   <Button 
                     className="mt-4" 
                     onClick={() => {
@@ -683,7 +683,7 @@ export function LibraryManagement() {
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-4">
-                        <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden">
+                        <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
                           <img
                             src={request.item?.image_url || "/placeholder.jpg"}
                             alt={request.item?.item_name || "Library Item"}
@@ -695,11 +695,11 @@ export function LibraryManagement() {
                         </div>
                         <div>
                           <h3 className="font-medium">{request.item?.item_name || "Unknown Item"}</h3>
-                          <p className="text-sm text-gray-600">Quantity: {request.quantity}</p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-sm text-gray-600 dark:text-gray-400">Quantity: {request.quantity}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
                             Requested: {new Date(request.request_date).toLocaleDateString()}
                           </p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
                             Required by: {new Date(request.required_date).toLocaleDateString()}
                           </p>
                           {request.collection_date && (
@@ -766,7 +766,7 @@ export function LibraryManagement() {
                     />
                   </div>
                   <span className="flex items-center ml-4 mr-1 text-gray-400"><Filter className="h-5 w-5" /></span>
-                  <span className="text-sm text-gray-600 font-medium ml-1">Category</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-400 font-medium ml-1">Category</span>
                   <div className="w-40 flex flex-col">
                     <Select value={categoryFilter} onValueChange={setCategoryFilter}>
                       <SelectTrigger className="h-9 text-sm">
@@ -800,7 +800,7 @@ export function LibraryManagement() {
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="h-6 w-6 text-gray-400 hover:text-gray-600"
+                              className="h-6 w-6 text-gray-400 hover:text-gray-600 dark:text-gray-400"
                               onClick={() => setInfoDialogOpen(item.id)}
                             >
                               <Info className="h-3 w-3" />
@@ -820,7 +820,7 @@ export function LibraryManagement() {
                                 <img
                                   src={item.image_url || '/placeholder.jpg'}
                                   alt={`Front view of ${item.item_name}`}
-                                  className="w-full h-full object-contain rounded-md bg-gray-50"
+                                  className="w-full h-full object-contain rounded-md bg-gray-50 dark:bg-slate-800 dark:bg-gray-800"
                                   onError={(e) => {
                                     e.currentTarget.src = "/placeholder.jpg"
                                   }}
@@ -834,7 +834,7 @@ export function LibraryManagement() {
                                   <img
                                     src={item.back_image_url}
                                     alt={`Back view of ${item.item_name}`}
-                                    className="w-full h-full object-contain rounded-md bg-gray-50"
+                                    className="w-full h-full object-contain rounded-md bg-gray-50 dark:bg-slate-800 dark:bg-gray-800"
                                     onError={(e) => {
                                       e.currentTarget.src = "/placeholder.jpg"
                                     }}
@@ -848,7 +848,7 @@ export function LibraryManagement() {
                                     <Button
                                       variant="secondary"
                                       size="icon"
-                                      className="absolute right-1 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-white/80 hover:bg-white shadow-sm z-10"
+                                      className="absolute right-1 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-white dark:bg-slate-900/80 hover:bg-white dark:bg-slate-900 shadow-sm z-10"
                                       onClick={() => setImageStates(prev => ({ ...prev, [item.id]: true }))}
                                     >
                                       <ChevronRight className="h-3 w-3" />
@@ -858,7 +858,7 @@ export function LibraryManagement() {
                                     <Button
                                       variant="secondary"
                                       size="icon"
-                                      className="absolute left-1 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-white/80 hover:bg-white shadow-sm z-10"
+                                      className="absolute left-1 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-white dark:bg-slate-900/80 hover:bg-white dark:bg-slate-900 shadow-sm z-10"
                                       onClick={() => setImageStates(prev => ({ ...prev, [item.id]: false }))}
                                     >
                                       <ChevronLeft className="h-3 w-3" />
@@ -869,18 +869,18 @@ export function LibraryManagement() {
                               {/* Image Indicators */}
                               {item.back_image_url && (
                                 <div className="absolute bottom-1 left-1/2 -translate-x-1/2 flex space-x-1 z-10">
-                                  <div className={`w-1 h-1 rounded-full transition-colors duration-300 ${!imageStates[item.id] ? 'bg-white' : 'bg-white/50'}`} />
-                                  <div className={`w-1 h-1 rounded-full transition-colors duration-300 ${imageStates[item.id] ? 'bg-white' : 'bg-white/50'}`} />
+                                  <div className={`w-1 h-1 rounded-full transition-colors duration-300 ${!imageStates[item.id] ? 'bg-white dark:bg-slate-900' : 'bg-white dark:bg-slate-900/50'}`} />
+                                  <div className={`w-1 h-1 rounded-full transition-colors duration-300 ${imageStates[item.id] ? 'bg-white dark:bg-slate-900' : 'bg-white dark:bg-slate-900/50'}`} />
                                 </div>
                               )}
                             </div>
                           )}
                           <div className="space-y-1">
-                            <div className="grid grid-cols-2 gap-2 text-xs text-gray-700">
+                            <div className="grid grid-cols-2 gap-2 text-xs text-gray-700 dark:text-gray-300">
                               <div><span className="font-medium">Available:</span> {item.available_quantity}</div>
                               <div><span className="font-medium">Total:</span> {item.item_quantity}</div>
                             </div>
-                            <div className="text-xs text-gray-500">
+                            <div className="text-xs text-gray-500 dark:text-gray-400">
                               <span className="font-medium">Location:</span> {item.item_location}
                             </div>
                           </div>
@@ -914,8 +914,8 @@ export function LibraryManagement() {
               <Card>
                 <CardContent className="p-8 text-center">
                   <CheckCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No items ready for collection</h3>
-                  <p className="text-gray-600">When items are approved, they'll appear here for collection.</p>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No items ready for collection</h3>
+                  <p className="text-gray-600 dark:text-gray-400">When items are approved, they'll appear here for collection.</p>
                 </CardContent>
               </Card>
             ) : (
@@ -924,7 +924,7 @@ export function LibraryManagement() {
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-4">
-                        <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden">
+                        <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
                           <img
                             src={request.item?.image_url || "/placeholder.jpg"}
                             alt={request.item?.item_name || "Library Item"}
@@ -936,11 +936,11 @@ export function LibraryManagement() {
                         </div>
                         <div>
                           <h3 className="font-medium">{request.item?.item_name || "Unknown Item"}</h3>
-                          <p className="text-sm text-gray-600">Quantity: {request.quantity}</p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-sm text-gray-600 dark:text-gray-400">Quantity: {request.quantity}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
                             Approved: {new Date(request.request_date).toLocaleDateString()}
                           </p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
                             Required by: {new Date(request.required_date).toLocaleDateString()}
                           </p>
                           {request.faculty_notes && (
@@ -951,7 +951,7 @@ export function LibraryManagement() {
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <Badge className="bg-green-100 text-green-800">
+                        <Badge className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
                           <CheckCircle className="h-3 w-3 mr-1" />
                           Ready for Collection
                         </Badge>
@@ -978,8 +978,8 @@ export function LibraryManagement() {
               <Card>
                 <CardContent className="p-8 text-center">
                   <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No active loans</h3>
-                  <p className="text-gray-600">Your collected items will appear here.</p>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No active loans</h3>
+                  <p className="text-gray-600 dark:text-gray-400">Your collected items will appear here.</p>
                 </CardContent>
               </Card>
             ) : (
@@ -988,7 +988,7 @@ export function LibraryManagement() {
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-4">
-                        <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden">
+                        <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
                           <img
                             src={request.item?.image_url || "/placeholder.jpg"}
                             alt={request.item?.item_name || "Library Item"}
@@ -1000,11 +1000,11 @@ export function LibraryManagement() {
                         </div>
                         <div>
                           <h3 className="font-medium">{request.item?.item_name || "Unknown Item"}</h3>
-                          <p className="text-sm text-gray-600">Quantity: {request.quantity}</p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-sm text-gray-600 dark:text-gray-400">Quantity: {request.quantity}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
                             Collected: {new Date(request.collection_date || request.request_date).toLocaleDateString()}
                           </p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
                             Due: {new Date(request.required_date).toLocaleDateString()}
                           </p>
                           {isOverdue(request.required_date) && (
@@ -1020,7 +1020,7 @@ export function LibraryManagement() {
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <Badge className={isOverdue(request.required_date) ? "bg-red-100 text-red-800" : "bg-blue-100 text-blue-800"}>
+                        <Badge className={isOverdue(request.required_date) ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400" : "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"}>
                           <BookOpen className="h-3 w-3 mr-1" />
                           {isOverdue(request.required_date) ? "Overdue" : "On Loan"}
                         </Badge>
@@ -1048,8 +1048,8 @@ export function LibraryManagement() {
               <Card>
                 <CardContent className="p-8 text-center">
                   <RotateCcw className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No pending returns</h3>
-                  <p className="text-gray-600">Items marked for return will appear here for faculty approval.</p>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No pending returns</h3>
+                  <p className="text-gray-600 dark:text-gray-400">Items marked for return will appear here for faculty approval.</p>
                 </CardContent>
               </Card>
             ) : (
@@ -1058,7 +1058,7 @@ export function LibraryManagement() {
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-4">
-                        <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden">
+                        <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
                           <img
                             src={request.item?.image_url || "/placeholder.jpg"}
                             alt={request.item?.item_name || "Library Item"}
@@ -1070,11 +1070,11 @@ export function LibraryManagement() {
                         </div>
                         <div>
                           <h3 className="font-medium">{request.item?.item_name || "Unknown Item"}</h3>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
                             Requester: {request.student?.user?.name || request.faculty?.user?.name || "Unknown"}
                           </p>
-                          <p className="text-sm text-gray-600">Quantity: {request.quantity}</p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-sm text-gray-600 dark:text-gray-400">Quantity: {request.quantity}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
                             Return requested: {new Date(request.return_date || request.request_date).toLocaleDateString()}
                           </p>
                           {request.faculty_notes && (
@@ -1085,7 +1085,7 @@ export function LibraryManagement() {
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <Badge className="bg-purple-100 text-purple-800">
+                        <Badge className="bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400">
                           <RotateCcw className="h-3 w-3 mr-1" />
                           Return Pending
                         </Badge>
@@ -1112,17 +1112,17 @@ export function LibraryManagement() {
               <Card>
                 <CardContent className="p-8 text-center">
                   <CheckCircle className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No completed requests</h3>
-                  <p className="text-gray-600">Completed library transactions will appear here.</p>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No completed requests</h3>
+                  <p className="text-gray-600 dark:text-gray-400">Completed library transactions will appear here.</p>
                 </CardContent>
               </Card>
             ) : (
               completedRequests.map((request) => (
-                <Card key={request.id} className="border-gray-200 bg-gray-50">
+                <Card key={request.id} className="border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-slate-800 dark:bg-gray-800">
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-4">
-                        <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden">
+                        <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
                           <img
                             src={request.item?.image_url || "/placeholder.jpg"}
                             alt={request.item?.item_name || "Library Item"}
@@ -1134,11 +1134,11 @@ export function LibraryManagement() {
                         </div>
                         <div>
                           <h3 className="font-medium">{request.item?.item_name || "Unknown Item"}</h3>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
                             Requester: {request.student?.user?.name || request.faculty?.user?.name || "Unknown"}
                           </p>
-                          <p className="text-sm text-gray-600">Quantity: {request.quantity}</p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-sm text-gray-600 dark:text-gray-400">Quantity: {request.quantity}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
                             Completed: {new Date(request.return_date || request.request_date).toLocaleDateString()}
                           </p>
                           {request.faculty_notes && (
@@ -1149,7 +1149,7 @@ export function LibraryManagement() {
                         </div>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <Badge className="bg-gray-100 text-gray-800">
+                        <Badge className="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100">
                           <CheckCircle className="h-3 w-3 mr-1" />
                           Completed
                         </Badge>
@@ -1176,7 +1176,7 @@ export function LibraryManagement() {
                 <CardContent>
                   <div className="space-y-4">
                     {/* Item Image */}
-                    <div className="w-full h-32 bg-gray-100 rounded-lg overflow-hidden">
+                    <div className="w-full h-32 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
                       <img
                         src={item.image_url || "/placeholder.jpg"}
                         alt={item.item_name}
@@ -1186,7 +1186,7 @@ export function LibraryManagement() {
                         }}
                       />
                     </div>
-                    <div className="flex flex-wrap gap-4 items-center text-sm text-gray-700 mb-2">
+                    <div className="flex flex-wrap gap-4 items-center text-sm text-gray-700 dark:text-gray-300 mb-2">
                       <div><span className="font-semibold">Total:</span> {item.item_quantity}</div>
                       <div><span className="font-semibold">Available:</span> {item.available_quantity}</div>
                       <div><span className="font-semibold">Category:</span> {item.item_category}</div>
@@ -1211,7 +1211,7 @@ export function LibraryManagement() {
           {selectedItem && (
             <div className="space-y-4">
               <div className="flex items-center space-x-4">
-                <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden">
+                <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
                   <img
                     src={selectedItem.image_url || "/placeholder.jpg"}
                     alt={selectedItem.item_name}
@@ -1223,7 +1223,7 @@ export function LibraryManagement() {
                 </div>
                 <div>
                   <h3 className="font-medium">{selectedItem.item_name}</h3>
-                  <p className="text-sm text-gray-600">{selectedItem.item_category}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{selectedItem.item_category}</p>
                   <p className="text-sm text-green-600">{selectedItem.available_quantity} available</p>
                 </div>
               </div>
@@ -1301,7 +1301,7 @@ export function LibraryManagement() {
                 {/* Item Name and Category */}
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2">
-                    <Package className="h-5 w-5 text-gray-500" />
+                    <Package className="h-5 w-5 text-gray-500 dark:text-gray-400" />
                     <h3 className="text-lg font-semibold">{item.item_name}</h3>
                   </div>
                   <Badge variant="outline" className="text-xs">
@@ -1312,20 +1312,20 @@ export function LibraryManagement() {
                 {/* Description */}
                 <div className="space-y-2">
                   <h4 className="font-medium text-sm">Description</h4>
-                  <p className="text-sm text-gray-600">{item.item_description}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{item.item_description}</p>
                 </div>
 
                 {/* Specifications */}
                 <div className="space-y-2">
                   <h4 className="font-medium text-sm">Specifications</h4>
-                  <p className="text-sm text-gray-600">{item.item_specification}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{item.item_specification}</p>
                 </div>
 
                 {/* Availability */}
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
                     <h4 className="font-medium text-sm">Total Quantity</h4>
-                    <p className="text-lg font-semibold text-gray-900">{item.item_quantity}</p>
+                    <p className="text-lg font-semibold text-gray-900 dark:text-gray-100">{item.item_quantity}</p>
                   </div>
                   <div className="space-y-1">
                     <h4 className="font-medium text-sm">Available</h4>
@@ -1346,12 +1346,12 @@ export function LibraryManagement() {
                 {/* Location */}
                 <div className="space-y-2">
                   <h4 className="font-medium text-sm">Location</h4>
-                  <p className="text-sm text-gray-600">{item.item_location}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{item.item_location}</p>
                 </div>
 
                 {/* Availability Status */}
                 <div className="pt-2 border-t">
-                  <Badge className={`${item.available_quantity > 0 ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>
+                  <Badge className={`${item.available_quantity > 0 ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"}`}>
                     {item.available_quantity > 0 ? "Available" : "Out of Stock"}
                   </Badge>
                 </div>

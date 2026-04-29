@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CIE Database Schema Report</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px;
+            background-color: #f9f9f9;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+        }
+        h1 { margin: 0; color: #2c3e50; }
+        .meta { color: #7f8c8d; font-size: 0.9em; }
+        
+        .section {
+            margin-bottom: 40px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h2 { 
+            color: #2980b9; 
+            border-left: 5px solid #2980b9;
+            padding-left: 15px;
+            margin-top: 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: white;
+        }
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background-color: #f8f9fa;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        tr:hover { background-color: #f1f1f1; }
+        
+        .table-name {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #8e44ad;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .badge {
+            background-color: #e74c3c;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.7em;
+            text-transform: uppercase;
+            font-family: sans-serif;
+        }
+        .badge-recent {
+            background-color: #3498db;
+        }
+
+        .highlight-row {
+            border: 2px solid #3498db !important;
+            background-color: #ebf5fb;
+        }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .section { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+            button { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CIE System Database Schema</h1>
+        <p class="meta">Generated on April 22, 2026 | Internal Documentation</p>
+    </div>
+
+    <div class="section">
+        <h2>Core Identity & Access</h2>
+        <div class="table-container">
+            <div class="table-name">users</div>
+            <table>
+                <thead>
+                    <tr><th>Column</th><th>Type</th><th>Notes</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>id</td><td>String</td><td>Primary Key (cuid)</td></tr>
+                    <tr><td>email</td><td>String</td><td>Unique</td></tr>
+                    <tr><td>name</td><td>String</td><td></td></tr>
+                    <tr><td>role</td><td>UserRole</td><td>ADMIN, FACULTY, STUDENT</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-container" style="margin-top: 30px;">
+            <div class="table-name">faculty</div>
+            <table>
+                <thead>
+                    <tr><th>Column</th><th>Type</th><th>Notes</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>id</td><td>String</td><td>Primary Key (cuid)</td></tr>
+                    <tr><td>faculty_id</td><td>String</td><td>Unique ID</td></tr>
+                    <tr><td>department</td><td>String</td><td></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="section highlight-row">
+        <h2 style="color: #2980b9;">Library Management <span class="badge badge-recent">Recently Modified</span></h2>
+        <div class="table-container">
+            <div class="table-name">library_items</div>
+            <table>
+                <thead>
+                    <tr><th>Column</th><th>Type</th><th>Notes</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>id</td><td>String (uuid)</td><td>Primary Key</td></tr>
+                    <tr><td>item_name</td><td>String</td><td>Book Title</td></tr>
+                    <tr style="background-color: #d6eaf8; font-weight: bold;"><td>author</td><td>String</td><td>Added April 2026</td></tr>
+                    <tr><td>item_quantity</td><td>Int</td><td>Total Stock</td></tr>
+                    <tr><td>available_quantity</td><td>Int</td><td>Current Available</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="section highlight-row">
+        <h2 style="color: #2980b9;">Programs & Modules <span class="badge badge-recent">Recently Modified</span></h2>
+        <div class="table-container">
+            <div class="table-name">base_programs</div>
+            <table>
+                <thead>
+                    <tr><th>Column</th><th>Type</th><th>Notes</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>id</td><td>String (cuid)</td><td>Primary Key</td></tr>
+                    <tr><td>name</td><td>String</td><td>Unique Name</td></tr>
+                    <tr><td>status</td><td>String</td><td>active, archived</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-container" style="margin-top: 30px;">
+            <div class="table-name">program_years</div>
+            <table>
+                <thead>
+                    <tr><th>Column</th><th>Type</th><th>Notes</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>id</td><td>String (cuid)</td><td>Primary Key</td></tr>
+                    <tr><td>year</td><td>Int</td><td>Calendar Year</td></tr>
+                    <tr><td>status</td><td>String</td><td>upcoming, ongoing, completed</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-container" style="margin-top: 30px;">
+            <div class="table-name">program_stages</div>
+            <table>
+                <thead>
+                    <tr><th>Column</th><th>Type</th><th>Notes</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>id</td><td>String (cuid)</td><td>Primary Key</td></tr>
+                    <tr><td>name</td><td>String</td><td>Stage Name</td></tr>
+                    <tr><td>order</td><td>Int</td><td>Display Order</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Academic Management</h2>
+        <div class="table-container">
+            <div class="table-name">courses</div>
+            <table>
+                <thead>
+                    <tr><th>Column</th><th>Type</th><th>Notes</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>id</td><td>String</td><td>Primary Key</td></tr>
+                    <tr><td>course_name</td><td>String</td><td></td></tr>
+                    <tr><td>course_code</td><td>String</td><td>Unique</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer style="text-align: center; margin-top: 50px; color: #95a5a6; font-size: 0.8em;">
+        &copy; 2026 CIE Innovation Hub. Confidential - For Internal Use Only.
+    </footer>
+</body>
+</html>

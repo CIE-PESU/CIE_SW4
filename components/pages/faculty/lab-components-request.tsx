@@ -161,7 +161,7 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
 
   const getProjectStatusColor = (projectId: string) => {
     const project = projects.find(p => p.id === projectId)
-    if (!project) return "text-gray-500"
+    if (!project) return "text-gray-500 dark:text-gray-400"
     
     switch (project.status) {
       case "PENDING":
@@ -177,7 +177,7 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
       case "REJECTED":
         return "text-red-600"
       default:
-        return "text-gray-500"
+        return "text-gray-500 dark:text-gray-400"
     }
   }
 
@@ -306,22 +306,22 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
   const getStatusColor = (status: string) => {
     switch (status.toUpperCase()) {
       case "PENDING":
-        return "bg-yellow-100 text-yellow-800"
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
       case "APPROVED":
-        return "bg-green-100 text-green-800"
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
       case "REJECTED":
-        return "bg-red-100 text-red-800"
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
       case "COLLECTED":
-        return "bg-blue-100 text-blue-800"
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400"
 
       case "USER_RETURNED":
-        return "bg-purple-100 text-purple-800"
+        return "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400"
       case "RETURNED":
-        return "bg-gray-100 text-gray-800"
+        return "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100"
       case "OVERDUE":
-        return "bg-red-100 text-red-800"
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100"
     }
   }
 
@@ -347,9 +347,9 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
 
   const getAvailabilityColor = (available: number, total: number) => {
     const percentage = (available / total) * 100
-    if (percentage === 0) return "bg-red-100 text-red-800"
-    if (percentage < 30) return "bg-yellow-100 text-yellow-800"
-    return "bg-green-100 text-green-800"
+    if (percentage === 0) return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
+    if (percentage < 30) return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
+    return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
   }
 
   const getAvailabilityText = (available: number, total: number) => {
@@ -445,12 +445,12 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
               }`} />
               <div>
                 <p className={`text-2xl font-bold transition-colors duration-200 ${
-                  currentView === 'available' ? 'text-purple-700' : 'text-gray-900'
+                  currentView === 'available' ? 'text-purple-700' : 'text-gray-900 dark:text-gray-100'
                 }`}>
                   {components.length}
                 </p>
                 <p className={`text-sm transition-colors duration-200 ${
-                  currentView === 'available' ? 'text-purple-600' : 'text-gray-600'
+                  currentView === 'available' ? 'text-purple-600' : 'text-gray-600 dark:text-gray-400'
                 }`}>Available Components</p>
               </div>
             </div>
@@ -470,10 +470,10 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
               }`} />
               <div>
                 <p className={`text-2xl font-bold transition-colors duration-200 ${
-                  currentView === 'active' ? 'text-green-700' : 'text-gray-900'
+                  currentView === 'active' ? 'text-green-700' : 'text-gray-900 dark:text-gray-100'
                 }`}>{activeRequests.length}</p>
                 <p className={`text-sm transition-colors duration-200 ${
-                  currentView === 'active' ? 'text-green-600' : 'text-gray-600'
+                  currentView === 'active' ? 'text-green-600' : 'text-gray-600 dark:text-gray-400'
                 }`}>Active Requests</p>
               </div>
             </div>
@@ -493,10 +493,10 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
               }`} />
               <div>
                 <p className={`text-2xl font-bold transition-colors duration-200 ${
-                  currentView === 'requests' ? 'text-blue-700' : 'text-gray-900'
+                  currentView === 'requests' ? 'text-blue-700' : 'text-gray-900 dark:text-gray-100'
                 }`}>{requests.length}</p>
                 <p className={`text-sm transition-colors duration-200 ${
-                  currentView === 'requests' ? 'text-blue-600' : 'text-gray-600'
+                  currentView === 'requests' ? 'text-blue-600' : 'text-gray-600 dark:text-gray-400'
                 }`}>My Requests</p>
               </div>
             </div>
@@ -518,10 +518,10 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
               }`} />
               <div>
                 <p className={`text-2xl font-bold transition-colors duration-200 ${
-                  currentView === 'overdue' ? 'text-red-700' : 'text-gray-900'
+                  currentView === 'overdue' ? 'text-red-700' : 'text-gray-900 dark:text-gray-100'
                 }`}>{overdueRequests.length}</p>
                 <p className={`text-sm transition-colors duration-200 ${
-                  currentView === 'overdue' ? 'text-red-600' : 'text-gray-600'
+                  currentView === 'overdue' ? 'text-red-600' : 'text-gray-600 dark:text-gray-400'
                 }`}>Overdue</p>
               </div>
             </div>
@@ -554,7 +554,7 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
                     />
                   </div>
                   <span className="flex items-center ml-4 mr-1 text-gray-400"><Filter className="h-5 w-5" /></span>
-                  <span className="text-sm text-gray-600 font-medium ml-1">Category</span>
+                  <span className="text-sm text-gray-600 dark:text-gray-400 font-medium ml-1">Category</span>
                   <div className="w-40 flex flex-col">
                     <Select value={categoryFilter} onValueChange={setCategoryFilter}>
                       <SelectTrigger className="h-9 text-sm">
@@ -588,7 +588,7 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="h-6 w-6 text-gray-400 hover:text-gray-600"
+                              className="h-6 w-6 text-gray-400 hover:text-gray-600 dark:text-gray-400"
                               onClick={() => setInfoDialogOpen(component.id)}
                             >
                               <Info className="h-3 w-3" />
@@ -610,7 +610,7 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
                                 <img
                                   src={component.image_url || '/placeholder.jpg'}
                                   alt={`Front view of ${component.component_name}`}
-                                  className="w-full h-full object-contain rounded-md bg-gray-50"
+                                  className="w-full h-full object-contain rounded-md bg-gray-50 dark:bg-slate-800 dark:bg-gray-800"
                                   onError={(e) => {
                                     e.currentTarget.src = "/placeholder.jpg"
                                   }}
@@ -627,7 +627,7 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
                                   <img
                                     src={component.back_image_url || '/placeholder.jpg'}
                                     alt={`Back view of ${component.component_name}`}
-                                    className="w-full h-full object-contain rounded-md bg-gray-50"
+                                    className="w-full h-full object-contain rounded-md bg-gray-50 dark:bg-slate-800 dark:bg-gray-800"
                                     onError={(e) => {
                                       e.currentTarget.src = "/placeholder.jpg"
                                     }}
@@ -642,7 +642,7 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
                                     <Button
                                       variant="secondary"
                                       size="icon"
-                                      className="absolute right-1 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-white/80 hover:bg-white shadow-sm z-10"
+                                      className="absolute right-1 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-white dark:bg-slate-900/80 hover:bg-white dark:bg-slate-900 shadow-sm z-10"
                                       onClick={() => setImageStates(prev => ({ ...prev, [component.id]: true }))}
                                     >
                                       <ChevronRight className="h-3 w-3" />
@@ -652,7 +652,7 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
                                     <Button
                                       variant="secondary"
                                       size="icon"
-                                      className="absolute left-1 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-white/80 hover:bg-white shadow-sm z-10"
+                                      className="absolute left-1 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-white dark:bg-slate-900/80 hover:bg-white dark:bg-slate-900 shadow-sm z-10"
                                       onClick={() => setImageStates(prev => ({ ...prev, [component.id]: false }))}
                                     >
                                       <ChevronLeft className="h-3 w-3" />
@@ -666,12 +666,12 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
                                 <div className="absolute bottom-1 left-1/2 -translate-x-1/2 flex space-x-1 z-10">
                                   <div 
                                     className={`w-1 h-1 rounded-full transition-colors duration-300 ${
-                                      !imageStates[component.id] ? 'bg-white' : 'bg-white/50'
+                                      !imageStates[component.id] ? 'bg-white dark:bg-slate-900' : 'bg-white dark:bg-slate-900/50'
                                     }`}
                                   />
                                   <div 
                                     className={`w-1 h-1 rounded-full transition-colors duration-300 ${
-                                      imageStates[component.id] ? 'bg-white' : 'bg-white/50'
+                                      imageStates[component.id] ? 'bg-white dark:bg-slate-900' : 'bg-white dark:bg-slate-900/50'
                                     }`}
                                   />
                                 </div>
@@ -680,12 +680,12 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
                           )}
                           
                           <div className="space-y-1">
-                            <div className="grid grid-cols-2 gap-2 text-xs text-gray-700">
+                            <div className="grid grid-cols-2 gap-2 text-xs text-gray-700 dark:text-gray-300">
                               <div><span className="font-medium">Total:</span> {component.component_quantity}</div>
                               <div><span className="font-medium">Available:</span> {component.available_quantity}</div>
                             </div>
                             
-                            <div className="text-xs text-gray-500">
+                            <div className="text-xs text-gray-500 dark:text-gray-400">
                               <span className="font-medium">Location:</span> {component.component_location}
                             </div>
                           </div>
@@ -726,8 +726,8 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
                                     {/* Top row: Name and Quantity */}
                                     <div className="flex flex-col md:flex-row md:items-center md:space-x-6">
                                       <div className="flex-1 mb-2 md:mb-0">
-                                        <h2 className="text-xl font-bold text-gray-900">{selectedComponent.component_name}</h2>
-                                        <p className="text-sm text-gray-500">{selectedComponent.component_category}</p>
+                                        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">{selectedComponent.component_name}</h2>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400">{selectedComponent.component_category}</p>
                                       </div>
                                       <div className="flex items-center space-x-2">
                                         <Label htmlFor="quantity" className="mb-0">Quantity *</Label>
@@ -740,7 +740,7 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
                                           max={selectedComponent.available_quantity || 1}
                                           className="w-20 px-2 py-1 text-sm"
                                         />
-                                        <span className="text-xs text-gray-500 ml-2">Available: {selectedComponent.available_quantity}</span>
+                                        <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">Available: {selectedComponent.available_quantity}</span>
                                       </div>
                                     </div>
                                     {/* Purpose textarea */}
@@ -752,7 +752,7 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
                                         onChange={(e) => setNewRequest((prev) => ({ ...prev, purpose: e.target.value }))}
                                         placeholder="Describe how you plan to use this component..."
                                         rows={5}
-                                        className="w-full text-base p-3 min-h-[120px] resize-vertical border border-gray-200 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                        className="w-full text-base p-3 min-h-[120px] resize-vertical border border-gray-200 dark:border-gray-600 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                       />
                                     </div>
                                     {/* Required date and project */}
@@ -765,7 +765,7 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
                                           value={newRequest.required_date}
                                           onChange={(e) => setNewRequest((prev) => ({ ...prev, required_date: e.target.value }))}
                                           min={new Date().toISOString().split("T")[0]}
-                                          className="text-base py-2 border-gray-200 rounded-lg"
+                                          className="text-base py-2 border-gray-200 dark:border-gray-600 rounded-lg"
                                         />
                                       </div>
                                       <div className="space-y-2">
@@ -804,7 +804,7 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
                                                 )
                                               })
                                             ) : (
-                                              <div className="p-4 text-sm text-center text-gray-500">
+                                              <div className="p-4 text-sm text-center text-gray-500 dark:text-gray-400">
                                                 No projects associated with this component.
                                               </div>
                                             )}
@@ -888,8 +888,8 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
                   <Card>
                     <CardContent className="p-4 text-center">
                       <Package className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                      <h3 className="font-medium text-gray-900 mb-1">No requests yet</h3>
-                      <p className="text-sm text-gray-600">Submit your first component request to get started.</p>
+                      <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-1">No requests yet</h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">Submit your first component request to get started.</p>
                     </CardContent>
                   </Card>
                 ) : (
@@ -902,8 +902,8 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
                               <Package className="h-4 w-4 text-orange-600" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <h3 className="font-medium text-gray-900 truncate text-sm">{request.component.component_name}</h3>
-                              <div className="flex items-center space-x-3 text-xs text-gray-500 mt-0.5">
+                              <h3 className="font-medium text-gray-900 dark:text-gray-100 truncate text-sm">{request.component.component_name}</h3>
+                              <div className="flex items-center space-x-3 text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                                 <span>Qty: {request.quantity}</span>
                                 <span>Requested: {new Date(request.request_date).toLocaleDateString()}</span>
                                 <span className={isOverdue(request.required_date) ? "text-red-600 font-medium" : ""}>
@@ -964,8 +964,8 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
                   <Card>
                     <CardContent className="p-4 text-center">
                       <Clock className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                      <h3 className="font-medium text-gray-900 mb-1">No active requests</h3>
-                      <p className="text-sm text-gray-600">You have no active component requests.</p>
+                      <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-1">No active requests</h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">You have no active component requests.</p>
                     </CardContent>
                   </Card>
                 ) : (
@@ -978,8 +978,8 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
                               <Package className="h-4 w-4 text-green-600" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <h3 className="font-medium text-gray-900 truncate text-sm">{request.component.component_name}</h3>
-                              <div className="flex items-center space-x-3 text-xs text-gray-500 mt-0.5">
+                              <h3 className="font-medium text-gray-900 dark:text-gray-100 truncate text-sm">{request.component.component_name}</h3>
+                              <div className="flex items-center space-x-3 text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                                 <span>Qty: {request.quantity}</span>
                                 <span>Requested: {new Date(request.request_date).toLocaleDateString()}</span>
                                 <span className={isOverdue(request.required_date) ? "text-red-600 font-medium" : ""}>
@@ -1066,8 +1066,8 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
                   <Card>
                     <CardContent className="p-4 text-center">
                       <AlertTriangle className="h-8 w-8 text-gray-400 mx-auto mb-2" />
-                      <h3 className="font-medium text-gray-900 mb-1">No overdue requests</h3>
-                      <p className="text-sm text-gray-600">You have no overdue component requests.</p>
+                      <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-1">No overdue requests</h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">You have no overdue component requests.</p>
                     </CardContent>
                   </Card>
                 ) : (
@@ -1080,8 +1080,8 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
                               <Package className="h-4 w-4 text-red-600" />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <h3 className="font-medium text-gray-900 truncate text-sm">{request.component.component_name}</h3>
-                              <div className="flex items-center space-x-3 text-xs text-gray-500 mt-0.5">
+                              <h3 className="font-medium text-gray-900 dark:text-gray-100 truncate text-sm">{request.component.component_name}</h3>
+                              <div className="flex items-center space-x-3 text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                                 <span>Qty: {request.quantity}</span>
                                 <span>Requested: {new Date(request.request_date).toLocaleDateString()}</span>
                                 <span className="text-red-600 font-medium">
@@ -1104,7 +1104,7 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
                           </div>
                           
                           <div className="flex items-center space-x-2">
-                            <Badge className="bg-red-100 text-red-800 text-xs px-2 py-1">
+                            <Badge className="bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 text-xs px-2 py-1">
                               <div className="flex items-center space-x-1">
                                 <AlertTriangle className="h-3 w-3" />
                                 <span>Overdue</span>
@@ -1177,7 +1177,7 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
                   <div className="space-y-6">
                     <div className="flex items-center justify-between">
                       <h3 className="text-lg font-semibold flex items-center gap-2">
-                        <Package className="h-5 w-5 text-gray-500" />
+                        <Package className="h-5 w-5 text-gray-500 dark:text-gray-400" />
                         {component.component_name}
                       </h3>
                       <span className={`px-3 py-1 rounded-full text-sm font-medium ${isAvailable ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{isAvailable ? 'Available' : 'Not Available'}</span>
@@ -1185,7 +1185,7 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
                     <div className="flex flex-row items-end justify-center pl-8">
                       <div>
                         <h4 className="font-medium text-sm">Total Quantity</h4>
-                        <p className="text-lg font-semibold text-gray-900 text-center">{component?.component_quantity}</p>
+                        <p className="text-lg font-semibold text-gray-900 dark:text-gray-100 text-center">{component?.component_quantity}</p>
                       </div>
                       <div className="ml-16 text-center">
                         <h4 className="font-medium text-sm">Available</h4>
@@ -1195,20 +1195,20 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
                     {component?.component_specification && (
                       <div className="space-y-2">
                         <h4 className="font-medium text-sm">Specifications</h4>
-                        <p className="text-sm text-gray-700 whitespace-pre-line">{component?.component_specification}</p>
+                        <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-line">{component?.component_specification}</p>
                       </div>
                     )}
                     {component?.component_description && (
                       <div className="space-y-2">
                         <h4 className="font-medium text-sm">Description</h4>
-                        <p className="text-sm text-gray-700 whitespace-pre-line">{component?.component_description}</p>
+                        <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-line">{component?.component_description}</p>
                       </div>
                     )}
                   </div>
                 </div>
                 {/* Right: Image Preview */}
                 <div className="flex-1 flex flex-col items-center justify-center min-w-0">
-                  <div className="relative w-full max-w-xs aspect-square bg-gray-50 rounded-lg border flex items-center justify-center overflow-hidden">
+                  <div className="relative w-full max-w-xs aspect-square bg-gray-50 dark:bg-slate-800 dark:bg-gray-800 rounded-lg border flex items-center justify-center overflow-hidden">
                     {component.front_image_id || component.back_image_id ? (
                       <>
                         <img
@@ -1222,7 +1222,7 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
                             {/* Left arrow (show only when on back) */}
                             {showBack && (
                               <button
-                                className="absolute left-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/80 hover:bg-white shadow flex items-center justify-center border z-10"
+                                className="absolute left-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white dark:bg-slate-900/80 hover:bg-white dark:bg-slate-900 shadow flex items-center justify-center border z-10"
                                 onClick={() => setShowBack(false)}
                                 type="button"
                                 aria-label="Show Front"
@@ -1233,7 +1233,7 @@ export function LabComponentsRequest({ onBackToManagement }: LabComponentsReques
                             {/* Right arrow (show only when on front) */}
                             {!showBack && (
                               <button
-                                className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/80 hover:bg-white shadow flex items-center justify-center border z-10"
+                                className="absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white dark:bg-slate-900/80 hover:bg-white dark:bg-slate-900 shadow flex items-center justify-center border z-10"
                                 onClick={() => setShowBack(true)}
                                 type="button"
                                 aria-label="Show Back"

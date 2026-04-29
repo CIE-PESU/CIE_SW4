@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, Suspense } from "react"
+import { useSearchParams } from "next/navigation"
 import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { Home, User as UserIcon, MapPin, Calendar, BookOpen, FolderOpen, ClipboardCheck, Wrench, Moon, Sun, History, Briefcase, GraduationCap } from "lucide-react"
 import { StudentHome } from "@/components/pages/student/student-home"
@@ -29,8 +30,17 @@ const menuItems = [
   { id: "locations", label: "Class Locations", icon: MapPin, disabled: true },
 ]
 
-export function StudentDashboard() {
-  const [currentPage, setCurrentPage] = useState("home")
+function StudentDashboardContent() {
+  const searchParams = useSearchParams()
+  const initialPage = searchParams?.get("page") || "home"
+  const [currentPage, setCurrentPage] = useState(initialPage)
+
+  useEffect(() => {
+    const page = searchParams?.get("page")
+    if (page) {
+      setCurrentPage(page)
+    }
+  }, [searchParams])
 
   const renderPage = () => {
     switch (currentPage) {
@@ -74,5 +84,13 @@ export function StudentDashboard() {
     <DashboardLayout currentPage={currentPage} onPageChange={setCurrentPage} menuItems={menuItems}>
       {renderPage()}
     </DashboardLayout>
+  )
+}
+
+export function StudentDashboard() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>}>
+      <StudentDashboardContent />
+    </Suspense>
   )
 }

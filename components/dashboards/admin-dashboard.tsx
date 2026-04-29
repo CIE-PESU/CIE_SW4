@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, Suspense } from "react"
+import { useSearchParams } from "next/navigation"
 import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { Home, Users, User as UserIcon, BookOpen, Wrench, MapPin, Calendar, Building, Briefcase, Award, FolderOpen, GraduationCap } from "lucide-react"
 import { AdminHome } from "@/components/pages/admin/admin-home"
@@ -35,8 +36,17 @@ const menuItems = [
   { id: "schedules", label: "Class Schedules", icon: Calendar, disabled: true },
 ]
 
-export function AdminDashboard() {
-  const [currentPage, setCurrentPage] = useState("home")
+function AdminDashboardContent() {
+  const searchParams = useSearchParams()
+  const initialPage = searchParams?.get("page") || "home"
+  const [currentPage, setCurrentPage] = useState(initialPage)
+
+  useEffect(() => {
+    const page = searchParams?.get("page")
+    if (page) {
+      setCurrentPage(page)
+    }
+  }, [searchParams])
 
   const renderPage = () => {
     switch (currentPage) {
@@ -79,5 +89,13 @@ export function AdminDashboard() {
     <DashboardLayout currentPage={currentPage} onPageChange={setCurrentPage} menuItems={menuItems}>
       {renderPage()}
     </DashboardLayout>
+  )
+}
+
+export function AdminDashboard() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>}>
+      <AdminDashboardContent />
+    </Suspense>
   )
 }

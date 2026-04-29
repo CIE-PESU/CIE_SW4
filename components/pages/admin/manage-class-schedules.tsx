@@ -571,8 +571,8 @@ export function ManageClassSchedules() {
               <Card className="col-span-full">
                 <CardContent className="p-8 text-center">
                   <Calendar className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No schedules found</h3>
-                  <p className="text-gray-600">Add your first class schedule to get started.</p>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No schedules found</h3>
+                  <p className="text-gray-600 dark:text-gray-400">Add your first class schedule to get started.</p>
                 </CardContent>
               </Card>
             ) : (
@@ -584,7 +584,7 @@ export function ManageClassSchedules() {
                         <Calendar className="h-5 w-5" />
                         <span>{schedule.course.course_name}</span>
                       </div>
-                      <div className="text-xs text-gray-500">
+                      <div className="text-xs text-gray-500 dark:text-gray-400">
                         {schedule.faculty.user.name} • {schedule.room} • Section {schedule.section}
                       </div>
                     </div>
@@ -623,10 +623,10 @@ export function ManageClassSchedules() {
                         className="p-2 bg-blue-100 rounded text-xs hover:bg-blue-200 cursor-pointer"
                       >
                         <div className="font-medium">{schedule.course.course_name}</div>
-                        <div className="text-gray-600">
+                        <div className="text-gray-600 dark:text-gray-400">
                           {formatTime(schedule.startTime)} - {formatTime(schedule.endTime)}
                         </div>
-                        <div className="text-gray-500">{schedule.room}</div>
+                        <div className="text-gray-500 dark:text-gray-400">{schedule.room}</div>
                       </div>
                     ))}
                 </div>

@@ -219,7 +219,7 @@ export function ManageStudents() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="admin-page-title">Manage Students</h1>
-          <p className="text-gray-500">View, add, and manage student records and enrollments.</p>
+          <p className="text-gray-500 dark:text-gray-400">View, add, and manage student records and enrollments.</p>
         </div>
         <div className="flex space-x-2">
           <Button onClick={fetchData} variant="outline">
@@ -352,7 +352,7 @@ export function ManageStudents() {
       <div className="space-y-4">
         <div className="flex flex-wrap items-center gap-4">
           <div className="relative flex-grow max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 dark:text-gray-400" />
             <Input
               placeholder="Search by name, email, ID..."
               value={searchTerm}
@@ -360,7 +360,7 @@ export function ManageStudents() {
               className="pl-10"
             />
           </div>
-          <Filter className="h-5 w-5 text-gray-500" />
+          <Filter className="h-5 w-5 text-gray-500 dark:text-gray-400" />
           <Select value={filters.program} onValueChange={(value) => handleFilterChange("program", value)}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Filter by Program" />

@@ -167,19 +167,19 @@ export function StudentRequestHistory() {
     const baseClass = "font-medium"
     switch (status) {
       case "PENDING":
-        return <Badge className={`bg-yellow-100 text-yellow-800 ${baseClass}`}>Pending Review</Badge>
+        return <Badge className={`bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 ${baseClass}`}>Pending Review</Badge>
       case "APPROVED":
-        return <Badge className={`bg-blue-100 text-blue-800 ${baseClass}`}>Approved - Ready for Collection</Badge>
+        return <Badge className={`bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 ${baseClass}`}>Approved - Ready for Collection</Badge>
       case "COLLECTED":
         return isOverdueItem ? 
-          <Badge className={`bg-red-100 text-red-800 ${baseClass}`}>Collected - Overdue</Badge> :
-          <Badge className={`bg-green-100 text-green-800 ${baseClass}`}>Collected</Badge>
+          <Badge className={`bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 ${baseClass}`}>Collected - Overdue</Badge> :
+          <Badge className={`bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 ${baseClass}`}>Collected</Badge>
       case "PENDING_RETURN":
-        return <Badge className={`bg-orange-100 text-orange-800 ${baseClass}`}>Return Requested</Badge>
+        return <Badge className={`bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400 ${baseClass}`}>Return Requested</Badge>
       case "RETURNED":
-        return <Badge className={`bg-green-100 text-green-800 ${baseClass}`}>Returned</Badge>
+        return <Badge className={`bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 ${baseClass}`}>Returned</Badge>
       case "REJECTED":
-        return <Badge className={`bg-red-100 text-red-800 ${baseClass}`}>Rejected</Badge>
+        return <Badge className={`bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 ${baseClass}`}>Rejected</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
@@ -209,7 +209,7 @@ export function StudentRequestHistory() {
     <div className="space-y-6">
       <div>
         <h1 className="admin-page-title">My Requests & History</h1>
-        <p className="text-gray-600 mt-2">Track your component and library requests</p>
+        <p className="text-gray-600 dark:text-gray-400 mt-2">Track your component and library requests</p>
       </div>
 
       {/* Summary Cards */}
@@ -219,7 +219,7 @@ export function StudentRequestHistory() {
             <div className="flex items-center">
               <Clock className="h-8 w-8 text-yellow-600" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Pending</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Pending</p>
                 <p className="text-2xl font-bold">{pendingRequests.length}</p>
               </div>
             </div>
@@ -231,7 +231,7 @@ export function StudentRequestHistory() {
             <div className="flex items-center">
               <Package className="h-8 w-8 text-blue-600" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Active Loans</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Active Loans</p>
                 <p className="text-2xl font-bold">{activeRequests.length}</p>
               </div>
             </div>
@@ -243,7 +243,7 @@ export function StudentRequestHistory() {
             <div className="flex items-center">
               <CheckCircle className="h-8 w-8 text-green-600" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Completed</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Completed</p>
                 <p className="text-2xl font-bold">{completedRequests.length}</p>
               </div>
             </div>
@@ -255,7 +255,7 @@ export function StudentRequestHistory() {
             <div className="flex items-center">
               <IndianRupee className="h-8 w-8 text-red-600" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Outstanding Fines</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Outstanding Fines</p>
                 <p className="text-2xl font-bold">₹{totalFines}</p>
               </div>
             </div>
@@ -278,8 +278,8 @@ export function StudentRequestHistory() {
               <Card>
                 <CardContent className="p-8 text-center">
                   <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No active loans</h3>
-                  <p className="text-gray-600">You currently have no borrowed items.</p>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No active loans</h3>
+                  <p className="text-gray-600 dark:text-gray-400">You currently have no borrowed items.</p>
                 </CardContent>
               </Card>
             ) : (
@@ -309,23 +309,23 @@ export function StudentRequestHistory() {
                     <CardContent className="space-y-4">
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
-                          <Label className="text-xs text-gray-500">Quantity</Label>
+                          <Label className="text-xs text-gray-500 dark:text-gray-400">Quantity</Label>
                           <p className="font-medium">{request.quantity}</p>
                         </div>
                         <div>
-                          <Label className="text-xs text-gray-500">Collection Date</Label>
+                          <Label className="text-xs text-gray-500 dark:text-gray-400">Collection Date</Label>
                           <p className="font-medium">
                             {request.collection_date ? new Date(request.collection_date).toLocaleDateString() : "Not collected"}
                           </p>
                         </div>
                         <div>
-                          <Label className="text-xs text-gray-500">Due Date</Label>
+                          <Label className="text-xs text-gray-500 dark:text-gray-400">Due Date</Label>
                           <p className={`font-medium ${overdue ? 'text-red-600' : ''}`}>
                             {request.due_date ? new Date(request.due_date).toLocaleDateString() : "N/A"}
                           </p>
                         </div>
                         <div>
-                          <Label className="text-xs text-gray-500">Status</Label>
+                          <Label className="text-xs text-gray-500 dark:text-gray-400">Status</Label>
                           <p className="font-medium">{request.status.replace('_', ' ')}</p>
                         </div>
                       </div>
@@ -393,7 +393,7 @@ export function StudentRequestHistory() {
                                         onChange={(e) => setPaymentProof(e.target.files?.[0] || null)}
                                         className="mt-1"
                                       />
-                                      <p className="text-xs text-gray-500 mt-1">
+                                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                                         Upload screenshot of payment or receipt (JPG, PNG, PDF)
                                       </p>
                                     </div>
@@ -451,8 +451,8 @@ export function StudentRequestHistory() {
               <Card>
                 <CardContent className="p-8 text-center">
                   <Clock className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No pending requests</h3>
-                  <p className="text-gray-600">You have no requests awaiting approval.</p>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No pending requests</h3>
+                  <p className="text-gray-600 dark:text-gray-400">You have no requests awaiting approval.</p>
                 </CardContent>
               </Card>
             ) : (
@@ -477,27 +477,27 @@ export function StudentRequestHistory() {
                   <CardContent>
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
-                        <Label className="text-xs text-gray-500">Quantity</Label>
+                        <Label className="text-xs text-gray-500 dark:text-gray-400">Quantity</Label>
                         <p className="font-medium">{request.quantity}</p>
                       </div>
                       <div>
-                        <Label className="text-xs text-gray-500">Required Date</Label>
+                        <Label className="text-xs text-gray-500 dark:text-gray-400">Required Date</Label>
                         <p className="font-medium">{new Date(request.required_date).toLocaleDateString()}</p>
                       </div>
                       <div>
-                        <Label className="text-xs text-gray-500">Requested On</Label>
+                        <Label className="text-xs text-gray-500 dark:text-gray-400">Requested On</Label>
                         <p className="font-medium">{new Date(request.request_date).toLocaleDateString()}</p>
                       </div>
                       <div>
-                        <Label className="text-xs text-gray-500">Status</Label>
+                        <Label className="text-xs text-gray-500 dark:text-gray-400">Status</Label>
                         <p className="font-medium">Under Review</p>
                       </div>
                     </div>
                     
                     {request.notes && (
-                      <div className="mt-3 p-3 bg-gray-50 rounded-lg">
-                        <Label className="text-sm font-medium text-gray-700">Purpose:</Label>
-                        <p className="text-sm text-gray-600 mt-1">"{request.notes}"</p>
+                      <div className="mt-3 p-3 bg-gray-50 dark:bg-slate-800 dark:bg-gray-800 rounded-lg">
+                        <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">Purpose:</Label>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">"{request.notes}"</p>
                       </div>
                     )}
                   </CardContent>
@@ -515,8 +515,8 @@ export function StudentRequestHistory() {
               <Card>
                 <CardContent className="p-8 text-center">
                   <History className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No history</h3>
-                  <p className="text-gray-600">You have no completed requests yet.</p>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No history</h3>
+                  <p className="text-gray-600 dark:text-gray-400">You have no completed requests yet.</p>
                 </CardContent>
               </Card>
             ) : (
@@ -541,11 +541,11 @@ export function StudentRequestHistory() {
                   <CardContent>
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
-                        <Label className="text-xs text-gray-500">Requested</Label>
+                        <Label className="text-xs text-gray-500 dark:text-gray-400">Requested</Label>
                         <p className="font-medium">{new Date(request.request_date).toLocaleDateString()}</p>
                       </div>
                       <div>
-                        <Label className="text-xs text-gray-500">
+                        <Label className="text-xs text-gray-500 dark:text-gray-400">
                           {request.status === "RETURNED" ? "Returned" : "Completed"}
                         </Label>
                         <p className="font-medium">
@@ -554,7 +554,7 @@ export function StudentRequestHistory() {
                       </div>
                       {request.fine_amount && request.fine_paid && (
                         <div className="col-span-2">
-                          <Label className="text-xs text-gray-500">Fine Paid</Label>
+                          <Label className="text-xs text-gray-500 dark:text-gray-400">Fine Paid</Label>
                           <p className="font-medium text-red-600">₹{request.fine_amount}</p>
                         </div>
                       )}

@@ -1,6 +1,7 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
+import { useSearchParams } from "next/navigation"
 import { DashboardLayout } from "@/components/layout/dashboard-layout"
 import { Home, Users, User as UserIcon, MapPin, Calendar, FolderOpen, ClipboardCheck, Wrench, BookOpen, Settings, Award, Briefcase, BarChart3, GraduationCap } from "lucide-react"
 import { FacultyHome } from "@/components/pages/faculty/faculty-home"
@@ -20,9 +21,18 @@ import FacultyOpportunity from '@/components/pages/faculty/faculty-opportunity';
 import FacultyFeedbacks from '@/components/pages/faculty/feedbacks';
 import { NotificationsPage } from "@/components/pages/common/notifications-page"
 
-export function FacultyDashboard() {
+function FacultyDashboardContent() {
+  const searchParams = useSearchParams()
+  const initialPage = searchParams?.get("page") || "home"
   const { user } = useAuth()
-  const [currentPage, setCurrentPage] = useState("home")
+  const [currentPage, setCurrentPage] = useState(initialPage)
+
+  useEffect(() => {
+    const page = searchParams?.get("page")
+    if (page) {
+      setCurrentPage(page)
+    }
+  }, [searchParams])
   const [isCoordinator, setIsCoordinator] = useState(false)
   const [isLabCoordinator, setIsLabCoordinator] = useState(false)
 
@@ -114,5 +124,13 @@ export function FacultyDashboard() {
     <DashboardLayout currentPage={currentPage} onPageChange={setCurrentPage} menuItems={getMenuItems()}>
       {renderPage()}
     </DashboardLayout>
+  )
+}
+
+export function FacultyDashboard() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>}>
+      <FacultyDashboardContent />
+    </Suspense>
   )
 }

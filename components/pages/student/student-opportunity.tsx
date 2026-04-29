@@ -198,39 +198,39 @@ export default function StudentOpportunity() {
           }
           const status = getApplicationStatus(opp.id);
           return (
-            <div key={opp.id} className="border p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow bg-white flex flex-col h-full group">
+            <div key={opp.id} className="border p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow bg-white dark:bg-slate-900 flex flex-col h-full group">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-lg">{opp.title}</span>
-                  <span className="ml-1 text-xs bg-gray-100 px-2 py-1 rounded font-semibold tracking-wide border border-gray-200">{opp.type}</span>
+                  <span className="ml-1 text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded font-semibold tracking-wide border border-gray-200 dark:border-gray-600">{opp.type}</span>
                 </div>
                 {status && (
                   <span
                     className={
                       status === 'ACCEPTED'
-                        ? 'inline-block px-3 py-1 rounded-full bg-green-100 text-green-800 font-semibold text-xs shadow-sm'
+                        ? 'inline-block px-3 py-1 rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 font-semibold text-xs shadow-sm'
                         : status === 'REJECTED'
-                        ? 'inline-block px-3 py-1 rounded-full bg-red-100 text-red-800 font-semibold text-xs shadow-sm'
-                        : 'inline-block px-3 py-1 rounded-full bg-yellow-100 text-yellow-800 font-semibold text-xs shadow-sm'
+                        ? 'inline-block px-3 py-1 rounded-full bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 font-semibold text-xs shadow-sm'
+                        : 'inline-block px-3 py-1 rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 font-semibold text-xs shadow-sm'
                     }
                   >
                     {status.charAt(0) + status.slice(1).toLowerCase()}
                   </span>
                 )}
               </div>
-              <div className="text-gray-600 mb-3 line-clamp-2 min-h-[40px]">{opp.description}</div>
+              <div className="text-gray-600 dark:text-gray-400 dark:text-gray-400 mb-3 line-clamp-2 min-h-[40px]">{opp.description}</div>
               <div className="border-t pt-3 mt-2">
                 <div className="flex flex-col gap-1 text-sm mb-3">
-                  <div className="flex justify-between"><span className="text-gray-500">Faculty:</span><span className="truncate text-right">{
+                  <div className="flex justify-between"><span className="text-gray-500 dark:text-gray-400 dark:text-gray-400">Faculty:</span><span className="truncate text-right">{
                     opp.faculty?.user?.name
                       ? opp.faculty.user.name
                       : opp.faculty?.user?.email
                         ? opp.faculty.user.email
                         : opp.facultyId
                   }</span></div>
-                  <div className="flex justify-between"><span className="text-gray-500">App Window:</span><span className="text-right">{formatDate(opp.applicationStartDate)} to {formatDate(opp.applicationEndDate)}</span></div>
-                  <div className="flex justify-between"><span className="text-gray-500">Capacity:</span><span className="text-right">{opp.capacity}</span></div>
-                  <div className="flex justify-between"><span className="text-gray-500">Status:</span><span className="capitalize text-right">{opp.status.toLowerCase()}</span></div>
+                  <div className="flex justify-between"><span className="text-gray-500 dark:text-gray-400 dark:text-gray-400">App Window:</span><span className="text-right">{formatDate(opp.applicationStartDate)} to {formatDate(opp.applicationEndDate)}</span></div>
+                  <div className="flex justify-between"><span className="text-gray-500 dark:text-gray-400 dark:text-gray-400">Capacity:</span><span className="text-right">{opp.capacity}</span></div>
+                  <div className="flex justify-between"><span className="text-gray-500 dark:text-gray-400 dark:text-gray-400">Status:</span><span className="capitalize text-right">{opp.status.toLowerCase()}</span></div>
                 </div>
                 {(
                   <div className="flex flex-col gap-2 mt-2">
@@ -242,7 +242,7 @@ export default function StudentOpportunity() {
                     <div className="flex items-center gap-2">
                       <button
                         type="button"
-                        className="bg-gray-100 border border-gray-300 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-200 transition-colors select-none"
+                        className="bg-gray-100 dark:bg-gray-700 border border-gray-300 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-200 transition-colors select-none"
                         onClick={() => fileInputRefs.current[opp.id]?.current?.click()}
                       >
                         {status ? 'Replace Resume' : 'Upload Resume'}
@@ -263,9 +263,9 @@ export default function StudentOpportunity() {
                       </button>
                     </div>
                     {resumeFiles[opp.id] && (
-                      <div className="flex items-center gap-2 mt-1 p-2 bg-gray-50 rounded">
+                      <div className="flex items-center gap-2 mt-1 p-2 bg-gray-50 dark:bg-slate-800 dark:bg-gray-800 rounded">
                         <FileText className="h-4 w-4 text-blue-600" />
-                        <span className="text-xs text-gray-800 font-medium truncate">{resumeFiles[opp.id]?.name}</span>
+                        <span className="text-xs text-gray-800 dark:text-gray-100 dark:text-gray-100 font-medium truncate">{resumeFiles[opp.id]?.name}</span>
                       </div>
                     )}
                   </div>
@@ -279,20 +279,20 @@ export default function StudentOpportunity() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 w-full">
         {(!opportunityApplications || opportunityApplications.length === 0) && <div className='col-span-full'>No applications yet.</div>}
         {Array.isArray(opportunityApplications) && opportunityApplications.map(app => (
-          <div key={app.id} className="border p-5 rounded-xl shadow bg-white flex flex-col h-full">
+          <div key={app.id} className="border p-5 rounded-xl shadow bg-white dark:bg-slate-900 flex flex-col h-full">
             <div className="flex items-center justify-between mb-1">
               <div className="font-bold text-base">{app.opportunity?.title || 'Opportunity'}</div>
               <span className={
                 app.status === 'ACCEPTED'
-                  ? 'inline-block px-3 py-1 rounded-full bg-green-100 text-green-800 font-semibold text-xs shadow-sm'
+                  ? 'inline-block px-3 py-1 rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 font-semibold text-xs shadow-sm'
                   : app.status === 'REJECTED'
-                  ? 'inline-block px-3 py-1 rounded-full bg-red-100 text-red-800 font-semibold text-xs shadow-sm'
-                  : 'inline-block px-3 py-1 rounded-full bg-yellow-100 text-yellow-800 font-semibold text-xs shadow-sm'
+                  ? 'inline-block px-3 py-1 rounded-full bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 font-semibold text-xs shadow-sm'
+                  : 'inline-block px-3 py-1 rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 font-semibold text-xs shadow-sm'
               }>
                 {app.status.charAt(0) + app.status.slice(1).toLowerCase()}
               </span>
             </div>
-            <div className="text-sm text-gray-600 mt-1">Applied At: {formatDate(app.appliedAt)}</div>
+            <div className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-400 mt-1">Applied At: {formatDate(app.appliedAt)}</div>
           </div>
         ))}
       </div>

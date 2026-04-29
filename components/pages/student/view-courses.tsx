@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { BookOpen, Calendar, UserPlus, Trash2, RefreshCw, List, Clock, FileText, Search, Filter, MessageSquare, Star, Info } from "lucide-react"
+import { BookOpen, Calendar, UserPlus, Trash2, RefreshCw, List, Clock, FileText, Search, Filter, MessageSquare, Star, Info, ExternalLink, Link } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/hooks/use-toast"
@@ -35,6 +35,13 @@ interface CourseUnit {
   unit_description: string
   assignment_count: number
   hours_per_unit: number
+  coursework_materials?: Array<{
+    id: string
+    type: "file" | "link"
+    name: string
+    url: string
+    uploaded_at: string
+  }>
 }
 
 interface Course {
@@ -333,7 +340,7 @@ export function ViewCourses() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="admin-page-title">Available Courses</h1>
-          <p className="text-gray-600 mt-2">Browse and sign up for available courses</p>
+          <p className="text-gray-600 dark:text-gray-400 mt-2">Browse and sign up for available courses</p>
         </div>
         <div className="flex items-center space-x-2">
           <Button onClick={fetchData} variant="outline">
@@ -366,22 +373,22 @@ export function ViewCourses() {
         </div>
 
         {/* Status Legend */}
-        <div className="flex flex-wrap items-center gap-4 text-sm bg-gray-50 dark:bg-slate-800/50 px-4 py-2 rounded-lg border border-gray-100 dark:border-slate-700">
+        <div className="flex flex-wrap items-center gap-4 text-sm bg-gray-50 dark:bg-gray-800 dark:bg-slate-800/50 px-4 py-2 rounded-lg border border-gray-100 dark:border-gray-600 dark:border-slate-700">
           <div className="flex items-center gap-1.5">
             <div className="h-2 w-2 rounded-full bg-green-500"></div>
-            <span className="text-gray-600 dark:text-gray-300">Completed</span>
+            <span className="text-gray-600 dark:text-gray-400 dark:text-gray-300">Completed</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="h-2 w-2 rounded-full bg-orange-500"></div>
-            <span className="text-gray-600 dark:text-gray-300">Ongoing</span>
+            <span className="text-gray-600 dark:text-gray-400 dark:text-gray-300">Ongoing</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="h-2 w-2 rounded-full bg-blue-500"></div>
-            <span className="text-gray-600 dark:text-gray-300">Available</span>
+            <span className="text-gray-600 dark:text-gray-400 dark:text-gray-300">Available</span>
           </div>
           <div className="flex items-center gap-1.5">
             <div className="h-2 w-2 rounded-full bg-red-500"></div>
-            <span className="text-gray-600 dark:text-gray-300">Ended</span>
+            <span className="text-gray-600 dark:text-gray-400 dark:text-gray-300">Ended</span>
           </div>
         </div>
       </div>
@@ -390,8 +397,8 @@ export function ViewCourses() {
           <Card className="col-span-full">
             <CardContent className="p-8 text-center">
               <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No courses found</h3>
-              <p className="text-gray-600 dark:text-gray-400">Try adjusting your search or filters.</p>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 dark:text-white mb-2">No courses found</h3>
+              <p className="text-gray-600 dark:text-gray-400 dark:text-gray-400">Try adjusting your search or filters.</p>
             </CardContent>
           </Card>
         ) : (
@@ -413,7 +420,7 @@ export function ViewCourses() {
                   <div className="flex justify-between items-center mb-2">
                     <div className="flex items-center space-x-2 min-w-0">
                       <BookOpen className="h-5 w-5 text-blue-600" />
-                      <span className="font-bold text-lg text-gray-900 dark:text-white truncate">{course.course_name}</span>
+                      <span className="font-bold text-lg text-gray-900 dark:text-gray-100 dark:text-white truncate">{course.course_name}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Badge className="bg-slate-200 dark:bg-slate-600 text-slate-900 dark:text-slate-100 border-0 whitespace-nowrap pointer-events-none">
@@ -424,35 +431,35 @@ export function ViewCourses() {
                       </Badge>
                     </div>
                   </div>
-                  <CardDescription className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2">
+                  <CardDescription className="text-gray-600 dark:text-gray-400 dark:text-gray-300 text-sm line-clamp-2">
                     {course.course_description}
                   </CardDescription>
                   <span className="text-xs text-gray-400 mt-1 block">{course.course_code}</span>
                 </CardHeader>
                 <CardContent className="flex-1 flex flex-col justify-between px-0 pb-0">
                   <div className="space-y-2">
-                    <div className="flex flex-wrap gap-4 text-sm mb-2 text-gray-600 dark:text-gray-300">
+                    <div className="flex flex-wrap gap-4 text-sm mb-2 text-gray-600 dark:text-gray-400 dark:text-gray-300">
                       <div className="flex items-center space-x-2">
-                        <Calendar className="h-4 w-4 text-gray-400 dark:text-gray-500" />
+                        <Calendar className="h-4 w-4 text-gray-400 dark:text-gray-500 dark:text-gray-400" />
                         <span>{new Date(course.course_start_date).toLocaleDateString()} - {new Date(course.course_end_date).toLocaleDateString()}</span>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <Clock className="h-4 w-4 text-gray-400 dark:text-gray-500" />
+                        <Clock className="h-4 w-4 text-gray-400 dark:text-gray-500 dark:text-gray-400" />
                         <span>{totalHours} hours</span>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <FileText className="h-4 w-4 text-gray-400 dark:text-gray-500" />
+                        <FileText className="h-4 w-4 text-gray-400 dark:text-gray-500 dark:text-gray-400" />
                         <span>{totalAssignments} assignments</span>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <List className="h-4 w-4 text-gray-400 dark:text-gray-500" />
+                        <List className="h-4 w-4 text-gray-400 dark:text-gray-500 dark:text-gray-400" />
                         <span>{course.course_units?.length || 0} units</span>
                       </div>
                     </div>
                   </div>
                   <div className="flex-1" />
                   <div className="flex items-center justify-between mt-4">
-                    <span className="text-xs text-gray-500">Created by: {course.creator?.name || course.created_by}</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">Created by: {course.creator?.name || course.created_by}</span>
                     <div className="flex space-x-2">
                       {!getEnrollmentStatus(course) && getCourseStatus(course).label === "Available" && (
                         <Button 
@@ -464,7 +471,7 @@ export function ViewCourses() {
                         </Button>
                       )}
                       {getEnrollmentStatus(course) === "PENDING" && (
-                        <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 border-yellow-200">
+                        <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 border-yellow-200">
                           Pending Approval
                         </Badge>
                       )}
@@ -477,51 +484,78 @@ export function ViewCourses() {
         )}
       </div>
 
-      {/* Course Units Sheet */}
-      <Sheet open={isUnitsSheetOpen} onOpenChange={setIsUnitsSheetOpen}>
-        <SheetContent className="w-96">
-          <SheetHeader>
-            <SheetTitle>Course Units</SheetTitle>
-            <SheetDescription>
-              {selectedCourse?.course_name}
-            </SheetDescription>
-          </SheetHeader>
-          <div className="mt-6 space-y-4">
+      {/* Course Units Dialog */}
+      <Dialog open={isUnitsSheetOpen} onOpenChange={setIsUnitsSheetOpen}>
+        <DialogContent className="max-w-5xl w-[95vw] max-h-[85vh] overflow-y-auto" onInteractOutside={(e) => e.preventDefault()}>
+          <DialogHeader>
+            <DialogTitle>Course Units</DialogTitle>
+            <DialogDescription>
+              {selectedCourse?.course_name} — {selectedCourse?.course_code}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-4 space-y-4">
             {selectedCourse?.course_units?.length === 0 ? (
-              <p className="text-gray-500 text-center">No units added yet</p>
+              <p className="text-gray-500 dark:text-gray-400 text-center py-8">No units added yet</p>
             ) : (
-              selectedCourse?.course_units?.map((unit) => (
-                <Card key={unit.id} className="p-4">
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-start">
-                      <h4 className="font-medium">Unit {unit.unit_number}</h4>
-                      <Badge variant="outline">{unit.hours_per_unit}h</Badge>
-                    </div>
-                    <h5 className="font-medium text-sm">{unit.unit_name}</h5>
-                    <p className="text-sm text-gray-600">{unit.unit_description}</p>
-                    <div className="flex justify-between text-xs text-gray-500">
-                      <span>{unit.assignment_count} assignments</span>
-                    </div>
-                    {selectedCourse && isEnrolled(selectedCourse) && (
-                      <div className="mt-3 pt-3 border-t">
-                        <Button 
-                          size="sm" 
-                          variant="outline" 
-                          className="w-full text-blue-600 border-blue-100 hover:bg-blue-50"
-                          onClick={(e) => openFeedbackDialog(selectedCourse, unit.id, e)}
-                        >
-                          <MessageSquare className="h-4 w-4 mr-2" />
-                          Give Feedback
-                        </Button>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {selectedCourse?.course_units?.map((unit) => (
+                  <Card key={unit.id} className="p-4">
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-start">
+                        <h4 className="font-medium">Unit {unit.unit_number}</h4>
+                        <Badge variant="outline">{unit.hours_per_unit}h</Badge>
                       </div>
-                    )}
-                  </div>
-                </Card>
-              ))
+                      <h5 className="font-medium text-sm">{unit.unit_name}</h5>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">{unit.unit_description}</p>
+                      <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400">
+                        <span>{unit.assignment_count} assignments</span>
+                      </div>
+                      {/* Materials — only show to enrolled students */}
+                      {selectedCourse && isEnrolled(selectedCourse) && unit.coursework_materials && unit.coursework_materials.length > 0 && (
+                        <div className="border-t pt-2 mt-1 dark:border-slate-700">
+                          <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-1.5">Course Materials</p>
+                          <div className="space-y-1.5">
+                            {unit.coursework_materials.map((mat) => (
+                              <a
+                                key={mat.id}
+                                href={mat.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-2 text-xs px-2.5 py-1.5 rounded-lg bg-slate-50 dark:bg-slate-800 border dark:border-slate-700 hover:bg-blue-50 dark:hover:bg-blue-950 group transition-colors"
+                              >
+                                {mat.type === "file" ? (
+                                  <FileText className="h-3.5 w-3.5 text-blue-500 shrink-0" />
+                                ) : (
+                                  <ExternalLink className="h-3.5 w-3.5 text-violet-500 shrink-0" />
+                                )}
+                                <span className="text-slate-700 dark:text-slate-200 group-hover:text-blue-700 dark:group-hover:text-blue-300 font-medium truncate">{mat.name}</span>
+                              </a>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      {selectedCourse && isEnrolled(selectedCourse) && (
+                        <div className="mt-3 pt-3 border-t">
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            className="w-full text-blue-600 border-blue-100 hover:bg-blue-50"
+                            onClick={(e) => openFeedbackDialog(selectedCourse, unit.id, e)}
+                          >
+                            <MessageSquare className="h-4 w-4 mr-2" />
+                            Give Feedback
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  </Card>
+                ))}
+              </div>
             )}
           </div>
-        </SheetContent>
-      </Sheet>
+        </DialogContent>
+      </Dialog>
+
 
       {/* Feedback Dialog */}
       <Dialog open={isFeedbackDialogOpen} onOpenChange={setIsFeedbackDialogOpen}>
@@ -540,7 +574,7 @@ export function ViewCourses() {
             {/* Left Column: Form */}
             <div className="space-y-4">
               <div className="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm">
-                <h3 className="text-xs font-bold text-gray-900 dark:text-white mb-3 uppercase tracking-wider">Submit Your Feedback</h3>
+                <h3 className="text-xs font-bold text-gray-900 dark:text-gray-100 dark:text-white mb-3 uppercase tracking-wider">Submit Your Feedback</h3>
                 
                 <div className="flex items-start gap-2 mb-4 p-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800 rounded-lg text-[10px] text-amber-800 dark:text-amber-300">
                   <Info className="h-3.5 w-3.5 mt-0.5 flex-shrink-0" />
@@ -551,7 +585,7 @@ export function ViewCourses() {
 
                 <div className="space-y-4">
                   <div className="flex flex-col gap-3">
-                    <Label htmlFor="rating" className="text-xs font-semibold text-gray-500 uppercase">Class Rating</Label>
+                    <Label htmlFor="rating" className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Class Rating</Label>
                     <div className="flex items-center gap-1 bg-white dark:bg-slate-900 p-2 rounded-lg border w-fit">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <Button
@@ -570,11 +604,11 @@ export function ViewCourses() {
                           />
                         </Button>
                       ))}
-                      <span className="ml-2 text-base font-bold text-gray-700 dark:text-white">{feedbackRating}/5</span>
+                      <span className="ml-2 text-base font-bold text-gray-700 dark:text-gray-300 dark:text-white">{feedbackRating}/5</span>
                     </div>
                   </div>
                   <div className="flex flex-col gap-2">
-                    <Label htmlFor="comment" className="text-[10px] font-semibold text-gray-500 uppercase">Your Experience</Label>
+                    <Label htmlFor="comment" className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 uppercase">Your Experience</Label>
                     <Textarea
                       id="comment"
                       placeholder="What did you like? What could be improved?"
@@ -585,7 +619,7 @@ export function ViewCourses() {
                     />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <Label htmlFor="suggestions" className="text-[10px] font-semibold text-gray-500 uppercase">Suggestions for Next Session</Label>
+                    <Label htmlFor="suggestions" className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 uppercase">Suggestions for Next Session</Label>
                     <Textarea
                       id="suggestions"
                       placeholder="What should be changed for the next session?"
@@ -614,7 +648,7 @@ export function ViewCourses() {
             {/* Right Column: History */}
             <div className="space-y-6">
               <div className="flex justify-between items-center px-1">
-                <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider">Your Submission</h3>
+                <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 dark:text-white uppercase tracking-wider">Your Submission</h3>
                 <Button 
                   size="sm" 
                   variant="ghost" 
@@ -634,9 +668,9 @@ export function ViewCourses() {
                     <RefreshCw className="h-6 w-6 animate-spin text-gray-300" />
                   </div>
                 ) : courseFeedbacks.length === 0 ? (
-                  <div className="text-center py-10 bg-gray-50 dark:bg-slate-800/50 rounded-xl border-2 border-dashed border-gray-200 dark:border-slate-700">
+                  <div className="text-center py-10 bg-gray-50 dark:bg-gray-800 dark:bg-slate-800/50 rounded-xl border-2 border-dashed border-gray-200 dark:border-gray-600 dark:border-slate-700">
                     <Info className="h-8 w-8 text-gray-300 mx-auto mb-2" />
-                    <p className="text-sm text-gray-500">No feedback submitted yet</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">No feedback submitted yet</p>
                   </div>
                 ) : (
                   courseFeedbacks.map((f, idx) => (
@@ -651,7 +685,7 @@ export function ViewCourses() {
                               <p className="text-sm font-bold text-gray-900 dark:text-gray-100">
                                 {user?.name}
                               </p>
-                              <p className="text-[10px] text-gray-500 flex items-center gap-1">
+                              <p className="text-[10px] text-gray-500 dark:text-gray-400 flex items-center gap-1">
                                 <Calendar className="h-3 w-3" />
                                 Updated on {new Date(f.updated_at || f.created_at).toLocaleDateString()}
                               </p>
@@ -669,14 +703,14 @@ export function ViewCourses() {
                                 />
                               ))}
                             </div>
-                            <Badge variant="outline" className="text-[9px] font-bold px-1.5 h-5 bg-white shadow-sm">
+                            <Badge variant="outline" className="text-[9px] font-bold px-1.5 h-5 bg-white dark:bg-slate-900 shadow-sm">
                               ID: {f.id.slice(-4).toUpperCase()}
                             </Badge>
                           </div>
                         </div>
                       </CardHeader>
                       <CardContent className="p-4 pt-3">
-                        <p className="text-sm text-gray-700 dark:text-gray-300 italic bg-white dark:bg-slate-900/50 p-3 rounded-lg border border-slate-100 dark:border-slate-800 quote">
+                        <p className="text-sm text-gray-700 dark:text-gray-300 dark:text-gray-300 italic bg-white dark:bg-slate-900/50 p-3 rounded-lg border border-slate-100 dark:border-slate-800 quote">
                           "{f.comment}"
                         </p>
                       </CardContent>
@@ -689,7 +723,7 @@ export function ViewCourses() {
               <div className="space-y-4 pt-2">
                 <div className="flex items-center gap-2 px-1">
                   <div className="h-1 w-8 bg-blue-500 rounded-full" />
-                  <h3 className="text-[10px] font-bold text-gray-900 dark:text-white uppercase tracking-wider">Collective Session Ideas</h3>
+                  <h3 className="text-[10px] font-bold text-gray-900 dark:text-gray-100 dark:text-white uppercase tracking-wider">Collective Session Ideas</h3>
                 </div>
                 {allSuggestions.length === 0 ? (
                   <div className="text-center py-4 bg-slate-50/50 dark:bg-slate-800/20 rounded-lg border border-slate-100 dark:border-slate-800">
@@ -736,7 +770,7 @@ export function ViewCourses() {
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="registration-details" className="text-sm font-semibold text-gray-700">
+              <Label htmlFor="registration-details" className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                 Registration Details / Statement of Purpose
               </Label>
               <Textarea
@@ -747,7 +781,7 @@ export function ViewCourses() {
                 rows={5}
                 className="resize-none"
               />
-              <p className="text-[10px] text-gray-500 italic">
+              <p className="text-[10px] text-gray-500 dark:text-gray-400 italic">
                 * Your application will be reviewed by the course faculty or an administrator.
               </p>
             </div>

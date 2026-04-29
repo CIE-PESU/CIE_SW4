@@ -26,13 +26,13 @@ export function ViewAttendance() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "present":
-        return "bg-green-100 text-green-800"
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
       case "absent":
-        return "bg-red-100 text-red-800"
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
       case "late":
-        return "bg-yellow-100 text-yellow-800"
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100"
     }
   }
 
@@ -68,7 +68,7 @@ export function ViewAttendance() {
               <TrendingUp className="h-5 w-5 text-blue-600" />
               <div>
                 <p className="text-2xl font-bold">{attendancePercentage.toFixed(1)}%</p>
-                <p className="text-sm text-gray-600">Overall Attendance</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Overall Attendance</p>
               </div>
             </div>
           </CardContent>
@@ -79,7 +79,7 @@ export function ViewAttendance() {
               <CheckCircle className="h-5 w-5 text-green-600" />
               <div>
                 <p className="text-2xl font-bold">{presentClasses}</p>
-                <p className="text-sm text-gray-600">Present</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Present</p>
               </div>
             </div>
           </CardContent>
@@ -90,7 +90,7 @@ export function ViewAttendance() {
               <Clock className="h-5 w-5 text-yellow-600" />
               <div>
                 <p className="text-2xl font-bold">{lateClasses}</p>
-                <p className="text-sm text-gray-600">Late</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Late</p>
               </div>
             </div>
           </CardContent>
@@ -101,7 +101,7 @@ export function ViewAttendance() {
               <X className="h-5 w-5 text-red-600" />
               <div>
                 <p className="text-2xl font-bold">{absentClasses}</p>
-                <p className="text-sm text-gray-600">Absent</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Absent</p>
               </div>
             </div>
           </CardContent>
@@ -122,7 +122,7 @@ export function ViewAttendance() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Attendance Progress</span>
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-gray-600 dark:text-gray-400">
                 {presentClasses} / {totalClasses} classes attended
               </span>
             </div>
@@ -163,8 +163,8 @@ export function ViewAttendance() {
           {myAttendance.length === 0 ? (
             <div className="text-center py-8">
               <ClipboardCheck className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No attendance records</h3>
-              <p className="text-gray-600">Your attendance will appear here once classes begin.</p>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No attendance records</h3>
+              <p className="text-gray-600 dark:text-gray-400">Your attendance will appear here once classes begin.</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -176,7 +176,7 @@ export function ViewAttendance() {
                       <h4 className="font-medium">
                         {record.course_code} - Section {record.section}
                       </h4>
-                      <p className="text-sm text-gray-600">{record.date}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">{record.date}</p>
                     </div>
                     <Badge className={getStatusColor(record.myStatus)}>
                       <div className="flex items-center space-x-1">
