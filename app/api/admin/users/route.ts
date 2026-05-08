@@ -22,6 +22,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
+    if (role === "ADMIN") {
+      return NextResponse.json({ error: "Admins can only create Faculty or Student accounts" }, { status: 400 })
+    }
+
     // ensure user doesn't already exist
     const existing = await prisma.user.findUnique({ where: { email } })
     if (existing) {

@@ -325,7 +325,7 @@ async function main() {
         phone: '2222222222',
         student: {
           create: {
-            student_id: 'PES1UG24CS001',
+            student_id: 'PES1UG24CS999',
             program: 'BTech CSE',
             year: '2024',
             section: 'A',

@@ -67,7 +67,6 @@ export function ManageUsers() {
         <div>
           <Label>Role</Label>
           <select className="w-full rounded-md border border-input px-3 py-2" value={role} onChange={(e) => setRole(e.target.value)}>
-            <option value="ADMIN">ADMIN</option>
             <option value="FACULTY">FACULTY</option>
             <option value="STUDENT">STUDENT</option>
           </select>

@@ -11,6 +11,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Name, email, password, and role are required" }, { status: 400 })
     }
 
+    if (role === "ADMIN") {
+      return NextResponse.json({ error: "Cannot register as ADMIN through this route" }, { status: 400 })
+    }
+
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
       where: { email },

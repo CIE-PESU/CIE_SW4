@@ -17,6 +17,7 @@ import {
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Plus, Mail, Phone, RefreshCw, Search } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { useAuth } from "@/components/auth-provider"
 
 interface Faculty {
   id: string
@@ -55,6 +56,7 @@ export function ManageFaculty() {
   const [loading, setLoading] = useState(true)
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
+  const { user } = useAuth()
   const { toast } = useToast()
   const [editMode, setEditMode] = useState(false)
 
@@ -293,7 +295,10 @@ export function ManageFaculty() {
     try {
       const response = await fetch(`/api/faculty/${editFaculty?.id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "x-user-id": user?.id || ""
+        },
         body: JSON.stringify(editFacultyData),
       });
       if (response.ok) {
@@ -325,7 +330,12 @@ export function ManageFaculty() {
   const handleDeleteFaculty = async () => {
     if (!facultyToDelete) return;
     try {
-      const response = await fetch(`/api/faculty/${facultyToDelete.id}`, { method: "DELETE" });
+      const response = await fetch(`/api/faculty/${facultyToDelete.id}`, { 
+        method: "DELETE",
+        headers: {
+          "x-user-id": user?.id || "" 
+        }
+      });
       if (response.ok) {
         await fetchData();
         setFacultyToDelete(null);
